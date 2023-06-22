@@ -1,6 +1,13 @@
 import Head from "next/head";
+import { signIn, useSession } from "next-auth/react";
 
 export default function Home() {
+  const session = useSession();
+
+  if (session.status === "authenticated") {
+    return <p>Signed in as {session.data?.user?.email}</p>;
+  }
+
   return (
     <>
       <Head>
@@ -9,7 +16,15 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="text-3xl">Yo</main>
+      <main className="text-3xl">
+        <div>Yo</div>
+        <button
+          className="w-20 bg-white shadow-md text-black p-2"
+          onClick={() => signIn()}
+        >
+          Sign in
+        </button>
+      </main>
     </>
   );
 }
