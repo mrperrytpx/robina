@@ -16,10 +16,10 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="text-3xl">
+      <main className="text-xl">
         <div>Yo</div>
         <button
-          className="w-20 bg-white shadow-md text-black p-2"
+          className="w-40 bg-white p-2 text-black shadow-md"
           onClick={() => signIn()}
         >
           Sign in
