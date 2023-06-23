@@ -1,11 +1,21 @@
 import Head from "next/head";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function Home() {
   const session = useSession();
 
   if (session.status === "authenticated") {
-    return <p>Signed in as {session.data?.user?.email}</p>;
+    return (
+      <div>
+        <p>Signed in as {session.data?.user?.email}</p>
+        <button
+          className="w-40 bg-white p-2 text-black shadow-md"
+          onClick={() => signOut()}
+        >
+          Sign out
+        </button>
+      </div>
+    );
   }
 
   return (
