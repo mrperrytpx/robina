@@ -37,13 +37,18 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id                    String      @id @default(cuid())
+  name                  String?
+  email                 String?     @unique
+  emailVerified         DateTime?
+  image                 String?
+  username              String?     @unique
+  accounts              Account[]
+  sessions              Session[]
+  messages              Message[]
+  chatrooms             Chatroom[]  @relation("ChatroomMembers")
+  banned_from_chatroom  Chatroom[]  @relation("ChatroomBannedMembers")
+  owned_chatroom        Chatroom?
 }
 
 model VerificationToken {
@@ -53,3 +58,27 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Message {
+  id           String     @id @default(cuid())
+  cretaed_at   DateTime   @default(now())
+  content      String
+  author       User       @relation(fields: [author_id], references: [id])
+  author_id    String     @unique
+  chatroom     Chatroom   @relation(fields: [chatroom_id], references: [id])
+  chatroom_id  String     @unique
+}
+
+model Chatroom {
+  id              String     @id @default(cuid())
+  created_at      DateTime   @default(now())
+  is_public       Boolean    @default(true)
+  name            String     
+  description     String
+  messages        Message[]
+  members         User[]     @relation("ChatroomMembers")
+  banned_members  User[]     @relation("ChatroomBannedMembers")
+  owner           User       @relation(fields: [owner_id], references: [id])
+  owner_id        String     @unique
+}
+
