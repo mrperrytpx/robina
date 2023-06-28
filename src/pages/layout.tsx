@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Head from "next/head";
+import { VscMenu, VscChromeClose } from "react-icons/vsc";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import Image from "next/image";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 interface ILayoutProps {
     children: JSX.Element | JSX.Element[];
@@ -10,6 +15,7 @@ const Layout = ({ children }: ILayoutProps) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const pathname = usePathname();
+    const session = useSession();
 
     useEffect(() => setIsExpanded(false), [pathname]);
 
@@ -28,23 +34,45 @@ const Layout = ({ children }: ILayoutProps) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="flex min-h-screen flex-col bg-blue-200">
-                <header className="sticky top-0 flex h-16 items-center justify-between bg-yellow-500">
-                    <p>navbar</p>
-                    <button
-                        aria-label="Menu"
-                        onClick={() => setIsExpanded((old) => !old)}
-                        className="select-none text-3xl sm:hidden"
-                        role="button"
-                    >
-                        YOOYOYO
-                    </button>
+                <header className="sticky top-0 flex min-h-[64px] items-center justify-between bg-yellow-500 p-2">
+                    <div className="text-3xl">L</div>
+                    <div className="flex items-center gap-4">
+                        {session.status === "loading" ? (
+                            <LoadingSpinner size={28} />
+                        ) : null}
+                        {session?.data?.user && (
+                            <Link
+                                className="rounded-full p-0.5"
+                                href="/profile"
+                                aria-label="Profile"
+                            >
+                                <Image
+                                    className="w-7 rounded-full bg-slate-200"
+                                    width={100}
+                                    height={100}
+                                    src={session?.data.user?.image!}
+                                    alt="User's profile"
+                                />
+                            </Link>
+                        )}
+                        <button
+                            aria-label="Menu"
+                            onClick={() => setIsExpanded((old) => !old)}
+                            className="select-none text-3xl sm:hidden"
+                            role="button"
+                        >
+                            {isExpanded ? <VscChromeClose /> : <VscMenu />}
+                        </button>
+                    </div>
                 </header>
                 {isExpanded ? (
                     <div className="flex-1 bg-purple-400">Phone</div>
                 ) : (
                     <>
-                        <main className="flex-1 bg-red-200">{children}</main>
-                        <footer className="min-h-[64px]">Footer</footer>
+                        <main className="flex-1 bg-red-200 p-2">
+                            {children}
+                        </main>
+                        <footer className="min-h-[64px] p-2">Footer</footer>
                     </>
                 )}
             </div>
