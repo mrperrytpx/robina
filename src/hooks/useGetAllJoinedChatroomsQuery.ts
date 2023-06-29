@@ -21,5 +21,5 @@ async function getJoinedChatrooms(): Promise<Chatroom[]> {
 }
 
 export const useGetAllJoinedChatroomsQuery = () => {
-    return useQuery(["chatrooms"], getJoinedChatrooms);
+    return useQuery({ queryKey: ["chatrooms"], queryFn: getJoinedChatrooms });
 };

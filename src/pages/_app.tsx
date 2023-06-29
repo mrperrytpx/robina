@@ -5,6 +5,7 @@ import "../styles/globals.css";
 import Layout from "./layout";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export default function App({
     Component,
@@ -16,7 +17,7 @@ export default function App({
                 defaultOptions: {
                     queries: {
                         refetchOnWindowFocus: false,
-                        retry: 1,
+                        retry: 0,
                     },
                 },
             })
@@ -27,6 +28,7 @@ export default function App({
             <QueryClientProvider client={queryClient}>
                 <Layout>
                     <Component {...pageProps} />
+                    <ReactQueryDevtools initialIsOpen={false} />
                 </Layout>
             </QueryClientProvider>
         </SessionProvider>

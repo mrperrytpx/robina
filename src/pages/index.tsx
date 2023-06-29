@@ -34,7 +34,7 @@ export default function Home() {
     }
 
     return (
-        <>
+        <div>
             <div>Yo</div>
             <button
                 className="w-40 bg-white p-2 text-black shadow-md"
@@ -57,6 +57,6 @@ export default function Home() {
             <Link className="p-4" href="/chats/1023912">
                 chat id
             </Link>
-        </>
+        </div>
     );
 }

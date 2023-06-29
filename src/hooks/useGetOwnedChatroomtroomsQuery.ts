@@ -9,11 +9,11 @@ async function getOwnedChatroom(): Promise<Chatroom> {
     });
 
     if (!response.ok) {
-        console.log(":)");
-        throw new Error(":)");
+        throw new Error("You don't own a chatroom");
     }
 
-    if (controller.signal.aborted) throw new Error(":)");
+    if (controller.signal.aborted)
+        throw new Error("Owned Chatroom fetch aborted");
 
     const data: Chatroom = await response.json();
 
@@ -21,5 +21,8 @@ async function getOwnedChatroom(): Promise<Chatroom> {
 }
 
 export const useGetOwnedChatroomtroomsQuery = () => {
-    return useQuery(["owned_chatroom"], getOwnedChatroom);
+    return useQuery({
+        queryKey: ["owned_chatroom"],
+        queryFn: getOwnedChatroom,
+    });
 };

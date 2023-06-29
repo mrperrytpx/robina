@@ -7,7 +7,9 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    if (req.method === "GET") {
+    if (req.method === "DELETE") {
+        const { id } = req.query;
+
         const session = await getServerSession(req, res, authOptions);
 
         if (!session) return res.status(401).end("No session");
@@ -20,20 +22,28 @@ export default async function handler(
                 owned_chatroom: true,
             },
         });
-
         if (!user) return res.status(401).end("No user");
 
-        const ownedChatroom = await prisma.chatroom.findFirst({
+        if (user.owned_chatroom?.id !== id)
+            return res.status(401).end("You do not own this chatroom");
+
+        const chatroom = await prisma.chatroom.findFirst({
             where: {
-                owner_id: user.id,
+                id: user?.owned_chatroom?.id,
             },
         });
 
-        if (!ownedChatroom) return res.status(200).json({});
+        if (!chatroom) return res.status(400).end("You do not own a chatroom");
 
-        res.status(200).json(ownedChatroom);
+        await prisma.chatroom.delete({
+            where: {
+                id: chatroom.id,
+            },
+        });
+
+        res.status(201).end("Success");
     } else {
-        res.setHeader("Allow", "GET");
+        res.setHeader("Allow", "DELETE");
         res.status(405).end("Method Not Allowed");
     }
 }

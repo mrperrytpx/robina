@@ -10,6 +10,7 @@ export const ChatroomCard = ({ id, name, description }: IChatroomCard) => {
     return (
         <Link
             href={`/chats/${id}`}
+            aria-label={`Visit a chatroom named ${name}`}
             className="relative flex aspect-video w-[min(100%,350px)] flex-col items-center justify-center gap-4 rounded-xl bg-gray-950 p-4 text-center shadow-lg hover:outline hover:outline-2 hover:outline-white"
         >
             <span className="mb-4 text-2xl">{name}</span>
@@ -17,5 +18,3 @@ export const ChatroomCard = ({ id, name, description }: IChatroomCard) => {
         </Link>
     );
 };
-
-// kasnije

@@ -25,7 +25,7 @@ export default async function handler(
 
         const joinedChatrooms = user.chatrooms;
 
-        return res.status(200).json(joinedChatrooms);
+        res.status(200).json(joinedChatrooms);
     } else {
         res.setHeader("Allow", "GET");
         res.status(405).end("Method Not Allowed");
