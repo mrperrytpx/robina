@@ -27,7 +27,7 @@ const ChatsPage = () => {
     // ];
 
     return (
-        <div>
+        <div className="flex-1">
             <article className="mb-4 space-y-4 ">
                 <h2 className="block border-b border-slate-200">
                     Owned Chatrooms

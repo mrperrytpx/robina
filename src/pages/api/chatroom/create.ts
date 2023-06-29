@@ -16,6 +16,8 @@ export default async function handler(
     if (req.method === "POST") {
         const { name, description, isPublic }: ICreateRoom = req.body;
 
+        console.log("REQ BODY CREATE", req.body);
+
         const session = await getServerSession(req, res, authOptions);
 
         if (!session) return res.status(401).end("No session");
@@ -32,7 +34,7 @@ export default async function handler(
         if (!user) return res.status(401).end("No user");
 
         if (user.owned_chatroom)
-            return res.status(400).end("User already owns a chatroom");
+            return res.status(400).end("You already own a chatroom");
 
         const chatroom = await prisma.chatroom.create({
             data: {
