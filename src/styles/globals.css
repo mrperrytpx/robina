@@ -6,4 +6,10 @@
 *::before,
 *::after {
     font-family: "Poppins", sans-serif;
+    @apply text-gray-100;
+}
+
+html,
+body {
+    @apply bg-slate-900;
 }
