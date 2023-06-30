@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { useUpdateUsernameMutation } from "../../hooks/useUpdateUsernameMutation";
@@ -27,6 +27,7 @@ const UsernamePage = () => {
     });
 
     const router = useRouter();
+    const session = useSession();
 
     const updateUsername = useUpdateUsernameMutation();
 
@@ -38,6 +39,7 @@ const UsernamePage = () => {
             setError("root", { message: error || "Server Error" });
             return;
         } else {
+            session.update();
             router.push("/chats");
         }
     };
