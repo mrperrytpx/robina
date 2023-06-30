@@ -13,7 +13,7 @@ export const useDeleteProfileMutation = () => {
         });
 
         if (!response.ok) {
-            console.log("Failed to delete chatroom");
+            console.log("Failed to delete profile");
         }
 
         if (controller.signal.aborted) console.log("mut:)");

@@ -13,6 +13,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             where: {
                 id: session.user.id,
             },
+            include: {
+                owned_chatroom: true,
+            },
         });
 
         if (!user) return res.status(401).end("No user");
@@ -22,6 +25,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
                 author_id: user.id,
             },
         });
+
+        if (user.owned_chatroom) {
+            await prisma.chatroom.delete({
+                where: {
+                    owner_id: user.id,
+                },
+            });
+        }
 
         await prisma.user.delete({
             where: {
