@@ -12,8 +12,8 @@ export type UsernameFormValues = z.infer<typeof usernameValidationSchema>;
 const usernameValidationSchema = z.object({
     username: z
         .string()
-        .min(1, "Username must be between 1 and 20 characters long")
-        .max(20, "Username must be between 1 and 20 characters long"),
+        .min(1, "Username must be 1 to 20 characters long")
+        .max(20, "Username must be 1 to 20 characters long"),
 });
 
 const UsernamePage = () => {
@@ -45,7 +45,7 @@ const UsernamePage = () => {
     return (
         <div className="max-w-screen-sm flex-1 sm:mx-auto sm:my-20">
             <form onClick={handleSubmit(onSubmit)}>
-                <h2>Let's give you a username :)</h2>
+                <h2>Let&apos;s give you a username :)</h2>
                 <fieldset>
                     <label className="block text-xs" htmlFor="name">
                         <strong className="uppercase">Choose a username</strong>
