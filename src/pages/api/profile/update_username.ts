@@ -2,12 +2,15 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { prisma } from "../../../../prisma/prisma";
 import { authOptions } from "../auth/[...nextauth]";
+import { UsernameFormValues } from "../../profile/username";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    if (req.method === "GET") {
+    if (req.method === "PATCH") {
+        const { username }: UsernameFormValues = req.body;
+
         const session = await getServerSession(req, res, authOptions);
 
         if (!session) return res.status(401).end("No session");
@@ -16,22 +19,31 @@ export default async function handler(
             where: {
                 id: session.user.id,
             },
-            include: {
-                owned_chatroom: true,
-            },
         });
 
         if (!user) return res.status(401).end("No user");
 
-        const ownedChatroom = await prisma.chatroom.findFirst({
+        const usernameExsits = await prisma.user.findFirst({
             where: {
-                owner_id: user.id,
+                username,
             },
         });
 
-        res.status(200).json(ownedChatroom);
+        if (usernameExsits)
+            return res.status(409).end("Username already taken");
+
+        await prisma.user.update({
+            where: {
+                id: user.id,
+            },
+            data: {
+                username,
+            },
+        });
+
+        res.status(201).end("Success");
     } else {
-        res.setHeader("Allow", "GET");
+        res.setHeader("Allow", "PATCH");
         res.status(405).end("Method Not Allowed");
     }
 }

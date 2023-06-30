@@ -14,6 +14,7 @@ declare module "next-auth" {
             email: string;
             image: string;
             id: string;
+            username: string;
         };
     }
 }
@@ -33,6 +34,7 @@ export const authOptions: AuthOptions = {
         }: Awaited<{ session: Session; user: any }>) => {
             if (session?.user && user.id) {
                 session.user.id = user.id;
+                session.user.username = user.username;
             }
             return session;
         },

@@ -2,21 +2,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { prisma } from "../../../../prisma/prisma";
 import { authOptions } from "../auth/[...nextauth]";
-
-interface ICreateRoom {
-    name: string;
-    description: string;
-    isPublic: boolean;
-}
+import { FormValues } from "../../chats/create";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
     if (req.method === "POST") {
-        const { name, description, isPublic }: ICreateRoom = req.body;
-
-        console.log("REQ BODY CREATE", req.body);
+        const { name, description, isPublic }: FormValues = req.body;
 
         const session = await getServerSession(req, res, authOptions);
 

@@ -13,8 +13,6 @@ export const useCreateChatroomMutation = () => {
             isPublic,
         };
 
-        console.log("BODY", body);
-
         const controller = new AbortController();
 
         const response = await fetch("/api/chatroom/create", {

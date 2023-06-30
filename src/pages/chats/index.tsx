@@ -1,21 +1,23 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { useGetAllJoinedChatroomsQuery } from "../../hooks/useGetAllJoinedChatroomsQuery";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { CreateChatroom } from "../../components/CreateChatroom";
 import { ChatroomCard } from "../../components/ChatroomCard";
 import { useGetOwnedChatroomtroomsQuery } from "../../hooks/useGetOwnedChatroomtroomsQuery";
+import { useRouter } from "next/router";
 
 const ChatsPage = () => {
     const joinedChatrooms = useGetAllJoinedChatroomsQuery();
     const ownedChatroom = useGetOwnedChatroomtroomsQuery();
+    const session = useSession();
 
     return (
         <div className="flex-1">
             <article className="mb-4 space-y-4 ">
                 <h2 className="block border-b border-slate-200">
-                    Owned Chatrooms
+                    Owned Chatrooms {session.data?.user.username}
                 </h2>
                 <div className="flex flex-col gap-4 sm:flex-row">
                     {ownedChatroom.isLoading && <LoadingSpinner size={32} />}
@@ -63,6 +65,15 @@ export const getServerSideProps = async (
                 destination: `/api/auth/signin?callbackUrl=${encodeURIComponent(
                     process.env.NEXTAUTH_URL + ctx.resolvedUrl
                 )}`,
+                permanent: false,
+            },
+        };
+    }
+
+    if (session && !session.user.username) {
+        return {
+            redirect: {
+                destination: `/profile/username`,
                 permanent: false,
             },
         };
