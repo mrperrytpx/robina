@@ -46,8 +46,6 @@ const ChatPage = () => {
 
     const isOwner = session.data?.user.id === ownedChatroom.data?.owner_id;
 
-    if (!ownedChatroom.data) return <div>wait</div>;
-
     const handleDelete = async () => {
         const chatId = router.query.chatId;
 

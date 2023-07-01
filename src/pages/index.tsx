@@ -26,6 +26,9 @@ export default function Home() {
                 <Link className="p-4" href="/chats/create">
                     create chat
                 </Link>
+                <Link className="p-4" href="/chats/join">
+                    join chat
+                </Link>
             </div>
         );
     }
@@ -50,6 +53,9 @@ export default function Home() {
             </Link>
             <Link className="p-4" href="/chats/create">
                 create chat
+            </Link>
+            <Link className="p-4" href="/chats/join">
+                join chat
             </Link>
         </div>
     );
