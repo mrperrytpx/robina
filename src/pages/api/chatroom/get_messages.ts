@@ -2,13 +2,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { prisma } from "../../../../prisma/prisma";
 import { authOptions } from "../auth/[...nextauth]";
+import { z } from "zod";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
     if (req.method === "GET") {
-        const { chatId } = req.query;
+        const chatId = z.string().parse(req.query.chatId);
 
         if (!chatId) return res.status(400).end("Provide a chat iD");
 
@@ -24,11 +25,27 @@ export default async function handler(
 
         if (!user) return res.status(401).end("No user");
 
-        const messages = await prisma.message.findMany({
+        const chatroom = await prisma.chatroom.findFirst({
             where: {
-                chatroom_id: chatId as string,
+                id: chatId,
+            },
+            include: {
+                banned_members: true,
+                messages: true,
             },
         });
+
+        if (!chatroom) return res.status(404).end("No chatroom with that ID");
+
+        const isUserBanned = chatroom.banned_members.find(
+            (bannedUser) => bannedUser.id === user.id
+        );
+
+        if (isUserBanned) {
+            return res.status(403).end("You are banned from this chatroom");
+        }
+
+        const messages = chatroom.messages.slice(0, 50);
 
         res.status(201).json(messages);
     } else {

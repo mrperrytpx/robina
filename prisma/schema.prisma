@@ -48,6 +48,7 @@ model User {
   messages              Message[]
   chatrooms             Chatroom[]  @relation("ChatroomMembers")
   banned_from_chatroom  Chatroom[]  @relation("ChatroomBannedMembers")
+  whitelisted           Chatroom[]  @relation("ChatroomWhitelistedMembers")
   owned_chatroom        Chatroom?
 }
 
@@ -78,6 +79,7 @@ model Chatroom {
   messages        Message[]
   members         User[]     @relation("ChatroomMembers")
   banned_members  User[]     @relation("ChatroomBannedMembers")
+  whitelisted     User[]     @relation("ChatroomWhitelistedMembers")
   owner           User       @relation(fields: [owner_id], references: [id])
   owner_id        String     @unique
 }
