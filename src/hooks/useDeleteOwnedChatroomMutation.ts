@@ -1,20 +1,23 @@
 import { useMutation } from "@tanstack/react-query";
 
 interface IDeleteChatroom {
-    id: string | string[];
+    chatId: string | string[];
 }
 
 export const useDeleteOwnedChatroomMutation = () => {
-    const deleteOwnedChatroom = async ({ id }: IDeleteChatroom) => {
+    const deleteOwnedChatroom = async ({ chatId }: IDeleteChatroom) => {
         const controller = new AbortController();
 
-        const response = await fetch(`/api/chatroom/delete_owned?id=${id}`, {
-            method: "DELETE",
-            signal: controller.signal,
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+        const response = await fetch(
+            `/api/chatroom/delete_owned?chatId=${chatId}`,
+            {
+                method: "DELETE",
+                signal: controller.signal,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
 
         return response;
     };
