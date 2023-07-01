@@ -5,14 +5,40 @@ import { useRouter } from "next/router";
 import { VscTrash } from "react-icons/vsc";
 import { useGetOwnedChatroomtroomsQuery } from "../../hooks/useGetOwnedChatroomtroomsQuery";
 import { useDeleteOwnedChatroomMutation } from "../../hooks/useDeleteOwnedChatroomMutation";
-import { useQueryClient } from "@tanstack/react-query";
+import { z } from "zod";
+import { usePostChatMessageMutation } from "../../hooks/usePostChatMessageMutation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useGetChatroomMessagesQuery } from "../../hooks/useGetChatroomMessagesQuery";
+
+export type ChatMessage = z.infer<typeof chatMessageSchema>;
+
+export const chatMessageSchema = z.object({
+    message: z
+        .string()
+        .min(1, "Message cannot be empty")
+        .max(150, "Message cannot exceed 150 characters"),
+});
 
 const ChatPage = () => {
     const router = useRouter();
     const session = useSession();
-    const queryClient = useQueryClient();
     const ownedChatroom = useGetOwnedChatroomtroomsQuery();
     const deleteOwnedChatroom = useDeleteOwnedChatroomMutation();
+    const postMessage = usePostChatMessageMutation();
+
+    const chatroomMessages = useGetChatroomMessagesQuery(
+        router.query.chatId as string
+    );
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        setError,
+    } = useForm<ChatMessage>({
+        resolver: zodResolver(chatMessageSchema),
+    });
 
     const isOwner = session.data?.user.id === ownedChatroom.data?.owner_id;
 
@@ -20,20 +46,31 @@ const ChatPage = () => {
 
     const handleDelete = async () => {
         const chatId = router.query.chatId;
-        if (!chatId) return;
-        deleteOwnedChatroom.mutateAsync(
-            {
-                id: chatId,
-            },
-            {
-                onSuccess: () =>
-                    queryClient.resetQueries({ queryKey: ["owned_chatroom"] }),
-            }
-        );
 
-        if (deleteOwnedChatroom.isError) return;
+        if (!chatId) return;
+
+        const response = await deleteOwnedChatroom.mutateAsync({
+            id: chatId,
+        });
+
+        if (!response.ok) return;
 
         router.push("/chats");
+    };
+
+    const onSubmit: SubmitHandler<ChatMessage> = async (data) => {
+        if (!router.query.chatId) return;
+
+        const response = await postMessage.mutateAsync({
+            ...data,
+            chatId: router.query.chatId,
+        });
+
+        if (!response?.ok) {
+            const error = await response?.text();
+            setError("root", { message: error || "Server Error" });
+            return;
+        }
     };
 
     return (
@@ -47,6 +84,38 @@ const ChatPage = () => {
                     <VscTrash size={32} />
                 </button>
             )}
+            <div>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <label className="block text-xs" htmlFor="message">
+                        <strong className="uppercase">Chatroom name</strong>
+                    </label>
+                    <input
+                        {...register("message")}
+                        name="message"
+                        id="message"
+                        type="message"
+                        className="h-10 w-full rounded-md border border-slate-500 bg-black p-2 text-sm font-medium focus:bg-slate-200 focus:text-black"
+                        placeholder="Message"
+                    />
+                    {errors.message && (
+                        <span className="text-xs font-semibold text-red-500">
+                            {errors.message.message}
+                        </span>
+                    )}
+                    <button
+                        type="submit"
+                        className="w-40 bg-white p-2 text-black shadow-md"
+                    >
+                        {postMessage.isLoading ? "Sending..." : "Send message"}
+                    </button>
+                </form>
+            </div>
+            <div>
+                {chatroomMessages.data &&
+                    chatroomMessages.data.map((message) => (
+                        <div key={message.id}>{message.content}</div>
+                    ))}
+            </div>
         </div>
     );
 };

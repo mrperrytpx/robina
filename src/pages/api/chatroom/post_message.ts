@@ -1,17 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { chatMessageSchema } from "../../chats/[chatId]";
 import { getServerSession } from "next-auth";
 import { prisma } from "../../../../prisma/prisma";
 import { authOptions } from "../auth/[...nextauth]";
-import { createChatroomSchema } from "../../chats/create";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
     if (req.method === "POST") {
-        const { name, description, isPublic } = createChatroomSchema.parse(
-            req.body
-        );
+        const { message } = chatMessageSchema.parse(req.body);
+        const { chatId } = req.query;
+
+        if (!chatId) return res.status(400).end("Provide a chat iD");
 
         const session = await getServerSession(req, res, authOptions);
 
@@ -22,36 +23,28 @@ export default async function handler(
                 id: session.user.id,
             },
             include: {
-                owned_chatroom: true,
+                chatrooms: true,
             },
         });
 
         if (!user) return res.status(401).end("No user");
 
-        if (user.owned_chatroom)
-            return res.status(400).end("You already own a chatroom");
+        const isMemberOfChatroom = user?.chatrooms.find(
+            (chat) => chat.id === chatId
+        );
 
-        const chatroom = await prisma.chatroom.create({
+        if (!isMemberOfChatroom)
+            return res.status(401).end("Not a part of this chatroom");
+
+        await prisma.message.create({
             data: {
-                name,
-                description,
-                is_public: isPublic,
-                owner: {
-                    connect: {
-                        id: user.id,
-                    },
-                },
-                members: {
-                    connect: {
-                        id: user.id,
-                    },
-                },
+                content: message,
+                author_id: user.id,
+                chatroom_id: isMemberOfChatroom.id,
             },
         });
 
-        if (!chatroom) return res.status(500).end("Server issues");
-
-        res.status(201).end("Success");
+        res.status(201).end();
     } else {
         res.setHeader("Allow", "POST");
         res.status(405).end("Method Not Allowed");

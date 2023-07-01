@@ -1,5 +1,6 @@
 import { Chatroom } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 async function getJoinedChatrooms(): Promise<Chatroom[]> {
     const controller = new AbortController();
@@ -21,5 +22,12 @@ async function getJoinedChatrooms(): Promise<Chatroom[]> {
 }
 
 export const useGetAllJoinedChatroomsQuery = () => {
-    return useQuery({ queryKey: ["chatrooms"], queryFn: getJoinedChatrooms });
+    const session = useSession();
+
+    return useQuery({
+        queryKey: ["chatrooms"],
+        queryFn: getJoinedChatrooms,
+        select: (data) =>
+            data.filter((room) => room.owner_id !== session.data?.user.id),
+    });
 };

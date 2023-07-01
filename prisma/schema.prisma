@@ -64,9 +64,9 @@ model Message {
   cretaed_at   DateTime   @default(now())
   content      String
   author       User       @relation(fields: [author_id], references: [id])
-  author_id    String     @unique
+  author_id    String     
   chatroom     Chatroom   @relation(fields: [chatroom_id], references: [id])
-  chatroom_id  String     @unique
+  chatroom_id  String     
 }
 
 model Chatroom {
