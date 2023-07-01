@@ -8,12 +8,12 @@ async function getJoinedChatrooms(): Promise<Chatroom[]> {
         signal: controller.signal,
     });
 
-    if (!response.ok) {
-        console.log("cuko:)");
-        throw new Error("cuko:)");
-    }
+    if (controller.signal.aborted)
+        throw new Error("Get joined chatrooms req aborted");
 
-    if (controller.signal.aborted) throw new Error("cuko:)");
+    if (!response.ok) {
+        throw new Error("Failed to get joined chatrooms");
+    }
 
     const data: Chatroom[] = await response.json();
 

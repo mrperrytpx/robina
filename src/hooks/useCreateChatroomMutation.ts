@@ -1,13 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import { FormValues } from "../pages/chats/create";
+import { CreateChatroomFormValues } from "../pages/chats/create";
 
 export const useCreateChatroomMutation = () => {
     const createChatroom = async ({
         name,
         description,
         isPublic,
-    }: FormValues) => {
-        const body: FormValues = {
+    }: CreateChatroomFormValues) => {
+        const body: CreateChatroomFormValues = {
             name,
             description,
             isPublic,
@@ -23,12 +23,6 @@ export const useCreateChatroomMutation = () => {
             },
             body: JSON.stringify(body),
         });
-
-        if (!response.ok) {
-            console.log("Failed to create chatroom");
-        }
-
-        if (controller.signal.aborted) console.log("mut:)");
 
         return response;
     };

@@ -2,14 +2,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { prisma } from "../../../../prisma/prisma";
 import { authOptions } from "../auth/[...nextauth]";
-import { UsernameFormValues } from "../../profile/username";
+import { usernameSchema } from "../../profile/username";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
     if (req.method === "PATCH") {
-        const { username }: UsernameFormValues = req.body;
+        const { username } = usernameSchema.parse(req.body);
 
         const session = await getServerSession(req, res, authOptions);
 

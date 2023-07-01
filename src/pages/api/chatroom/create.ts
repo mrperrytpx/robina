@@ -2,14 +2,16 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { prisma } from "../../../../prisma/prisma";
 import { authOptions } from "../auth/[...nextauth]";
-import { FormValues } from "../../chats/create";
+import { createChatroomSchema } from "../../chats/create";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
     if (req.method === "POST") {
-        const { name, description, isPublic }: FormValues = req.body;
+        const { name, description, isPublic } = createChatroomSchema.parse(
+            req.body
+        );
 
         const session = await getServerSession(req, res, authOptions);
 

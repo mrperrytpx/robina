@@ -8,12 +8,12 @@ async function getOwnedChatroom(): Promise<Chatroom> {
         signal: controller.signal,
     });
 
-    if (!response.ok) {
-        throw new Error("You don't own a chatroom");
-    }
-
     if (controller.signal.aborted)
         throw new Error("Owned Chatroom fetch aborted");
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch owned chatroom");
+    }
 
     const data: Chatroom = await response.json();
 

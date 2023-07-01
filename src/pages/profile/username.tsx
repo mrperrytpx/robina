@@ -7,9 +7,9 @@ import { z } from "zod";
 import { useUpdateUsernameMutation } from "../../hooks/useUpdateUsernameMutation";
 import { useRouter } from "next/router";
 
-export type UsernameFormValues = z.infer<typeof usernameValidationSchema>;
+export type UsernameFormValues = z.infer<typeof usernameSchema>;
 
-const usernameValidationSchema = z.object({
+export const usernameSchema = z.object({
     username: z
         .string()
         .min(1, "Username must be 1 to 20 characters long")
@@ -23,7 +23,7 @@ const UsernamePage = () => {
         formState: { errors },
         setError,
     } = useForm<UsernameFormValues>({
-        resolver: zodResolver(usernameValidationSchema),
+        resolver: zodResolver(usernameSchema),
     });
 
     const router = useRouter();

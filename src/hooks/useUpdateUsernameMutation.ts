@@ -18,12 +18,6 @@ export const useUpdateUsernameMutation = () => {
             body: JSON.stringify(body),
         });
 
-        if (!response.ok) {
-            console.log("Failed to update username");
-        }
-
-        if (controller.signal.aborted) console.log("username update aborted");
-
         return response;
     };
 

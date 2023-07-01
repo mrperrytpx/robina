@@ -7,9 +7,9 @@ import { useCreateChatroomMutation } from "../../hooks/useCreateChatroomMutation
 import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-export type FormValues = z.infer<typeof validationSchema>;
+export type CreateChatroomFormValues = z.infer<typeof createChatroomSchema>;
 
-const validationSchema = z.object({
+export const createChatroomSchema = z.object({
     name: z.string().min(1, "Required"),
     description: z.string().min(1, "Required"),
     isPublic: z.boolean().optional(),
@@ -21,15 +21,15 @@ const CreateChatPage = () => {
         handleSubmit,
         formState: { errors },
         setError,
-    } = useForm<FormValues>({
-        resolver: zodResolver(validationSchema),
+    } = useForm<CreateChatroomFormValues>({
+        resolver: zodResolver(createChatroomSchema),
     });
 
     const router = useRouter();
 
     const createRoom = useCreateChatroomMutation();
 
-    const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const onSubmit: SubmitHandler<CreateChatroomFormValues> = async (data) => {
         const response = await createRoom.mutateAsync({ ...data });
 
         if (!response?.ok) {

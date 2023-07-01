@@ -16,12 +16,6 @@ export const useDeleteOwnedChatroomMutation = () => {
             },
         });
 
-        if (!response.ok) {
-            console.log("Failed to delete chatroom");
-        }
-
-        if (controller.signal.aborted) console.log("mut:)");
-
         return response;
     };
 

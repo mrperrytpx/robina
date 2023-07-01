@@ -10,6 +10,8 @@ export default async function handler(
     if (req.method === "DELETE") {
         const { id } = req.query;
 
+        if (!id) return res.status(400).end("Please provide an ID");
+
         const session = await getServerSession(req, res, authOptions);
 
         if (!session) return res.status(401).end("No session");
@@ -24,20 +26,17 @@ export default async function handler(
         });
         if (!user) return res.status(401).end("No user");
 
-        if (user.owned_chatroom?.id !== id)
+        if (!user.owned_chatroom) {
+            return res.status(400).end("You do not own a chatroom");
+        }
+
+        if (user.owned_chatroom?.id !== id) {
             return res.status(401).end("You do not own this chatroom");
-
-        const chatroom = await prisma.chatroom.findFirst({
-            where: {
-                id: user?.owned_chatroom?.id,
-            },
-        });
-
-        if (!chatroom) return res.status(400).end("You do not own a chatroom");
+        }
 
         await prisma.chatroom.delete({
             where: {
-                id: chatroom.id,
+                id: user.owned_chatroom.id,
             },
         });
 
