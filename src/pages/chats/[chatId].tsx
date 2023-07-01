@@ -78,7 +78,7 @@ const ChatPage = () => {
     };
 
     return (
-        <div>
+        <div className="space-x-2 space-y-2">
             <div>Single Chat Page {router.query.chatId}</div>
             {isOwner && (
                 <button
@@ -122,20 +122,26 @@ const ChatPage = () => {
             </div>
             <button
                 className="w-40 bg-white p-2 text-black shadow-md"
-                // onClick={async () => {
-                //     await updateWhitelist.mutateAsync({
-                //         username: "perryx1",
-                //         chatId: router.query.chatId as string,
-                //     });
-                // }}
                 onClick={async () => {
                     await createInvite.mutateAsync({
                         chatId: router.query.chatId as string,
                     });
                 }}
             >
-                Whitelist
+                create inv link
             </button>
+            <button
+                className="w-40 bg-white p-2 text-black shadow-md"
+                onClick={async () => {
+                    await updateWhitelist.mutateAsync({
+                        username: "perryx1",
+                        chatId: router.query.chatId as string,
+                    });
+                }}
+            >
+                add to whitelist
+            </button>
+
             {createInvite.data && <div>{createInvite.data.value}</div>}
         </div>
     );

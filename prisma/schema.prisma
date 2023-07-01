@@ -65,9 +65,9 @@ model Message {
   id           String     @id @default(cuid())
   created_at   DateTime   @default(now())
   content      String
-  author       User       @relation(fields: [author_id], references: [id])
+  author       User       @relation(fields: [author_id], references: [id], onDelete: Cascade)
   author_id    String     
-  chatroom     Chatroom   @relation(fields: [chatroom_id], references: [id])
+  chatroom     Chatroom   @relation(fields: [chatroom_id], references: [id], onDelete: Cascade)
   chatroom_id  String     
 }
 
@@ -81,7 +81,7 @@ model Chatroom {
   members         User[]      @relation("ChatroomMembers")
   banned_members  User[]      @relation("ChatroomBannedMembers")
   whitelisted     User[]      @relation("ChatroomWhitelistedMembers")
-  owner           User        @relation(fields: [owner_id], references: [id])
+  owner           User        @relation(fields: [owner_id], references: [id], onDelete: Cascade)
   owner_id        String      @unique
   invite_link     InviteLink?
 }
@@ -90,6 +90,6 @@ model InviteLink {
   id            String      @id @default(cuid())
   created_at    DateTime    @default(now())
   value         String      @unique
-  chatroom      Chatroom    @relation(fields: [chatroom_id], references: [id])
+  chatroom      Chatroom    @relation(fields: [chatroom_id], references: [id], onDelete: Cascade)
   chatroom_id   String      @unique
 }
