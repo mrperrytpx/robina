@@ -12,7 +12,7 @@ export type CreateChatroomFormValues = z.infer<typeof createChatroomSchema>;
 export const createChatroomSchema = z.object({
     name: z.string().min(1, "Required"),
     description: z.string().min(1, "Required"),
-    isPublic: z.boolean().optional(),
+    isPublic: z.boolean().optional().default(true),
 });
 
 const CreateChatPage = () => {

@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useGetChatroomMessagesQuery } from "../../hooks/useGetChatroomMessagesQuery";
 import { useUpdateWhitelistMutation } from "../../hooks/useUpdateWhitelistMutation";
+import { useCreateChatroomInviteMutation } from "../../hooks/useCreateChatroomInviteMutation";
 
 export type ChatMessage = z.infer<typeof chatMessageSchema>;
 
@@ -28,6 +29,7 @@ const ChatPage = () => {
     const deleteOwnedChatroom = useDeleteOwnedChatroomMutation();
     const postMessage = usePostChatMessageMutation();
     const updateWhitelist = useUpdateWhitelistMutation();
+    const createInvite = useCreateChatroomInviteMutation();
 
     const chatroomMessages = useGetChatroomMessagesQuery(
         router.query.chatId as string
@@ -120,15 +122,21 @@ const ChatPage = () => {
             </div>
             <button
                 className="w-40 bg-white p-2 text-black shadow-md"
+                // onClick={async () => {
+                //     await updateWhitelist.mutateAsync({
+                //         username: "perryx1",
+                //         chatId: router.query.chatId as string,
+                //     });
+                // }}
                 onClick={async () => {
-                    await updateWhitelist.mutateAsync({
-                        username: "perryx1",
+                    await createInvite.mutateAsync({
                         chatId: router.query.chatId as string,
                     });
                 }}
             >
                 Whitelist
             </button>
+            {createInvite.data && <div>{createInvite.data.value}</div>}
         </div>
     );
 };
