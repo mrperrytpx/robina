@@ -112,7 +112,13 @@ const ChatPage = () => {
                     <div key={member.id}>@{member.username}</div>
                 ))}
             </div>
-            <div className="anchor relative h-full">
+            <div className="anchor relative flex h-full items-center justify-center">
+                {chatroomMessages.isLoading && (
+                    <div className="flex flex-col items-center gap-4">
+                        <LoadingSpinner />
+                        Loading messages...
+                    </div>
+                )}
                 {chatroomMessages.data?.length && (
                     <div
                         ref={chatRef}
