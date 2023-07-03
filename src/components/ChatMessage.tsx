@@ -61,7 +61,7 @@ export const ChatMessage = ({ message, isDifferentAuthor }: IChatMessage) => {
                 }}
             >
                 <p
-                    className="rounded-md bg-gray-100 p-1 text-sm text-black first:mt-1"
+                    className="rounded-md bg-gray-100 p-3 text-sm text-black first:mt-1"
                     style={{
                         border:
                             ownedChatroom.data?.owner_id === author_id

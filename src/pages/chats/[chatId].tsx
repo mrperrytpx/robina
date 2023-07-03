@@ -22,17 +22,18 @@ import { chatMessageSchema } from "../../lib/zSchemas";
 import type { TChatMessage } from "../../lib/zSchemas";
 import { ChatMessage } from "../../components/ChatMessage";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { useGetChatroomMembersQuery } from "../../hooks/useGetChatroomMembersQuery";
 
 const ChatPage = () => {
     const router = useRouter();
+    const chatId = z.string().parse(router.query.chatId);
     const session = useSession();
     const ownedChatroom = useGetOwnedChatroomtroomsQuery();
     const deleteOwnedChatroom = useDeleteOwnedChatroomMutation();
     const postMessage = usePostChatMessageMutation();
     const updateWhitelist = useUpdateWhitelistMutation();
     const createInvite = useCreateChatroomInviteMutation();
-
-    const chatId = z.string().parse(router.query.chatId);
+    const chatroomMembers = useGetChatroomMembersQuery(chatId);
 
     const chatroomMessages = useGetChatroomMessagesQuery(chatId);
 
@@ -106,8 +107,13 @@ const ChatPage = () => {
 
     return (
         <div className="mx-auto flex w-full max-w-screen-md flex-1 flex-col">
-            <div className="relative anchor h-full">
-                {chatroomMessages.data && (
+            <div>
+                {chatroomMembers.data?.map((member) => (
+                    <div key={member.id}>@{member.username}</div>
+                ))}
+            </div>
+            <div className="anchor relative h-full">
+                {chatroomMessages.data?.length && (
                     <div
                         ref={chatRef}
                         className="anchor absolute inset-0 w-full flex-1 overflow-clip overflow-y-auto  py-2 pr-1"
