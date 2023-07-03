@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { chatMessageSchema } from "../../chats/[chatId]";
 import { getServerSession } from "next-auth";
 import { prisma } from "../../../../prisma/prisma";
 import { authOptions } from "../auth/[...nextauth]";
 import { pusherServer } from "../../../lib/pusher";
+import { chatMessageSchema } from "../../../lib/zSchemas";
 
 export default async function handler(
     req: NextApiRequest,
@@ -29,6 +29,10 @@ export default async function handler(
         });
 
         if (!user) return res.status(401).end("No user");
+        if (!user.username)
+            return res
+                .status(302)
+                .redirect(process.env.NEXTAUTH_URL! + "/api/auth/signin");
 
         const isMemberOfChatroom = user?.chatrooms.find(
             (chat) => chat.id === chatId
@@ -45,12 +49,13 @@ export default async function handler(
             },
         });
 
-        console.log("new message", newMessage);
-
         await pusherServer.trigger(
             `chat__${chatId}__new-message`,
             "new-message",
-            newMessage
+            {
+                ...newMessage,
+                author: { username: user.username, image: user.image },
+            }
         );
 
         res.status(201).end();

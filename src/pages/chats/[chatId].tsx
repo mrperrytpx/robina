@@ -2,29 +2,26 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { VscTrash } from "react-icons/vsc";
+import { VscSend } from "react-icons/vsc";
 import { useGetOwnedChatroomtroomsQuery } from "../../hooks/useGetOwnedChatroomtroomsQuery";
 import { useDeleteOwnedChatroomMutation } from "../../hooks/useDeleteOwnedChatroomMutation";
 import { z } from "zod";
 import { usePostChatMessageMutation } from "../../hooks/usePostChatMessageMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useGetChatroomMessagesQuery } from "../../hooks/useGetChatroomMessagesQuery";
+import {
+    TChatroomMessage,
+    useGetChatroomMessagesQuery,
+} from "../../hooks/useGetChatroomMessagesQuery";
 import { useUpdateWhitelistMutation } from "../../hooks/useUpdateWhitelistMutation";
 import { useCreateChatroomInviteMutation } from "../../hooks/useCreateChatroomInviteMutation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { pusherClient } from "../../lib/pusher";
 import { useQueryClient } from "@tanstack/react-query";
-import { Message } from "@prisma/client";
-
-export type ChatMessage = z.infer<typeof chatMessageSchema>;
-
-export const chatMessageSchema = z.object({
-    message: z
-        .string()
-        .min(1, "Message cannot be empty")
-        .max(150, "Message cannot exceed 150 characters"),
-});
+import { chatMessageSchema } from "../../lib/zSchemas";
+import type { TChatMessage } from "../../lib/zSchemas";
+import { ChatMessage } from "../../components/ChatMessage";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 const ChatPage = () => {
     const router = useRouter();
@@ -44,7 +41,8 @@ const ChatPage = () => {
         handleSubmit,
         formState: { errors },
         setError,
-    } = useForm<ChatMessage>({
+        reset,
+    } = useForm<TChatMessage>({
         resolver: zodResolver(chatMessageSchema),
     });
 
@@ -52,8 +50,10 @@ const ChatPage = () => {
 
     const isOwner = session.data?.user.id === ownedChatroom.data?.owner_id;
 
+    const chatRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
-        const newMessageHandler = async (data: Message) => {
+        const newMessageHandler = async (data: TChatroomMessage) => {
             if (!chatId) return;
             queryClient.setQueryData(
                 ["messages", chatId],
@@ -74,7 +74,7 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__new-message`);
             pusherClient.unbind("new-message", newMessageHandler);
         };
-    }, [chatId]);
+    }, [chatId, queryClient, chatroomMessages]);
 
     const handleDelete = async () => {
         if (!chatId) return;
@@ -88,8 +88,9 @@ const ChatPage = () => {
         router.push("/chats");
     };
 
-    const onSubmit: SubmitHandler<ChatMessage> = async (data) => {
+    const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
         if (!chatId) return;
+        reset();
 
         const response = await postMessage.mutateAsync({
             ...data,
@@ -104,71 +105,53 @@ const ChatPage = () => {
     };
 
     return (
-        <div className="space-x-2 space-y-2">
-            <div>Single Chat Page {chatId}</div>
-            {isOwner && (
-                <button
-                    onClick={handleDelete}
-                    className="rounded-lg border border-black p-2 shadow-md"
-                >
-                    <VscTrash size={32} />
-                </button>
-            )}
-            <div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <label className="block text-xs" htmlFor="message">
-                        <strong className="uppercase">Chatroom name</strong>
-                    </label>
-                    <input
-                        {...register("message")}
-                        name="message"
-                        id="message"
-                        type="message"
-                        className="h-10 w-full rounded-md border border-slate-500 bg-black p-2 text-sm font-medium focus:bg-slate-200 focus:text-black"
-                        placeholder="Message"
-                    />
-                    {errors.message && (
-                        <span className="text-xs font-semibold text-red-500">
-                            {errors.message.message}
-                        </span>
-                    )}
-                    <button
-                        type="submit"
-                        className="w-40 bg-white p-2 text-black shadow-md"
+        <div className="mx-auto flex w-full max-w-screen-md flex-1 flex-col">
+            <div className="relative anchor h-full">
+                {chatroomMessages.data && (
+                    <div
+                        ref={chatRef}
+                        className="anchor absolute inset-0 w-full flex-1 overflow-clip overflow-y-auto  py-2 pr-1"
                     >
-                        {postMessage.isLoading ? "Sending..." : "Send message"}
-                    </button>
-                </form>
+                        {chatroomMessages.data.map((message, i) => (
+                            <ChatMessage
+                                isDifferentAuthor={
+                                    i > 0 &&
+                                    message.author_id ===
+                                        chatroomMessages.data?.[i - 1].author_id
+                                }
+                                message={message}
+                                key={message.id}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
-            <div>
-                {chatroomMessages.data &&
-                    chatroomMessages.data.map((message) => (
-                        <div key={message.id}>{message.content}</div>
-                    ))}
-            </div>
-            <button
-                className="w-40 bg-white p-2 text-black shadow-md"
-                onClick={async () => {
-                    await createInvite.mutateAsync({
-                        chatId,
-                    });
-                }}
+            <form
+                className="mt-4 flex min-h-[48px] w-full items-center justify-between gap-2 shadow-lg"
+                onSubmit={handleSubmit(onSubmit)}
             >
-                create inv link
-            </button>
-            <button
-                className="w-40 bg-white p-2 text-black shadow-md"
-                onClick={async () => {
-                    await updateWhitelist.mutateAsync({
-                        username: "perryx1",
-                        chatId,
-                    });
-                }}
-            >
-                add to whitelist
-            </button>
-
-            {createInvite.data && <div>{createInvite.data.value}</div>}
+                <label
+                    aria-hidden="true"
+                    aria-label={`Chatroom with id ${chatId}`}
+                    htmlFor="message"
+                    className="hidden"
+                />
+                <input
+                    {...register("message")}
+                    name="message"
+                    id="message"
+                    type="message"
+                    placeholder="Message"
+                    className="flex-1 p-2 text-black"
+                />
+                <button
+                    type="submit"
+                    className="rounded-full bg-white p-2 shadow-md"
+                    aria-label="Send message"
+                >
+                    <VscSend fill="black" size={20} />
+                </button>
+            </form>
         </div>
     );
 };

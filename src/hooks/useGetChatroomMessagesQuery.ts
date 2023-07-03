@@ -1,9 +1,16 @@
 import { Message } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
-type ChatId = string;
+type TChatId = string;
 
-async function getChatroomMessages(chatId: ChatId): Promise<Message[]> {
+export type TChatroomMessage = Message & {
+    author: {
+        username: string;
+        image: string;
+    };
+};
+
+async function getChatroomMessages(chatId: TChatId) {
     const controller = new AbortController();
 
     const response = await fetch(
@@ -20,12 +27,12 @@ async function getChatroomMessages(chatId: ChatId): Promise<Message[]> {
         throw new Error("Failed to get chatroom messages");
     }
 
-    const data: Message[] = await response.json();
+    const data: TChatroomMessage[] = await response.json();
 
     return data;
 }
 
-export const useGetChatroomMessagesQuery = (chatId: ChatId) => {
+export const useGetChatroomMessagesQuery = (chatId: TChatId) => {
     return useQuery({
         queryKey: ["messages", chatId],
         queryFn: () => getChatroomMessages(chatId),

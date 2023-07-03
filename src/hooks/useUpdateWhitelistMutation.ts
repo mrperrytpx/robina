@@ -1,13 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import { UsernameFormValues } from "../pages/profile/username";
+import { TUsernameFormValues } from "../pages/profile/username";
 
-interface IPostMessage extends UsernameFormValues {
+interface IPostMessage extends TUsernameFormValues {
     chatId: string | string[];
 }
 
 export const useUpdateWhitelistMutation = () => {
     const updateWhitelist = async ({ username, chatId }: IPostMessage) => {
-        const body: UsernameFormValues = {
+        const body: TUsernameFormValues = {
             username,
         };
 

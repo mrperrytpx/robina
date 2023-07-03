@@ -31,7 +31,16 @@ export default async function handler(
             },
             include: {
                 banned_members: true,
-                messages: true,
+                messages: {
+                    include: {
+                        author: {
+                            select: {
+                                username: true,
+                                image: true,
+                            },
+                        },
+                    },
+                },
             },
         });
 

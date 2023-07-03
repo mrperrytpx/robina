@@ -1,13 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import { CreateChatroomFormValues } from "../pages/chats/create";
+import { TCreateChatroomFormValues } from "../pages/chats/create";
 
 export const useCreateChatroomMutation = () => {
     const createChatroom = async ({
         name,
         description,
         isPublic,
-    }: CreateChatroomFormValues) => {
-        const body: CreateChatroomFormValues = {
+    }: TCreateChatroomFormValues) => {
+        const body: TCreateChatroomFormValues = {
             name,
             description,
             isPublic,

@@ -7,7 +7,7 @@ import { z } from "zod";
 import { useUpdateUsernameMutation } from "../../hooks/useUpdateUsernameMutation";
 import { useRouter } from "next/router";
 
-export type UsernameFormValues = z.infer<typeof usernameSchema>;
+export type TUsernameFormValues = z.infer<typeof usernameSchema>;
 
 export const usernameSchema = z.object({
     username: z
@@ -22,7 +22,7 @@ const UsernamePage = () => {
         handleSubmit,
         formState: { errors },
         setError,
-    } = useForm<UsernameFormValues>({
+    } = useForm<TUsernameFormValues>({
         resolver: zodResolver(usernameSchema),
     });
 
@@ -31,7 +31,7 @@ const UsernamePage = () => {
 
     const updateUsername = useUpdateUsernameMutation();
 
-    const onSubmit: SubmitHandler<UsernameFormValues> = async (data) => {
+    const onSubmit: SubmitHandler<TUsernameFormValues> = async (data) => {
         const response = await updateUsername.mutateAsync({ ...data });
 
         if (!response?.ok) {
