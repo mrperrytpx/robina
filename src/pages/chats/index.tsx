@@ -6,7 +6,6 @@ import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { CreateChatroom } from "../../components/CreateChatroom";
 import { ChatroomCard } from "../../components/ChatroomCard";
 import { useGetOwnedChatroomtroomsQuery } from "../../hooks/useGetOwnedChatroomtroomsQuery";
-import { useRouter } from "next/router";
 
 const ChatsPage = () => {
     const joinedChatrooms = useGetAllJoinedChatroomsQuery();

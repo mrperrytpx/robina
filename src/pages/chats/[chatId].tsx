@@ -12,6 +12,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useGetChatroomMessagesQuery } from "../../hooks/useGetChatroomMessagesQuery";
 import { useUpdateWhitelistMutation } from "../../hooks/useUpdateWhitelistMutation";
 import { useCreateChatroomInviteMutation } from "../../hooks/useCreateChatroomInviteMutation";
+import { useEffect } from "react";
+import { pusherClient } from "../../lib/pusher";
+import { useQueryClient } from "@tanstack/react-query";
+import { Message } from "@prisma/client";
 
 export type ChatMessage = z.infer<typeof chatMessageSchema>;
 
@@ -44,7 +48,34 @@ const ChatPage = () => {
         resolver: zodResolver(chatMessageSchema),
     });
 
+    const queryClient = useQueryClient();
+
     const isOwner = session.data?.user.id === ownedChatroom.data?.owner_id;
+
+    useEffect(() => {
+        const newMessageHandler = async (data: Message) => {
+            queryClient.setQueryData(
+                ["messages", router.query.chatId as string],
+                (oldData: typeof chatroomMessages.data) => {
+                    if (!oldData) {
+                        return [data];
+                    } else {
+                        return [...oldData, data];
+                    }
+                }
+            );
+        };
+
+        pusherClient.subscribe(`chat__${router.query.chatId}__new-message`);
+        pusherClient.bind("new-message", newMessageHandler);
+
+        return () => {
+            pusherClient.unsubscribe(
+                `chat__${router.query.chatId}__new-message`
+            );
+            pusherClient.unbind("new-message", newMessageHandler);
+        };
+    }, [router.query.chatId]);
 
     const handleDelete = async () => {
         const chatId = router.query.chatId;

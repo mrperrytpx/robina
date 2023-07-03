@@ -3,6 +3,7 @@ import { chatMessageSchema } from "../../chats/[chatId]";
 import { getServerSession } from "next-auth";
 import { prisma } from "../../../../prisma/prisma";
 import { authOptions } from "../auth/[...nextauth]";
+import { pusherServer } from "../../../lib/pusher";
 
 export default async function handler(
     req: NextApiRequest,
@@ -36,13 +37,19 @@ export default async function handler(
         if (!isMemberOfChatroom)
             return res.status(401).end("Not a part of this chatroom");
 
-        await prisma.message.create({
+        const newMessage = await prisma.message.create({
             data: {
                 content: message,
                 author_id: user.id,
                 chatroom_id: isMemberOfChatroom.id,
             },
         });
+
+        pusherServer.trigger(
+            `chat__${chatId}__new-message`,
+            "new-message",
+            newMessage
+        );
 
         res.status(201).end();
     } else {
