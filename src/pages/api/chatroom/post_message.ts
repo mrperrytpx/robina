@@ -45,7 +45,9 @@ export default async function handler(
             },
         });
 
-        pusherServer.trigger(
+        console.log("new message", newMessage);
+
+        await pusherServer.trigger(
             `chat__${chatId}__new-message`,
             "new-message",
             newMessage

@@ -35,9 +35,9 @@ const ChatPage = () => {
     const updateWhitelist = useUpdateWhitelistMutation();
     const createInvite = useCreateChatroomInviteMutation();
 
-    const chatroomMessages = useGetChatroomMessagesQuery(
-        router.query.chatId as string
-    );
+    const chatId = z.string().parse(router.query.chatId);
+
+    const chatroomMessages = useGetChatroomMessagesQuery(chatId);
 
     const {
         register,
@@ -54,10 +54,11 @@ const ChatPage = () => {
 
     useEffect(() => {
         const newMessageHandler = async (data: Message) => {
+            if (!chatId) return;
             queryClient.setQueryData(
-                ["messages", router.query.chatId as string],
+                ["messages", chatId],
                 (oldData: typeof chatroomMessages.data) => {
-                    if (!oldData) {
+                    if (!oldData?.length) {
                         return [data];
                     } else {
                         return [...oldData, data];
@@ -66,20 +67,16 @@ const ChatPage = () => {
             );
         };
 
-        pusherClient.subscribe(`chat__${router.query.chatId}__new-message`);
+        pusherClient.subscribe(`chat__${chatId}__new-message`);
         pusherClient.bind("new-message", newMessageHandler);
 
         return () => {
-            pusherClient.unsubscribe(
-                `chat__${router.query.chatId}__new-message`
-            );
+            pusherClient.unsubscribe(`chat__${chatId}__new-message`);
             pusherClient.unbind("new-message", newMessageHandler);
         };
-    }, [router.query.chatId]);
+    }, [chatId]);
 
     const handleDelete = async () => {
-        const chatId = router.query.chatId;
-
         if (!chatId) return;
 
         const response = await deleteOwnedChatroom.mutateAsync({
@@ -92,11 +89,11 @@ const ChatPage = () => {
     };
 
     const onSubmit: SubmitHandler<ChatMessage> = async (data) => {
-        if (!router.query.chatId) return;
+        if (!chatId) return;
 
         const response = await postMessage.mutateAsync({
             ...data,
-            chatId: router.query.chatId,
+            chatId,
         });
 
         if (!response?.ok) {
@@ -108,7 +105,7 @@ const ChatPage = () => {
 
     return (
         <div className="space-x-2 space-y-2">
-            <div>Single Chat Page {router.query.chatId}</div>
+            <div>Single Chat Page {chatId}</div>
             {isOwner && (
                 <button
                     onClick={handleDelete}
@@ -153,7 +150,7 @@ const ChatPage = () => {
                 className="w-40 bg-white p-2 text-black shadow-md"
                 onClick={async () => {
                     await createInvite.mutateAsync({
-                        chatId: router.query.chatId as string,
+                        chatId,
                     });
                 }}
             >
@@ -164,7 +161,7 @@ const ChatPage = () => {
                 onClick={async () => {
                     await updateWhitelist.mutateAsync({
                         username: "perryx1",
-                        chatId: router.query.chatId as string,
+                        chatId,
                     });
                 }}
             >
