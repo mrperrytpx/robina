@@ -116,7 +116,7 @@ const ChatPage = () => {
                 {chatroomMessages.data?.length && (
                     <div
                         ref={chatRef}
-                        className="anchor absolute inset-0 w-full flex-1 overflow-clip overflow-y-auto  py-2 pr-1"
+                        className="anchor absolute inset-0 w-full flex-1 overflow-clip overflow-y-auto py-2 pr-1"
                     >
                         {chatroomMessages.data.map((message, i) => (
                             <ChatMessage

@@ -13,7 +13,6 @@ const ProfilePage = () => {
 
         if (!response?.ok) {
             const error = await response?.text();
-            console.log(error);
             return;
         } else {
             router.reload();

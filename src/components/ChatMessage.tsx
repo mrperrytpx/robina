@@ -2,6 +2,9 @@ import { useSession } from "next-auth/react";
 import type { TChatroomMessage } from "../hooks/useGetChatroomMessagesQuery";
 import Image from "next/image";
 import { useGetOwnedChatroomtroomsQuery } from "../hooks/useGetOwnedChatroomtroomsQuery";
+import { VscTrash } from "react-icons/vsc";
+import { useDeleteMessageMutation } from "../hooks/useDeleteMessageMutation";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface IChatMessage {
     message: TChatroomMessage;
@@ -12,6 +15,8 @@ export const ChatMessage = ({ message, isDifferentAuthor }: IChatMessage) => {
     const { author, author_id, content, created_at } = message;
     const session = useSession();
     const ownedChatroom = useGetOwnedChatroomtroomsQuery();
+    const deleteMessage = useDeleteMessageMutation();
+    const queryClient = useQueryClient();
 
     const date = new Date(created_at);
     const timestamp = new Intl.DateTimeFormat("en-GB", {
@@ -21,7 +26,7 @@ export const ChatMessage = ({ message, isDifferentAuthor }: IChatMessage) => {
 
     return (
         <div
-            className="flex w-full flex-col items-start gap-0.5"
+            className="mt-2 flex w-full flex-col items-start gap-0.5"
             style={{
                 alignItems:
                     session.data?.user.id === author_id ? "end" : "start",
@@ -52,7 +57,7 @@ export const ChatMessage = ({ message, isDifferentAuthor }: IChatMessage) => {
                 </div>
             )}
             <div
-                className="flex max-w-[min(86%,450px)] items-end gap-2"
+                className="group relative flex max-w-[min(86%,450px)] items-end gap-2"
                 style={{
                     flexDirection:
                         session.data?.user.id === author_id
@@ -60,8 +65,22 @@ export const ChatMessage = ({ message, isDifferentAuthor }: IChatMessage) => {
                             : "row-reverse",
                 }}
             >
+                <VscTrash
+                    size={24}
+                    fill="black"
+                    onClick={async () => {
+                        await deleteMessage.mutateAsync({
+                            chatId: message.chatroom_id,
+                            messageId: message.id,
+                        });
+                        queryClient.refetchQueries({
+                            queryKey: ["messages", message.chatroom_id],
+                        });
+                    }}
+                    className="absolute right-2 top-1 z-10 hidden cursor-pointer rounded-full bg-white p-1 group-hover:inline-block"
+                />
                 <p
-                    className="rounded-md bg-gray-100 p-3 text-sm text-black first:mt-1"
+                    className="break-all rounded-md bg-gray-100 p-3 text-sm text-black"
                     style={{
                         border:
                             ownedChatroom.data?.owner_id === author_id

@@ -8,8 +8,6 @@ async function getChatroomMembers(chatId: string) {
         signal: controller.signal,
     });
 
-    console.log("resp", response);
-
     if (controller.signal.aborted)
         throw new Error("Get chatroom messages req aborted");
 
