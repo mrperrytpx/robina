@@ -1,13 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import { ChatMessage } from "../pages/chats/[chatId]";
+import { TChatMessage } from "../lib/zSchemas";
 
-interface IPostMessage extends ChatMessage {
+interface IPostMessage extends TChatMessage {
     chatId: string | string[];
 }
 
 export const usePostChatMessageMutation = () => {
     const postMessage = async ({ message, chatId }: IPostMessage) => {
-        const body: ChatMessage = {
+        const body: TChatMessage = {
             message,
         };
 
