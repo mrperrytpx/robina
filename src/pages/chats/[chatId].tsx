@@ -15,7 +15,7 @@ import {
 } from "../../hooks/useGetChatroomMessagesQuery";
 import { useUpdateWhitelistMutation } from "../../hooks/useUpdateWhitelistMutation";
 import { useCreateChatroomInviteMutation } from "../../hooks/useCreateChatroomInviteMutation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { pusherClient } from "../../lib/pusher";
 import { useQueryClient } from "@tanstack/react-query";
 import { chatMessageSchema } from "../../lib/zSchemas";
@@ -23,8 +23,12 @@ import type { TChatMessage } from "../../lib/zSchemas";
 import { ChatMessage } from "../../components/ChatMessage";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useGetChatroomMembersQuery } from "../../hooks/useGetChatroomMembersQuery";
+import { Portal } from "../../components/Portal";
 
 const ChatPage = () => {
+    const [isMembersOpen, setIsMembersOpen] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
     const router = useRouter();
     const chatId = z.string().parse(router.query.chatId);
     const session = useSession();
@@ -108,9 +112,27 @@ const ChatPage = () => {
     return (
         <div className="mx-auto flex w-full max-w-screen-md flex-1 flex-col">
             <div>
-                {chatroomMembers.data?.map((member) => (
-                    <div key={member.id}>@{member.username}</div>
-                ))}
+                <button
+                    className="rounded-full bg-white p-2 text-black shadow-md"
+                    onClick={() => setIsMembersOpen(!isMembersOpen)}
+                >
+                    Open Member List
+                </button>
+                {session.data?.user.id === ownedChatroom.data?.owner_id && (
+                    <button
+                        className="rounded-full bg-white p-2 text-black shadow-md"
+                        onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                    >
+                        Open Chat Settings
+                    </button>
+                )}
+                <button
+                    className="rounded-full bg-white p-2 text-black shadow-md"
+                    onClick={() => createInvite.mutateAsync({ chatId })}
+                >
+                    createInv
+                </button>
+                <div>{createInvite.data?.value}</div>
             </div>
             <div className="anchor relative flex h-full items-center justify-center">
                 {chatroomMessages.isLoading && (
@@ -164,6 +186,24 @@ const ChatPage = () => {
                     <VscSend fill="black" size={20} />
                 </button>
             </form>
+            {isMembersOpen && (
+                <Portal>
+                    <div className="relative flex max-h-full max-w-screen-md flex-col items-center gap-4 overflow-y-auto rounded-md border-2 border-slate-500 bg-black p-4 text-slate-100 hover:border-slate-200">
+                        {!chatroomMembers.data ? (
+                            <LoadingSpinner size={50} />
+                        ) : (
+                            <div>yo</div>
+                        )}
+                    </div>
+                </Portal>
+            )}
+            {isSettingsOpen && (
+                <Portal>
+                    <div className="relative flex max-h-full max-w-screen-md flex-col items-center gap-4 overflow-y-auto rounded-md border-2 border-slate-500 bg-black p-4 text-slate-100 hover:border-slate-200">
+                        <div>yo settings</div>
+                    </div>
+                </Portal>
+            )}
         </div>
     );
 };
