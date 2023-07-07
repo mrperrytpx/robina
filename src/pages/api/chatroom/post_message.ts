@@ -32,7 +32,7 @@ export default async function handler(
         if (!user.username)
             return res
                 .status(302)
-                .redirect(process.env.NEXTAUTH_URL! + "/api/auth/signin");
+                .redirect(process.env.NEXTAUTH_URL! + "/username");
 
         const isMemberOfChatroom = user?.chatrooms.find(
             (chat) => chat.id === chatId
