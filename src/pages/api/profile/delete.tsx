@@ -12,10 +12,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         const user = await prisma.user.findFirst({
             where: {
                 id: session.user.id,
-            },
-            include: {
-                owned_chatroom: true,
-            },
+            }
         });
 
         if (!user) return res.status(401).end("No user");
