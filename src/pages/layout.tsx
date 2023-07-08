@@ -75,12 +75,12 @@ const Layout = ({ children }: ILayoutProps) => {
                     </div>
                 ) : (
                     <>
-                        <main className="mx-auto flex min-h-[calc(max(600px,100svh)-64px)] w-full max-w-screen-2xl flex-1 px-4 py-2">
+                        <main className="mx-auto flex min-h-[calc(max(600px,100svh)-64px)] w-full max-w-screen-2xl flex-1">
                             {children}
                         </main>
-                        <footer className="sticky top-0 grid min-h-[128px] place-items-center items-center border-t-2 border-slate-400 bg-slate-900">
+                        {/* <footer className="sticky top-0 grid min-h-[128px] place-items-center items-center border-t-2 border-slate-400 bg-slate-900">
                             Footer
-                        </footer>
+                        </footer> */}
                     </>
                 )}
             </div>

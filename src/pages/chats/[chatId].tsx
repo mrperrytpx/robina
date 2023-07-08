@@ -3,8 +3,8 @@ import { Session } from "next-auth";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { VscSend } from "react-icons/vsc";
+import { FiSettings, FiUsers } from "react-icons/fi";
 import { useGetOwnedChatroomtroomsQuery } from "../../hooks/useGetOwnedChatroomtroomsQuery";
-import { useDeleteOwnedChatroomMutation } from "../../hooks/useDeleteOwnedChatroomMutation";
 import { z } from "zod";
 import { usePostChatMessageMutation } from "../../hooks/usePostChatMessageMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,7 +13,6 @@ import {
     TChatroomMessage,
     useGetChatroomMessagesQuery,
 } from "../../hooks/useGetChatroomMessagesQuery";
-import { useUpdateWhitelistMutation } from "../../hooks/useUpdateWhitelistMutation";
 import { useCreateChatroomInviteMutation } from "../../hooks/useCreateChatroomInviteMutation";
 import { useEffect, useRef, useState } from "react";
 import { pusherClient } from "../../lib/pusher";
@@ -33,11 +32,13 @@ const ChatPage = () => {
     const chatId = z.string().parse(router.query.chatId);
     const session = useSession();
     const ownedChatroom = useGetOwnedChatroomtroomsQuery();
-    const deleteOwnedChatroom = useDeleteOwnedChatroomMutation();
     const postMessage = usePostChatMessageMutation();
-    const updateWhitelist = useUpdateWhitelistMutation();
+
     const createInvite = useCreateChatroomInviteMutation();
     const chatroomMembers = useGetChatroomMembersQuery(chatId);
+
+    const endRef = useRef<HTMLDivElement>(null);
+    const chatRef = useRef<HTMLDivElement>(null);
 
     const chatroomMessages = useGetChatroomMessagesQuery(chatId);
 
@@ -54,8 +55,6 @@ const ChatPage = () => {
     const queryClient = useQueryClient();
 
     const isOwner = session.data?.user.id === ownedChatroom.data?.owner_id;
-
-    const chatRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const newMessageHandler = async (data: TChatroomMessage) => {
@@ -81,17 +80,9 @@ const ChatPage = () => {
         };
     }, [chatId, queryClient, chatroomMessages]);
 
-    const handleDelete = async () => {
-        if (!chatId) return;
-
-        const response = await deleteOwnedChatroom.mutateAsync({
-            chatId,
-        });
-
-        if (!response.ok) return;
-
-        router.push("/chats");
-    };
+    useEffect(() => {
+        endRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [chatroomMessages.data]);
 
     const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
         if (!chatId) return;
@@ -111,28 +102,9 @@ const ChatPage = () => {
 
     return (
         <div className="mx-auto flex w-full max-w-screen-md flex-1 flex-col">
-            <div>
-                <button
-                    className="rounded-full bg-white p-2 text-black shadow-md"
-                    onClick={() => setIsMembersOpen(!isMembersOpen)}
-                >
-                    Open Member List
-                </button>
-                {session.data?.user.id === ownedChatroom.data?.owner_id && (
-                    <button
-                        className="rounded-full bg-white p-2 text-black shadow-md"
-                        onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-                    >
-                        Open Chat Settings
-                    </button>
-                )}
-                <button
-                    className="rounded-full bg-white p-2 text-black shadow-md"
-                    onClick={() => createInvite.mutateAsync({ chatId })}
-                >
-                    createInv
-                </button>
-                <div>{createInvite.data?.value}</div>
+            <div className="flex w-full items-center justify-between border-b border-black px-4 py-2 shadow-lg">
+                <FiSettings size={24} />
+                <FiUsers size={24} />
             </div>
             <div className="anchor relative flex h-full items-center justify-center">
                 {chatroomMessages.isLoading && (
@@ -144,7 +116,7 @@ const ChatPage = () => {
                 {chatroomMessages.data?.length && (
                     <div
                         ref={chatRef}
-                        className="anchor absolute inset-0 w-full flex-1 overflow-clip overflow-y-auto py-2 pr-1"
+                        className="absolute inset-0 w-full flex-1 overflow-clip overflow-y-auto px-4 py-2"
                     >
                         {chatroomMessages.data.map((message, i) => (
                             <ChatMessage
@@ -157,11 +129,12 @@ const ChatPage = () => {
                                 key={message.id}
                             />
                         ))}
+                        <div ref={endRef} />
                     </div>
                 )}
             </div>
             <form
-                className="mt-4 flex min-h-[48px] w-full items-center justify-between gap-2 shadow-lg"
+                className="my-4 flex min-h-[48px] w-full items-center justify-between gap-2 px-4 shadow-lg"
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <label

@@ -5,6 +5,7 @@ import { useGetOwnedChatroomtroomsQuery } from "../hooks/useGetOwnedChatroomtroo
 import { VscTrash } from "react-icons/vsc";
 import { useDeleteMessageMutation } from "../hooks/useDeleteMessageMutation";
 import { useQueryClient } from "@tanstack/react-query";
+import { formatTime } from "../util/formatTime";
 
 interface IChatMessage {
     message: TChatroomMessage;
@@ -19,79 +20,47 @@ export const ChatMessage = ({ message, isDifferentAuthor }: IChatMessage) => {
     const queryClient = useQueryClient();
 
     const date = new Date(created_at);
-    const timestamp = new Intl.DateTimeFormat("en-GB", {
-        hour: "2-digit",
-        minute: "2-digit",
-    }).format(date);
 
     return (
         <div
-            className="mt-2 flex w-full flex-col items-start gap-0.5"
+            className="group flex w-full items-start justify-center gap-2"
             style={{
-                alignItems:
-                    session.data?.user.id === author_id ? "end" : "start",
+                marginTop: !isDifferentAuthor ? "0.75rem" : "",
             }}
         >
-            {!isDifferentAuthor && (
-                <div
-                    className="flex items-end gap-2"
-                    style={{
-                        flexDirection:
-                            session.data?.user.id === author_id
-                                ? "row-reverse"
-                                : "row",
-                    }}
-                >
-                    <div className="aspect-square w-8">
-                        <Image
-                            src={author.image}
-                            width={100}
-                            height={100}
-                            alt={`${author.username}'s profile`}
-                            className="rounded-full"
-                        />
-                    </div>
-                    <span className="text-xs font-bold">
-                        @{author.username}
-                    </span>
+            {!isDifferentAuthor ? (
+                <div className="aspect-square w-12">
+                    <Image
+                        src={author.image}
+                        alt={`${author.username}'s profile image`}
+                        width={100}
+                        height={100}
+                        className="w-full rounded-full"
+                    />
+                </div>
+            ) : (
+                <div className="mt-1 w-12 text-xs">
+                    <p className=" hidden w-full text-right font-mono group-hover:block">
+                        {new Intl.DateTimeFormat("en-GB", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                        }).format(date)}
+                    </p>
                 </div>
             )}
-            <div
-                className="group relative flex max-w-[min(86%,450px)] items-end gap-2"
-                style={{
-                    flexDirection:
-                        session.data?.user.id === author_id
-                            ? "row"
-                            : "row-reverse",
-                }}
-            >
-                <VscTrash
-                    size={24}
-                    fill="black"
-                    onClick={async () => {
-                        await deleteMessage.mutateAsync({
-                            chatId: message.chatroom_id,
-                            messageId: message.id,
-                        });
-                        queryClient.refetchQueries({
-                            queryKey: ["messages", message.chatroom_id],
-                        });
-                    }}
-                    className="absolute right-2 top-1 z-10 hidden cursor-pointer rounded-full bg-white p-1 group-hover:inline-block"
-                />
-                <p
-                    className="break-all rounded-md bg-gray-100 p-3 text-sm text-black"
-                    style={{
-                        border:
-                            ownedChatroom.data?.owner_id === author_id
-                                ? "2px solid orange"
-                                : "",
-                    }}
-                >
+            <div className="flex w-full flex-col">
+                {!isDifferentAuthor && (
+                    <div className="flex items-end justify-start gap-2">
+                        <span className="mb-1 text-sm font-bold">
+                            @{author.username}
+                        </span>
+                        <span className="mb-1 text-xs font-extralight">
+                            {formatTime(date).replace(",", "")}
+                        </span>
+                    </div>
+                )}
+                <span className="break-all py-1 text-sm leading-4">
                     {content}
-                </p>
-                <span className="min-w-[33px] text-right font-mono text-xs">
-                    {timestamp}
                 </span>
             </div>
         </div>
