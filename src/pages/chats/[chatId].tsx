@@ -4,7 +4,6 @@ import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { VscSend } from "react-icons/vsc";
 import { FiSettings, FiUsers } from "react-icons/fi";
-import { useGetOwnedChatroomtroomsQuery } from "../../hooks/useGetOwnedChatroomtroomsQuery";
 import { z } from "zod";
 import { usePostChatMessageMutation } from "../../hooks/usePostChatMessageMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +13,7 @@ import {
     useGetChatroomMessagesQuery,
 } from "../../hooks/useGetChatroomMessagesQuery";
 import { useCreateChatroomInviteMutation } from "../../hooks/useCreateChatroomInviteMutation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { pusherClient } from "../../lib/pusher";
 import { useQueryClient } from "@tanstack/react-query";
 import { chatMessageSchema } from "../../lib/zSchemas";
@@ -31,11 +30,18 @@ const ChatPage = () => {
     const router = useRouter();
     const chatId = z.string().parse(router.query.chatId);
     const session = useSession();
-    const ownedChatroom = useGetOwnedChatroomtroomsQuery();
     const postMessage = usePostChatMessageMutation();
 
     const createInvite = useCreateChatroomInviteMutation();
     const chatroomMembers = useGetChatroomMembersQuery(chatId);
+
+    const isOwner = useMemo(
+        () =>
+            chatroomMembers.data?.find(
+                (member) => member.id === session.data?.user.id
+            ),
+        [chatroomMembers.data, session.data?.user.id]
+    );
 
     const endRef = useRef<HTMLDivElement>(null);
     const chatRef = useRef<HTMLDivElement>(null);
@@ -53,8 +59,6 @@ const ChatPage = () => {
     });
 
     const queryClient = useQueryClient();
-
-    const isOwner = session.data?.user.id === ownedChatroom.data?.owner_id;
 
     useEffect(() => {
         const newMessageHandler = async (data: TChatroomMessage) => {
@@ -102,18 +106,18 @@ const ChatPage = () => {
 
     return (
         <div className="mx-auto flex w-full max-w-screen-md flex-1 flex-col">
-            <div className="flex w-full items-center justify-between border-b border-black px-4 py-2 shadow-lg">
+            <div>{!!isOwner ? "Owner" : "not owner"}</div>
+            <div className="flex w-full items-center justify-between border-b border-black px-6 py-4 shadow-lg">
                 <FiSettings size={24} />
                 <FiUsers size={24} />
             </div>
             <div className="anchor relative flex h-full items-center justify-center">
-                {chatroomMessages.isLoading && (
+                {chatroomMessages.isLoading ? (
                     <div className="flex flex-col items-center gap-4">
                         <LoadingSpinner />
                         Loading messages...
                     </div>
-                )}
-                {chatroomMessages.data?.length && (
+                ) : chatroomMessages.data?.length ? (
                     <div
                         ref={chatRef}
                         className="absolute inset-0 w-full flex-1 overflow-clip overflow-y-auto px-4 py-2"
@@ -131,6 +135,8 @@ const ChatPage = () => {
                         ))}
                         <div ref={endRef} />
                     </div>
+                ) : (
+                    <div>No messages</div>
                 )}
             </div>
             <form
@@ -159,7 +165,7 @@ const ChatPage = () => {
                     <VscSend fill="black" size={20} />
                 </button>
             </form>
-            {isMembersOpen && (
+            {/* {isMembersOpen && (
                 <Portal>
                     <div className="relative flex max-h-full max-w-screen-md flex-col items-center gap-4 overflow-y-auto rounded-md border-2 border-slate-500 bg-black p-4 text-slate-100 hover:border-slate-200">
                         {!chatroomMembers.data ? (
@@ -176,7 +182,7 @@ const ChatPage = () => {
                         <div>yo settings</div>
                     </div>
                 </Portal>
-            )}
+            )} */}
         </div>
     );
 };

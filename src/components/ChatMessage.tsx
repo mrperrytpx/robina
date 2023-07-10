@@ -1,7 +1,6 @@
 import { useSession } from "next-auth/react";
 import type { TChatroomMessage } from "../hooks/useGetChatroomMessagesQuery";
 import Image from "next/image";
-import { useGetOwnedChatroomtroomsQuery } from "../hooks/useGetOwnedChatroomtroomsQuery";
 import { VscTrash } from "react-icons/vsc";
 import { useDeleteMessageMutation } from "../hooks/useDeleteMessageMutation";
 import { useQueryClient } from "@tanstack/react-query";
@@ -15,7 +14,6 @@ interface IChatMessage {
 export const ChatMessage = ({ message, isDifferentAuthor }: IChatMessage) => {
     const { author, author_id, content, created_at } = message;
     const session = useSession();
-    const ownedChatroom = useGetOwnedChatroomtroomsQuery();
     const deleteMessage = useDeleteMessageMutation();
     const queryClient = useQueryClient();
 
