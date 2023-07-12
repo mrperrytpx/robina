@@ -31,7 +31,7 @@ export const Portal = ({ children }: PortalProps) => {
     return mounted && ref.current
         ? createPortal(
               <>
-                  <div className="fixed inset-0 z-40 bg-slate-700 bg-opacity-30"></div>
+                  <div className="fixed inset-0 z-40 bg-slate-700 bg-opacity-30" />
                   <div
                       role="dialog"
                       className="fixed inset-0 z-50 flex max-h-screen items-center justify-center overflow-y-auto p-1 opacity-100"

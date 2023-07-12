@@ -13,7 +13,7 @@ import {
     useGetChatroomMessagesQuery,
 } from "../../hooks/useGetChatroomMessagesQuery";
 import { useCreateChatroomInviteMutation } from "../../hooks/useCreateChatroomInviteMutation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { pusherClient } from "../../lib/pusher";
 import { useQueryClient } from "@tanstack/react-query";
 import { chatMessageSchema } from "../../lib/zSchemas";
@@ -21,12 +21,10 @@ import type { TChatMessage } from "../../lib/zSchemas";
 import { ChatMessage } from "../../components/ChatMessage";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useGetChatroomMembersQuery } from "../../hooks/useGetChatroomMembersQuery";
-import { Portal } from "../../components/Portal";
+import Image from "next/image";
+import DefaultPic from "../../../public/default.png";
 
 const ChatPage = () => {
-    const [isMembersOpen, setIsMembersOpen] = useState(false);
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-
     const router = useRouter();
     const chatId = z.string().parse(router.query.chatId);
     const session = useSession();
@@ -85,7 +83,7 @@ const ChatPage = () => {
     }, [chatId, queryClient, chatroomMessages]);
 
     useEffect(() => {
-        endRef.current?.scrollIntoView({ behavior: "smooth" });
+        endRef.current?.scrollIntoView({ behavior: "instant" });
     }, [chatroomMessages.data]);
 
     const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
@@ -104,85 +102,104 @@ const ChatPage = () => {
         }
     };
 
+    if (!isOwner) return;
+
     return (
-        <div className="mx-auto flex w-full max-w-screen-md flex-1 flex-col">
-            <div>{!!isOwner ? "Owner" : "not owner"}</div>
-            <div className="flex w-full items-center justify-between border-b border-black px-6 py-4 shadow-lg">
-                <FiSettings size={24} />
-                <FiUsers size={24} />
-            </div>
-            <div className="anchor relative flex h-full items-center justify-center">
-                {chatroomMessages.isLoading ? (
-                    <div className="flex flex-col items-center gap-4">
-                        <LoadingSpinner />
-                        Loading messages...
-                    </div>
-                ) : chatroomMessages.data?.length ? (
-                    <div
-                        ref={chatRef}
-                        className="absolute inset-0 w-full flex-1 overflow-clip overflow-y-auto px-4 py-2"
-                    >
-                        {chatroomMessages.data.map((message, i) => (
-                            <ChatMessage
-                                isDifferentAuthor={
-                                    i > 0 &&
-                                    message.author_id ===
-                                        chatroomMessages.data?.[i - 1].author_id
-                                }
-                                message={message}
-                                key={message.id}
-                            />
-                        ))}
-                        <div ref={endRef} />
-                    </div>
-                ) : (
-                    <div>No messages</div>
-                )}
-            </div>
-            <form
-                className="my-4 flex min-h-[48px] w-full items-center justify-between gap-2 px-4 shadow-lg"
-                onSubmit={handleSubmit(onSubmit)}
-            >
-                <label
-                    aria-hidden="true"
-                    aria-label={`Chatroom with id ${chatId}`}
-                    htmlFor="message"
-                    className="hidden"
-                />
-                <input
-                    {...register("message")}
-                    name="message"
-                    id="message"
-                    type="message"
-                    placeholder="Message"
-                    className="flex-1 p-2 text-black"
-                />
-                <button
-                    type="submit"
-                    className="rounded-full bg-white p-2 shadow-md"
-                    aria-label="Send message"
+        <div className="mx-auto flex max-h-[calc(100svh-64px)] w-full flex-1">
+            <div className="flex w-full flex-1 flex-col">
+                <div className="flex w-full items-center justify-between border-b border-black px-6 py-4 shadow-lg sm:hidden">
+                    <FiSettings size={24} />
+                    <FiUsers size={24} />
+                </div>
+                <div className="relative flex h-full  items-center justify-center ">
+                    {chatroomMessages.isLoading ? (
+                        <div className="flex flex-col items-center gap-4">
+                            <LoadingSpinner />
+                            Loading messages...
+                        </div>
+                    ) : chatroomMessages.data?.length ? (
+                        <div
+                            ref={chatRef}
+                            className="absolute inset-0 w-full flex-1 overflow-clip overflow-y-auto px-4 py-2 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400"
+                        >
+                            {chatroomMessages.data.map((message, i) => (
+                                <ChatMessage
+                                    isDifferentAuthor={
+                                        i > 0 &&
+                                        message.author_id ===
+                                            chatroomMessages.data?.[i - 1]
+                                                .author_id
+                                    }
+                                    message={message}
+                                    key={message.id}
+                                    ownerId={isOwner.id}
+                                />
+                            ))}
+                            <div ref={endRef} />
+                        </div>
+                    ) : (
+                        <div>No messages</div>
+                    )}
+                </div>
+                <form
+                    className="my-4 flex min-h-[48px] w-[calc(100%-48px)] items-center justify-between gap-2 self-end px-4 shadow-lg"
+                    onSubmit={handleSubmit(onSubmit)}
                 >
-                    <VscSend fill="black" size={20} />
-                </button>
-            </form>
-            {/* {isMembersOpen && (
-                <Portal>
-                    <div className="relative flex max-h-full max-w-screen-md flex-col items-center gap-4 overflow-y-auto rounded-md border-2 border-slate-500 bg-black p-4 text-slate-100 hover:border-slate-200">
-                        {!chatroomMembers.data ? (
-                            <LoadingSpinner size={50} />
-                        ) : (
-                            <div>yo</div>
-                        )}
-                    </div>
-                </Portal>
-            )}
-            {isSettingsOpen && (
-                <Portal>
-                    <div className="relative flex max-h-full max-w-screen-md flex-col items-center gap-4 overflow-y-auto rounded-md border-2 border-slate-500 bg-black p-4 text-slate-100 hover:border-slate-200">
-                        <div>yo settings</div>
-                    </div>
-                </Portal>
-            )} */}
+                    <label
+                        aria-hidden="true"
+                        aria-label={`Chatroom with id ${chatId}`}
+                        htmlFor="message"
+                        className="hidden"
+                    />
+                    <input
+                        {...register("message")}
+                        name="message"
+                        id="message"
+                        type="message"
+                        placeholder="Message"
+                        className="flex-1 p-2 text-black"
+                    />
+                    <button
+                        type="submit"
+                        className="rounded-full bg-white p-2 shadow-md"
+                        aria-label="Send message"
+                    >
+                        <VscSend fill="black" size={20} />
+                    </button>
+                </form>
+            </div>
+            <div className="hidden w-52 flex-col bg-slate-800 sm:flex">
+                <h2 className="p-2 text-xs shadow-md">
+                    Members - {chatroomMembers.data?.length}
+                </h2>
+                <div className="flex w-full flex-col overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
+                    {chatroomMembers.data?.map((member) => (
+                        <div
+                            key={member.id}
+                            className="flex items-center gap-2 p-2"
+                        >
+                            <div className="aspect-square w-8">
+                                <Image
+                                    src={member.image ?? DefaultPic}
+                                    alt={`${member.username}'s image`}
+                                    width={100}
+                                    height={100}
+                                    className="w-full min-w-[32px] rounded-full"
+                                />
+                            </div>
+                            <span
+                                style={{
+                                    fontWeight:
+                                        member.id === isOwner?.id ? "bold" : "",
+                                }}
+                                className="truncate text-sm"
+                            >
+                                @{member.username}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };

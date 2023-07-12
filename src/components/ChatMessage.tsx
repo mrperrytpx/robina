@@ -9,9 +9,14 @@ import { formatTime } from "../util/formatTime";
 interface IChatMessage {
     message: TChatroomMessage;
     isDifferentAuthor: boolean;
+    ownerId: string;
 }
 
-export const ChatMessage = ({ message, isDifferentAuthor }: IChatMessage) => {
+export const ChatMessage = ({
+    message,
+    isDifferentAuthor,
+    ownerId,
+}: IChatMessage) => {
     const { author, author_id, content, created_at } = message;
     const session = useSession();
     const deleteMessage = useDeleteMessageMutation();
@@ -50,7 +55,7 @@ export const ChatMessage = ({ message, isDifferentAuthor }: IChatMessage) => {
                 {!isDifferentAuthor && (
                     <div className="flex items-end justify-start gap-2">
                         <span className="mb-1 text-sm font-bold">
-                            @{author.username}
+                            @{author.username} {author_id === ownerId && "🦁"}
                         </span>
                         <span className="mb-1 text-xs font-extralight">
                             {formatTime(date).replace(",", "")}
