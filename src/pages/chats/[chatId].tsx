@@ -174,7 +174,7 @@ const ChatPage = () => {
                     </button>
                 </form>
             </div>
-            <div className="w-60flex-col hidden bg-slate-800 sm:flex">
+            <div className="hidden w-60 flex-col bg-slate-800 sm:flex">
                 <h2 className="p-2 text-xs shadow-md">
                     Members - {chatroom.data?.members.length}
                 </h2>
