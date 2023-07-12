@@ -47,6 +47,9 @@ export default async function handler(
                 author_id: user.id,
                 chatroom_id: isMemberOfChatroom.id,
             },
+            include: {
+                author: true,
+            },
         });
 
         await pusherServer.trigger(
@@ -54,7 +57,6 @@ export default async function handler(
             "new-message",
             {
                 ...newMessage,
-                author: { username: user.username, image: user.image },
             }
         );
 

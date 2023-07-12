@@ -1,28 +1,22 @@
 import { useSession } from "next-auth/react";
-import type { TChatroomMessage } from "../hooks/useGetChatroomMessagesQuery";
 import Image from "next/image";
-import { VscTrash } from "react-icons/vsc";
 import { useDeleteMessageMutation } from "../hooks/useDeleteMessageMutation";
 import { useQueryClient } from "@tanstack/react-query";
 import { formatTime } from "../util/formatTime";
+import DefaultImage from "../../public/default.png";
+import { TChatroomMessage } from "../hooks/useGetChatroomQuery";
 
 interface IChatMessage {
     message: TChatroomMessage;
     isDifferentAuthor: boolean;
-    ownerId: string;
 }
 
-export const ChatMessage = ({
-    message,
-    isDifferentAuthor,
-    ownerId,
-}: IChatMessage) => {
-    const { author, author_id, content, created_at } = message;
+export const ChatMessage = ({ message, isDifferentAuthor }: IChatMessage) => {
     const session = useSession();
     const deleteMessage = useDeleteMessageMutation();
     const queryClient = useQueryClient();
 
-    const date = new Date(created_at);
+    const date = new Date(message.created_at);
 
     return (
         <div
@@ -34,8 +28,8 @@ export const ChatMessage = ({
             {!isDifferentAuthor ? (
                 <div className="aspect-square w-12">
                     <Image
-                        src={author.image}
-                        alt={`${author.username}'s profile image`}
+                        src={message.author.image || DefaultImage}
+                        alt={`${message.author.username}'s profile image`}
                         width={100}
                         height={100}
                         className="w-full rounded-full"
@@ -55,7 +49,7 @@ export const ChatMessage = ({
                 {!isDifferentAuthor && (
                     <div className="flex items-end justify-start gap-2">
                         <span className="mb-1 text-sm font-bold">
-                            @{author.username} {author_id === ownerId && "🦁"}
+                            @{message.author.username}
                         </span>
                         <span className="mb-1 text-xs font-extralight">
                             {formatTime(date).replace(",", "")}
@@ -63,7 +57,7 @@ export const ChatMessage = ({
                     </div>
                 )}
                 <span className="break-all py-1 text-sm leading-4">
-                    {content}
+                    {message.content}
                 </span>
             </div>
         </div>

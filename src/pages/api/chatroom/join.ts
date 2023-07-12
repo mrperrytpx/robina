@@ -9,7 +9,10 @@ export default async function handler(
     res: NextApiResponse
 ) {
     if (req.method === "POST") {
-        const { inviteLink } = req.body;
+        const inviteLink = z
+            .string()
+            .min(10, "Invite link needs to be 10 chars")
+            .parse(req.body.inviteLink);
 
         if (!inviteLink) return res.status(404).end("Invalid invite link");
 

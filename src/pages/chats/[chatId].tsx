@@ -8,10 +8,6 @@ import { z } from "zod";
 import { usePostChatMessageMutation } from "../../hooks/usePostChatMessageMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import {
-    TChatroomMessage,
-    useGetChatroomMessagesQuery,
-} from "../../hooks/useGetChatroomMessagesQuery";
 import { useCreateChatroomInviteMutation } from "../../hooks/useCreateChatroomInviteMutation";
 import { useEffect, useMemo, useRef } from "react";
 import { pusherClient } from "../../lib/pusher";
@@ -20,9 +16,13 @@ import { chatMessageSchema } from "../../lib/zSchemas";
 import type { TChatMessage } from "../../lib/zSchemas";
 import { ChatMessage } from "../../components/ChatMessage";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
-import { useGetChatroomMembersQuery } from "../../hooks/useGetChatroomMembersQuery";
 import Image from "next/image";
 import DefaultPic from "../../../public/default.png";
+import {
+    TChatroomMessage,
+    useGetChatroomQuery,
+} from "../../hooks/useGetChatroomQuery";
+import { TChatroomData } from "../api/chatroom/get_chatroom";
 
 const ChatPage = () => {
     const router = useRouter();
@@ -31,20 +31,19 @@ const ChatPage = () => {
     const postMessage = usePostChatMessageMutation();
 
     const createInvite = useCreateChatroomInviteMutation();
-    const chatroomMembers = useGetChatroomMembersQuery(chatId);
+
+    const chatroom = useGetChatroomQuery(chatId);
 
     const isOwner = useMemo(
         () =>
-            chatroomMembers.data?.find(
-                (member) => member.id === session.data?.user.id
+            chatroom.data?.members.find(
+                (member) => member.id === chatroom.data.owner_id
             ),
-        [chatroomMembers.data, session.data?.user.id]
+        [chatroom.data]
     );
 
     const endRef = useRef<HTMLDivElement>(null);
     const chatRef = useRef<HTMLDivElement>(null);
-
-    const chatroomMessages = useGetChatroomMessagesQuery(chatId);
 
     const {
         register,
@@ -62,12 +61,22 @@ const ChatPage = () => {
         const newMessageHandler = async (data: TChatroomMessage) => {
             if (!chatId) return;
             queryClient.setQueryData(
-                ["messages", chatId],
-                (oldData: typeof chatroomMessages.data) => {
-                    if (!oldData?.length) {
-                        return [data];
+                ["chatroom", chatId],
+                // This is the weirdest shit ever
+                // Spread operator tripping the type
+                // then only the first return needs to be casted to fix it ???????????
+                // ????????????????????????????????????????????????
+                (oldData: TChatroomData | undefined) => {
+                    if (!oldData?.messages) {
+                        return {
+                            ...oldData,
+                            messages: [data],
+                        } as TChatroomData;
                     } else {
-                        return [...oldData, data];
+                        return {
+                            ...oldData,
+                            messages: [...oldData.messages, data],
+                        };
                     }
                 }
             );
@@ -80,11 +89,11 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__new-message`);
             pusherClient.unbind("new-message", newMessageHandler);
         };
-    }, [chatId, queryClient, chatroomMessages]);
+    }, [chatId, queryClient, chatroom.data?.messages]);
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "instant" });
-    }, [chatroomMessages.data]);
+    }, [chatroom.data?.messages]);
 
     const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
         if (!chatId) return;
@@ -102,8 +111,6 @@ const ChatPage = () => {
         }
     };
 
-    if (!isOwner) return;
-
     return (
         <div className="mx-auto flex max-h-[calc(100svh-64px)] w-full flex-1">
             <div className="flex w-full flex-1 flex-col">
@@ -112,27 +119,26 @@ const ChatPage = () => {
                     <FiUsers size={24} />
                 </div>
                 <div className="relative flex h-full  items-center justify-center ">
-                    {chatroomMessages.isLoading ? (
+                    {chatroom.isLoading ? (
                         <div className="flex flex-col items-center gap-4">
                             <LoadingSpinner />
                             Loading messages...
                         </div>
-                    ) : chatroomMessages.data?.length ? (
+                    ) : chatroom.data?.messages.length ? (
                         <div
                             ref={chatRef}
                             className="absolute inset-0 w-full flex-1 overflow-clip overflow-y-auto px-4 py-2 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400"
                         >
-                            {chatroomMessages.data.map((message, i) => (
+                            {chatroom.data?.messages.map((message, i) => (
                                 <ChatMessage
                                     isDifferentAuthor={
                                         i > 0 &&
                                         message.author_id ===
-                                            chatroomMessages.data?.[i - 1]
+                                            chatroom.data?.messages[i - 1]
                                                 .author_id
                                     }
                                     message={message}
                                     key={message.id}
-                                    ownerId={isOwner.id}
                                 />
                             ))}
                             <div ref={endRef} />
@@ -168,12 +174,12 @@ const ChatPage = () => {
                     </button>
                 </form>
             </div>
-            <div className="hidden w-52 flex-col bg-slate-800 sm:flex">
+            <div className="w-60flex-col hidden bg-slate-800 sm:flex">
                 <h2 className="p-2 text-xs shadow-md">
-                    Members - {chatroomMembers.data?.length}
+                    Members - {chatroom.data?.members.length}
                 </h2>
                 <div className="flex w-full flex-col overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
-                    {chatroomMembers.data?.map((member) => (
+                    {chatroom.data?.members.map((member) => (
                         <div
                             key={member.id}
                             className="flex items-center gap-2 p-2"
