@@ -128,6 +128,41 @@ const ChatPage = () => {
     }, [chatId, queryClient, chatroom.data?.members]);
 
     useEffect(() => {
+        const removeUserHandler = async (data: { id: string }) => {
+            if (!chatId) return;
+
+            if (data.id === session.data?.user.id) {
+                router.push("/chats");
+            } else {
+                queryClient.setQueryData(
+                    ["chatroom", chatId],
+                    (oldData: TChatroomData | undefined) => {
+                        if (!oldData?.members) return;
+
+                        return {
+                            ...oldData,
+                            messages: oldData.messages.filter(
+                                (message) => message.author_id !== data.id
+                            ),
+                            members: oldData.members.filter(
+                                (member) => member.id !== data.id
+                            ),
+                        };
+                    }
+                );
+            }
+        };
+
+        pusherClient.subscribe(`chat__${chatId}__remove-member`);
+        pusherClient.bind("remove-member", removeUserHandler);
+
+        return () => {
+            pusherClient.unsubscribe(`chat__${chatId}__remove-member`);
+            pusherClient.unbind("remove-member", removeUserHandler);
+        };
+    }, [chatId, queryClient, chatroom.data?.members]);
+
+    useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "instant" });
     }, [chatroom.data?.messages]);
 
@@ -159,7 +194,9 @@ const ChatPage = () => {
 
     if (chatroom.isLoading) return <LoadingSpinner />;
 
-    if (!chatroom.data) return <div>No data?</div>;
+    if (!chatroom.data) {
+        return <div>You're not a part of this chatroom :)</div>;
+    }
 
     return (
         <div className="mx-auto flex max-h-[100vh] w-full flex-1">

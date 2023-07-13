@@ -35,9 +35,16 @@ export default async function handler(
                     value: inviteLink,
                 },
             },
+            include: {
+                banned_members: true,
+            },
         });
 
         if (!chatroom) return res.status(404).end("Invalid invite link");
+
+        if (chatroom.banned_members.find((member) => member.id === user.id)) {
+            return res.status(403).end("You are banned from this chatroom");
+        }
 
         await prisma.chatroom.update({
             where: {

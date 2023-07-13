@@ -29,9 +29,16 @@ export default async function handler(
             where: {
                 id: session.user.id,
             },
+            include: {
+                chatrooms: true,
+            },
         });
 
         if (!user) return res.status(401).end("No user");
+
+        if (!user.chatrooms.find((chat) => chat.id === chatId)) {
+            return res.status(401).end("You're not a member of this chatroom");
+        }
 
         const chatroom = await prisma.chatroom.findFirst({
             where: {
