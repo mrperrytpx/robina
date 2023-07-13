@@ -9,7 +9,7 @@ import { usePostChatMessageMutation } from "../../hooks/usePostChatMessageMutati
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useCreateChatroomInviteMutation } from "../../hooks/useCreateChatroomInviteMutation";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { pusherClient } from "../../lib/pusher";
 import { useQueryClient } from "@tanstack/react-query";
 import { chatMessageSchema } from "../../lib/zSchemas";
@@ -24,8 +24,13 @@ import {
 } from "../../hooks/useGetChatroomQuery";
 import { TChatroomData } from "../api/chatroom/get_chatroom";
 import { User } from "@prisma/client";
+import { Portal } from "../../components/Portal";
+import { ChatroomMembers } from "../../components/ChatroomMembers";
 
 const ChatPage = () => {
+    const [isMembersActive, setIsMembersActive] = useState(false);
+    const [isSettingsActive, setIsSettingsActive] = useState(false);
+
     const router = useRouter();
     const chatId = z.string().parse(router.query.chatId);
     const session = useSession();
@@ -142,100 +147,104 @@ const ChatPage = () => {
         }
     };
 
+    const handleSettings = () => {
+        setIsSettingsActive(!isSettingsActive);
+        setIsMembersActive(false);
+    };
+
+    const handleMembers = () => {
+        setIsMembersActive(!isMembersActive);
+        setIsSettingsActive(false);
+    };
+
+    if (chatroom.isLoading) return <LoadingSpinner />;
+
+    if (!chatroom.data) return <div>No data?</div>;
+
     return (
         <div className="mx-auto flex max-h-[100vh] w-full flex-1">
             <div className="flex w-full flex-1 flex-col">
                 <div className="flex w-full items-center justify-between border-b border-black px-6 py-4 shadow-lg sm:hidden">
-                    <FiSettings size={24} />
-                    <FiUsers size={24} />
+                    <FiSettings size={24} onClick={handleSettings} />
+                    <FiUsers size={24} onClick={handleMembers} />
                 </div>
-                <div className="relative flex h-full  items-center justify-center ">
-                    {chatroom.isLoading ? (
-                        <div className="flex flex-col items-center gap-4">
-                            <LoadingSpinner />
-                            Loading messages...
-                        </div>
-                    ) : chatroom.data?.messages.length ? (
-                        <div
-                            ref={chatRef}
-                            className="absolute inset-0 w-full flex-1 overflow-clip overflow-y-auto px-4 py-2 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400"
+                <div className="relative flex flex-1 flex-col">
+                    <div className="relative flex h-full items-center justify-center ">
+                        {chatroom.isLoading ? (
+                            <div className="flex flex-col items-center gap-4">
+                                <LoadingSpinner />
+                                Loading messages...
+                            </div>
+                        ) : chatroom.data?.messages.length ? (
+                            <div
+                                ref={chatRef}
+                                className="absolute inset-0 w-full flex-1 overflow-clip overflow-y-auto px-4 py-2 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400"
+                            >
+                                {chatroom.data?.messages.map((message, i) => (
+                                    <ChatMessage
+                                        isDifferentAuthor={
+                                            i > 0 &&
+                                            message.author_id ===
+                                                chatroom.data?.messages[i - 1]
+                                                    .author_id
+                                        }
+                                        message={message}
+                                        key={message.id}
+                                        ownerId={chatroom.data.owner_id}
+                                    />
+                                ))}
+                                <div ref={endRef} />
+                            </div>
+                        ) : (
+                            <div>No messages</div>
+                        )}
+                    </div>
+                    <form
+                        className="my-4 flex min-h-[48px] w-[calc(100%-48px)] items-center justify-between gap-2 self-end px-4 shadow-lg"
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
+                        <label
+                            aria-hidden="true"
+                            aria-label={`Chatroom with id ${chatId}`}
+                            htmlFor="message"
+                            className="hidden"
+                        />
+                        <input
+                            {...register("message")}
+                            name="message"
+                            id="message"
+                            type="text"
+                            placeholder="Message"
+                            className="min-w-0 flex-1 p-2 text-black"
+                        />
+                        <button
+                            type="submit"
+                            className="rounded-full bg-white p-2 shadow-md"
+                            aria-label="Send message"
                         >
-                            {chatroom.data?.messages.map((message, i) => (
-                                <ChatMessage
-                                    isDifferentAuthor={
-                                        i > 0 &&
-                                        message.author_id ===
-                                            chatroom.data?.messages[i - 1]
-                                                .author_id
-                                    }
-                                    message={message}
-                                    key={message.id}
-                                />
-                            ))}
-                            <div ref={endRef} />
+                            <VscSend fill="black" size={20} />
+                        </button>
+                    </form>
+                    {isMembersActive && (
+                        <div className="absolute inset-0 h-full w-full bg-gray-900">
+                            <ChatroomMembers
+                                members={chatroom.data.members}
+                                ownerId={chatroom.data.owner_id}
+                            />
                         </div>
-                    ) : (
-                        <div>No messages</div>
+                    )}
+                    {isSettingsActive && (
+                        <div className="absolute inset-0 h-full w-full bg-gray-900">
+                            settings
+                        </div>
                     )}
                 </div>
-                <form
-                    className="my-4 flex min-h-[48px] w-[calc(100%-48px)] items-center justify-between gap-2 self-end px-4 shadow-lg"
-                    onSubmit={handleSubmit(onSubmit)}
-                >
-                    <label
-                        aria-hidden="true"
-                        aria-label={`Chatroom with id ${chatId}`}
-                        htmlFor="message"
-                        className="hidden"
-                    />
-                    <input
-                        {...register("message")}
-                        name="message"
-                        id="message"
-                        type="message"
-                        placeholder="Message"
-                        className="flex-1 p-2 text-black"
-                    />
-                    <button
-                        type="submit"
-                        className="rounded-full bg-white p-2 shadow-md"
-                        aria-label="Send message"
-                    >
-                        <VscSend fill="black" size={20} />
-                    </button>
-                </form>
             </div>
-            <div className="hidden w-60 flex-col bg-slate-800 sm:flex">
-                <h2 className="p-2 text-xs shadow-md">
-                    Members - {chatroom.data?.members.length}
-                </h2>
-                <div className="flex w-full flex-col overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
-                    {chatroom.data?.members.map((member) => (
-                        <div
-                            key={member.id}
-                            className="flex items-center gap-2 p-2"
-                        >
-                            <div className="aspect-square w-8">
-                                <Image
-                                    src={member.image ?? DefaultPic}
-                                    alt={`${member.username}'s image`}
-                                    width={100}
-                                    height={100}
-                                    className="w-full min-w-[32px] rounded-full"
-                                />
-                            </div>
-                            <span
-                                style={{
-                                    fontWeight:
-                                        member.id === isOwner?.id ? "bold" : "",
-                                }}
-                                className="truncate text-sm"
-                            >
-                                @{member.username}
-                            </span>
-                        </div>
-                    ))}
-                </div>
+            <div className="hidden sm:block">
+                <ChatroomMembers
+                    members={chatroom.data.members}
+                    ownerId={chatroom.data.owner_id}
+                />
             </div>
         </div>
     );

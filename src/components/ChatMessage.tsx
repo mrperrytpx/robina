@@ -1,7 +1,4 @@
-import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useDeleteMessageMutation } from "../hooks/useDeleteMessageMutation";
-import { useQueryClient } from "@tanstack/react-query";
 import { formatTime } from "../util/formatTime";
 import DefaultImage from "../../public/default.png";
 import { TChatroomMessage } from "../hooks/useGetChatroomQuery";
@@ -9,13 +6,14 @@ import { TChatroomMessage } from "../hooks/useGetChatroomQuery";
 interface IChatMessage {
     message: TChatroomMessage;
     isDifferentAuthor: boolean;
+    ownerId: string;
 }
 
-export const ChatMessage = ({ message, isDifferentAuthor }: IChatMessage) => {
-    const session = useSession();
-    const deleteMessage = useDeleteMessageMutation();
-    const queryClient = useQueryClient();
-
+export const ChatMessage = ({
+    message,
+    isDifferentAuthor,
+    ownerId,
+}: IChatMessage) => {
     const date = new Date(message.created_at);
 
     return (
@@ -49,7 +47,8 @@ export const ChatMessage = ({ message, isDifferentAuthor }: IChatMessage) => {
                 {!isDifferentAuthor && (
                     <div className="flex items-end justify-start gap-2">
                         <span className="mb-1 text-sm font-bold">
-                            @{message.author.username}
+                            @{message.author.username}{" "}
+                            {message.author_id === ownerId && "- 🦁"}
                         </span>
                         <span className="mb-1 text-xs font-extralight">
                             {formatTime(date).replace(",", "")}
