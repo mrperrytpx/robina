@@ -60,16 +60,15 @@ export default async function handler(
             },
         });
 
-        // FIX
-        // await prisma.message.deleteMany({
-        //     where: {
-        //         id: {
-        //             in: member.messages
-        //                 .filter((msg) => msg.chatroom_id !== chatId)
-        //                 .map((msg) => msg.id),
-        //         },
-        //     },
-        // });
+        await prisma.message.deleteMany({
+            where: {
+                id: {
+                    in: member.messages
+                        .filter((msg) => msg.chatroom_id === chatId)
+                        .map((msg) => msg.id),
+                },
+            },
+        });
 
         await prisma.chatroom.update({
             where: {

@@ -16,15 +16,12 @@ import { chatMessageSchema } from "../../lib/zSchemas";
 import type { TChatMessage } from "../../lib/zSchemas";
 import { ChatMessage } from "../../components/ChatMessage";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
-import Image from "next/image";
-import DefaultPic from "../../../public/default.png";
 import {
     TChatroomMessage,
     useGetChatroomQuery,
 } from "../../hooks/useGetChatroomQuery";
 import { TChatroomData } from "../api/chatroom/get_chatroom";
 import { User } from "@prisma/client";
-import { Portal } from "../../components/Portal";
 import { ChatroomMembers } from "../../components/ChatroomMembers";
 
 const ChatPage = () => {
