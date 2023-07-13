@@ -2,6 +2,15 @@ import Image from "next/image";
 import { formatTime } from "../util/formatTime";
 import DefaultImage from "../../public/default.png";
 import { TChatroomMessage } from "../hooks/useGetChatroomQuery";
+import { VscCircleSlash } from "react-icons/vsc";
+import { useDeleteMessageMutation } from "../hooks/useDeleteMessageMutation";
+import { useRouter } from "next/router";
+import { z } from "zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { TChatroomData } from "../pages/api/chatroom/get_chatroom";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { pusherClient } from "../lib/pusher";
 
 interface IChatMessage {
     message: TChatroomMessage;
@@ -15,10 +24,48 @@ export const ChatMessage = ({
     ownerId,
 }: IChatMessage) => {
     const date = new Date(message.created_at);
+    const router = useRouter();
+    const chatId = z.string().parse(router.query.chatId);
+    const queryClient = useQueryClient();
+    const session = useSession();
+
+    const deleteMessage = useDeleteMessageMutation();
+
+    useEffect(() => {
+        const deleteMessageHandler = async (data: { id: string }) => {
+            if (!chatId) return;
+
+            queryClient.setQueryData(
+                ["chatroom", chatId],
+                (oldData: TChatroomData | undefined) => {
+                    if (!oldData?.messages) return;
+
+                    return {
+                        ...oldData,
+                        messages: oldData.messages.filter(
+                            (message) => message.id !== data.id
+                        ),
+                    };
+                }
+            );
+        };
+
+        pusherClient.subscribe(`chat__${chatId}__delete-message`);
+        pusherClient.bind("delete-message", deleteMessageHandler);
+
+        return () => {
+            pusherClient.unsubscribe(`chat__${chatId}__delete-message`);
+            pusherClient.unbind("delete-message", deleteMessageHandler);
+        };
+    }, [chatId, queryClient, session.data?.user.id]);
+
+    const isAllowedToDelete =
+        message.author_id === session.data?.user.id ||
+        session.data?.user.id === ownerId;
 
     return (
         <div
-            className="group flex w-full items-start justify-center gap-2"
+            className="releative group flex w-full items-start justify-center gap-1"
             style={{
                 marginTop: !isDifferentAuthor ? "0.75rem" : "",
             }}
@@ -43,7 +90,7 @@ export const ChatMessage = ({
                     </p>
                 </div>
             )}
-            <div className="flex w-full flex-col">
+            <div className="flex w-full flex-col pl-1 group-hover:bg-slate-800 group-focus:bg-slate-800 group-active:bg-slate-800 active:bg-slate-800">
                 {!isDifferentAuthor && (
                     <div className="flex items-end justify-start gap-2">
                         <span className="mb-1 text-sm font-bold">
@@ -55,10 +102,23 @@ export const ChatMessage = ({
                         </span>
                     </div>
                 )}
-                <span className="break-all py-1 text-sm leading-4">
+                <span className="break-all py-1 text-sm leading-4 ">
                     {message.content}
                 </span>
             </div>
+            {isAllowedToDelete && (
+                <button
+                    onClick={async () =>
+                        await deleteMessage.mutateAsync({
+                            chatId,
+                            messageId: message.id,
+                        })
+                    }
+                    className="absolute right-5 hidden -translate-y-4 rounded-lg bg-black p-1.5 shadow-lg group-hover:block  group-focus:block group-active:block active:block"
+                >
+                    <VscCircleSlash size={20} fill="red" />
+                </button>
+            )}
         </div>
     );
 };

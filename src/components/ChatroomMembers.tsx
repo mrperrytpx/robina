@@ -60,7 +60,7 @@ export const ChatroomMembers = ({
                                             memberId: member.id,
                                         });
                                     }}
-                                    className="group-target::block absolute right-1 top-1/2 hidden -translate-y-1/2 cursor-pointer p-1 group-hover:block"
+                                    className="group-target::block absolute right-1 top-1/2 hidden -translate-y-1/2 cursor-pointer bg-gray-900 p-1 group-hover:block"
                                 >
                                     <VscCircleSlash size={28} fill="red" />
                                 </button>

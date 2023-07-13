@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { prisma } from "../../../../prisma/prisma";
 import { authOptions } from "../auth/[...nextauth]";
 import { z } from "zod";
+import { pusherServer } from "../../../lib/pusher";
 
 export type TDeleteMessage = z.infer<typeof deleteMessageSchema>;
 
@@ -36,18 +37,36 @@ export default async function handler(
             where: {
                 id: messageId,
             },
+            include: {
+                chatroom: {
+                    include: {
+                        owner: true,
+                    },
+                },
+            },
         });
 
         if (!message) return res.status(404).end("No message found");
 
-        if (message.author_id !== user.id)
-            return res.status(401).end("Not your message");
+        if (
+            message.author_id !== user.id &&
+            user.id !== message.chatroom.owner_id
+        )
+            return res.status(401).end("Now allowed to delete that message");
 
         await prisma.message.delete({
             where: {
                 id: message.id,
             },
         });
+
+        await pusherServer.trigger(
+            `chat__${chatId}__delete-message`,
+            "delete-message",
+            {
+                id: message.id,
+            }
+        );
 
         res.status(201).end("Success");
     } else {

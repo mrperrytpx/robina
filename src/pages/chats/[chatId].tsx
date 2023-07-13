@@ -37,14 +37,6 @@ const ChatPage = () => {
 
     const chatroom = useGetChatroomQuery(chatId);
 
-    const isOwner = useMemo(
-        () =>
-            chatroom.data?.members.find(
-                (member) => member.id === chatroom.data.owner_id
-            ),
-        [chatroom.data]
-    );
-
     const endRef = useRef<HTMLDivElement>(null);
     const chatRef = useRef<HTMLDivElement>(null);
 
