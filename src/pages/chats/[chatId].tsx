@@ -160,7 +160,7 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__remove-member`);
             pusherClient.unbind("remove-member", removeUserHandler);
         };
-    }, [chatId, queryClient, chatroom.data?.members]);
+    }, [chatId, queryClient, chatroom.data, router, session.data?.user.id]);
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "instant" });
@@ -195,7 +195,7 @@ const ChatPage = () => {
     if (chatroom.isLoading) return <LoadingSpinner />;
 
     if (!chatroom.data) {
-        return <div>You're not a part of this chatroom :)</div>;
+        return <div>You&apos;re not a part of this chatroom :)</div>;
     }
 
     return (
