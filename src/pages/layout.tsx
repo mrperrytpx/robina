@@ -70,12 +70,10 @@ const Layout = ({ children }: ILayoutProps) => {
                     </div>
                 </header>
                 {isExpanded ? (
-                    <div className="h-[calc(max(600px,100svh)-64px)] px-4 py-2">
-                        Phone
-                    </div>
+                    <div className="h-[calc(100svh-64px)] px-4 py-2">Phone</div>
                 ) : (
                     <>
-                        <main className="mx-auto flex min-h-[calc(max(600px,100svh)-64px)] w-full max-w-screen-2xl flex-1">
+                        <main className="mx-auto flex min-h-[calc(100svh-64px)] w-full max-w-screen-2xl flex-1">
                             {children}
                         </main>
                         {/* <footer className="sticky top-0 grid min-h-[128px] place-items-center items-center border-t-2 border-slate-400 bg-slate-900">

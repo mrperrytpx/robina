@@ -112,7 +112,7 @@ const ChatPage = () => {
     };
 
     return (
-        <div className="mx-auto flex max-h-[calc(100svh-64px)] w-full flex-1">
+        <div className="mx-auto flex max-h-[100vh] w-full flex-1">
             <div className="flex w-full flex-1 flex-col">
                 <div className="flex w-full items-center justify-between border-b border-black px-6 py-4 shadow-lg sm:hidden">
                     <FiSettings size={24} />
