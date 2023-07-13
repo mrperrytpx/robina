@@ -23,6 +23,7 @@ import {
     useGetChatroomQuery,
 } from "../../hooks/useGetChatroomQuery";
 import { TChatroomData } from "../api/chatroom/get_chatroom";
+import { User } from "@prisma/client";
 
 const ChatPage = () => {
     const router = useRouter();
@@ -90,6 +91,36 @@ const ChatPage = () => {
             pusherClient.unbind("new-message", newMessageHandler);
         };
     }, [chatId, queryClient, chatroom.data?.messages]);
+
+    useEffect(() => {
+        const newUserHandler = async (data: User) => {
+            if (!chatId) return;
+            queryClient.setQueryData(
+                ["chatroom", chatId],
+                (oldData: TChatroomData | undefined) => {
+                    if (!oldData?.members) {
+                        return {
+                            ...oldData,
+                            members: [data],
+                        } as TChatroomData;
+                    } else {
+                        return {
+                            ...oldData,
+                            members: [...oldData.members, data],
+                        };
+                    }
+                }
+            );
+        };
+
+        pusherClient.subscribe(`chat__${chatId}__new-member`);
+        pusherClient.bind("new-member", newUserHandler);
+
+        return () => {
+            pusherClient.unsubscribe(`chat__${chatId}__new-member`);
+            pusherClient.unbind("new-member", newUserHandler);
+        };
+    }, [chatId, queryClient, chatroom.data?.members]);
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "instant" });

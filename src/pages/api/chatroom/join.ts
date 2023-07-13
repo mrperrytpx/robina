@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { prisma } from "../../../../prisma/prisma";
 import { authOptions } from "../auth/[...nextauth]";
+import { pusherServer } from "../../../lib/pusher";
 
 export default async function handler(
     req: NextApiRequest,
@@ -50,6 +51,14 @@ export default async function handler(
                 },
             },
         });
+
+        await pusherServer.trigger(
+            `chat__${chatroom.id}__new-member`,
+            "new-member",
+            {
+                ...user,
+            }
+        );
 
         res.status(201).end();
     } else {
