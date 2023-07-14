@@ -8,7 +8,6 @@ import { z } from "zod";
 import { usePostChatMessageMutation } from "../../hooks/usePostChatMessageMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useCreateChatroomInviteMutation } from "../../hooks/useCreateChatroomInviteMutation";
 import { useEffect, useRef, useState } from "react";
 import { pusherClient } from "../../lib/pusher";
 import { useQueryClient } from "@tanstack/react-query";
@@ -23,6 +22,7 @@ import {
 import { TChatroomData } from "../api/chatroom/get_chatroom";
 import { User } from "@prisma/client";
 import { ChatroomMembers } from "../../components/ChatroomMembers";
+import { ChatroomSettings } from "../../components/ChatroomSettings";
 
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
@@ -32,8 +32,6 @@ const ChatPage = () => {
     const chatId = z.string().parse(router.query.chatId);
     const session = useSession();
     const postMessage = usePostChatMessageMutation();
-
-    const createInvite = useCreateChatroomInviteMutation();
 
     const chatroom = useGetChatroomQuery(chatId);
 
@@ -155,6 +153,41 @@ const ChatPage = () => {
         endRef.current?.scrollIntoView({ behavior: "instant" });
     }, [chatroom.data?.messages]);
 
+    useEffect(() => {
+        const leaveChatroomHandler = async (data: { id: string }) => {
+            if (!chatId) return;
+
+            if (data.id === session.data?.user.id) {
+                router.push("/chats");
+            } else {
+                queryClient.setQueryData(
+                    ["chatroom", chatId],
+                    (oldData: TChatroomData | undefined) => {
+                        if (!oldData?.members) return;
+
+                        return {
+                            ...oldData,
+                            messages: oldData.messages.filter(
+                                (message) => message.author_id !== data.id
+                            ),
+                            members: oldData.members.filter(
+                                (member) => member.id !== data.id
+                            ),
+                        };
+                    }
+                );
+            }
+        };
+
+        pusherClient.subscribe(`chat__${chatId}__member-leave`);
+        pusherClient.bind("member-leave", leaveChatroomHandler);
+
+        return () => {
+            pusherClient.unsubscribe(`chat__${chatId}__member-leave`);
+            pusherClient.unbind("member-leave", leaveChatroomHandler);
+        };
+    }, [chatId, queryClient, chatroom.data, router, session.data?.user.id]);
+
     const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
         if (!chatId) return;
         reset();
@@ -191,8 +224,18 @@ const ChatPage = () => {
         <div className="mx-auto flex max-h-[100svh] w-full flex-1">
             <div className="flex w-full flex-1 flex-col">
                 <div className="flex w-full items-center justify-between border-b border-black px-6 py-4 shadow-lg sm:hidden">
-                    <FiSettings size={24} onClick={handleSettings} />
-                    <FiUsers size={24} onClick={handleMembers} />
+                    <button onClick={handleSettings}>
+                        <FiSettings
+                            className="cursor-pointer hover:scale-110 focus:scale-110 active:scale-110"
+                            size={24}
+                        />
+                    </button>
+                    <button onClick={handleMembers}>
+                        <FiUsers
+                            className="cursor-pointer hover:scale-110 focus:scale-110 active:scale-110"
+                            size={24}
+                        />
+                    </button>
                 </div>
                 <div className="relative flex flex-1 flex-col">
                     <div className="relative flex h-full items-center justify-center ">
@@ -225,7 +268,7 @@ const ChatPage = () => {
                             <div>No messages</div>
                         )}
                     </div>
-                    <div className="my-4 flex min-h-[48px] w-full items-center justify-between gap-3 px-4 shadow-lg">
+                    <div className="my-2 flex min-h-[48px] w-full items-center justify-between gap-3 px-4 shadow-lg">
                         <button
                             type="submit"
                             className="hidden rounded-full bg-white p-2 shadow-md sm:inline-block"
@@ -246,11 +289,12 @@ const ChatPage = () => {
                             />
                             <input
                                 {...register("message")}
+                                autoComplete="off"
                                 name="message"
                                 id="message"
                                 type="text"
                                 placeholder="Message"
-                                className="w-full min-w-0 flex-1 rounded-3xl p-2 text-black"
+                                className="h-full w-full min-w-0 flex-1 rounded-3xl p-2 pl-3 text-sm text-black"
                             />
                             <button
                                 type="submit"
@@ -262,33 +306,13 @@ const ChatPage = () => {
                         </form>
                     </div>
                     {isMembersActive && (
-                        <div className="absolute inset-0 h-full w-full bg-gray-900">
-                            <ChatroomMembers
-                                members={chatroom.data.members}
-                                ownerId={chatroom.data.owner_id}
-                            />
-                        </div>
+                        <ChatroomMembers
+                            members={chatroom.data.members}
+                            ownerId={chatroom.data.owner_id}
+                        />
                     )}
                     {isSettingsActive && (
-                        <div className="absolute inset-0 h-full w-full bg-gray-900">
-                            <button
-                                className="shadowm-md rounded-lg bg-white p-2 text-black"
-                                onClick={async () => {
-                                    await createInvite.mutateAsync({ chatId });
-                                }}
-                            >
-                                Generate invite link
-                            </button>
-                            <button
-                                className="shadowm-md rounded-lg bg-white p-2 text-black"
-                                onClick={() => setIsSettingsActive(false)}
-                            >
-                                back xd{" "}
-                            </button>
-                            {createInvite.data && (
-                                <div>{createInvite.data.value}</div>
-                            )}
-                        </div>
+                        <ChatroomSettings ownerId={chatroom.data.owner_id} />
                     )}
                 </div>
             </div>

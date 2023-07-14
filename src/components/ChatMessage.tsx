@@ -86,12 +86,12 @@ export const ChatMessage = ({
                 </div>
             ) : (
                 <div className="mt-1 w-12 text-xs">
-                    <p className="hidden w-full text-right font-mono group-hover:block">
+                    <span className="hidden w-full text-center font-mono group-hover:block">
                         {new Intl.DateTimeFormat("en-GB", {
                             hour: "2-digit",
                             minute: "2-digit",
                         }).format(date)}
-                    </p>
+                    </span>
                 </div>
             )}
             <div className="flex flex-col overflow-hidden pl-1 group-hover:bg-slate-800 group-focus:bg-slate-800 group-active:bg-slate-800 active:bg-slate-800">

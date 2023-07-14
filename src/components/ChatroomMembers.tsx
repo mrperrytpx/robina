@@ -3,7 +3,7 @@ import React from "react";
 import DefaultPic from "../../public/default.png";
 import Image from "next/image";
 import { VscCircleSlash } from "react-icons/vsc";
-import { useDeleteChatroomMemberMutation } from "../hooks/useDeleteChatroomMemberMutation";
+import { useBanChatroomMemberMutation } from "../hooks/useBanChatroomMemberMutation";
 import { z } from "zod";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -21,7 +21,7 @@ export const ChatroomMembers = ({
     const chatId = z.string().parse(router.query.chatId);
     const session = useSession();
 
-    const deleteChatroomMember = useDeleteChatroomMemberMutation();
+    const banChatroomMember = useBanChatroomMemberMutation();
 
     return (
         <div className="z-20 flex h-full w-full flex-col bg-slate-800 sm:w-60">
@@ -55,7 +55,7 @@ export const ChatroomMembers = ({
                             session.data?.user.id === ownerId && (
                                 <button
                                     onClick={async () => {
-                                        await deleteChatroomMember.mutateAsync({
+                                        await banChatroomMember.mutateAsync({
                                             chatId,
                                             memberId: member.id,
                                         });

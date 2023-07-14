@@ -6,7 +6,7 @@ export default function Home() {
 
     if (session.status === "authenticated") {
         return (
-            <div>
+            <div className="flex flex-col items-center gap-4">
                 <p>Signed in as {session.data?.user?.email}</p>
                 <button
                     className="w-40 bg-white p-2 text-black shadow-md"
@@ -34,7 +34,7 @@ export default function Home() {
     }
 
     return (
-        <div>
+        <div className="flex flex-col items-center gap-4">
             <div>Yo</div>
             <button
                 className="w-40 bg-white p-2 text-black shadow-md"

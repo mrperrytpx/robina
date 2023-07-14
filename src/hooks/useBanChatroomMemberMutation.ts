@@ -1,15 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 
-interface IDeleteMember {
+interface IBanMember {
     memberId: string;
     chatId: string;
 }
 
-export const useDeleteChatroomMemberMutation = () => {
-    const deleteChatroomMember = async ({
-        memberId,
-        chatId,
-    }: IDeleteMember) => {
+export const useBanChatroomMemberMutation = () => {
+    const banChatroomMember = async ({ memberId, chatId }: IBanMember) => {
         const controller = new AbortController();
 
         const response = await fetch(
@@ -26,5 +23,5 @@ export const useDeleteChatroomMemberMutation = () => {
         return response;
     };
 
-    return useMutation(deleteChatroomMember);
+    return useMutation(banChatroomMember);
 };
