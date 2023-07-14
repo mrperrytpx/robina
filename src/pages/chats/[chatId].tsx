@@ -188,7 +188,7 @@ const ChatPage = () => {
     }
 
     return (
-        <div className="mx-auto flex max-h-[100vh] w-full flex-1">
+        <div className="mx-auto flex max-h-[100svh] w-full flex-1">
             <div className="flex w-full flex-1 flex-col">
                 <div className="flex w-full items-center justify-between border-b border-black px-6 py-4 shadow-lg sm:hidden">
                     <FiSettings size={24} onClick={handleSettings} />
@@ -261,7 +261,17 @@ const ChatPage = () => {
                     )}
                     {isSettingsActive && (
                         <div className="absolute inset-0 h-full w-full bg-gray-900">
-                            settings
+                            <button
+                                className="shadowm-md rounded-lg bg-white p-2 text-black"
+                                onClick={async () => {
+                                    await createInvite.mutateAsync({ chatId });
+                                }}
+                            >
+                                Generate invite link
+                            </button>
+                            {createInvite.data && (
+                                <div>{createInvite.data.value}</div>
+                            )}
                         </div>
                     )}
                 </div>
