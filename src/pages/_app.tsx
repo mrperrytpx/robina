@@ -28,7 +28,7 @@ export default function App({
             <QueryClientProvider client={queryClient}>
                 <Layout>
                     <Component {...pageProps} />
-                    <ReactQueryDevtools initialIsOpen={false} />
+                    {/* <ReactQueryDevtools initialIsOpen={false} /> */}
                 </Layout>
             </QueryClientProvider>
         </SessionProvider>

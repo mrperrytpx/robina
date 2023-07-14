@@ -9,7 +9,7 @@ import { usePostChatMessageMutation } from "../../hooks/usePostChatMessageMutati
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useCreateChatroomInviteMutation } from "../../hooks/useCreateChatroomInviteMutation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { pusherClient } from "../../lib/pusher";
 import { useQueryClient } from "@tanstack/react-query";
 import { chatMessageSchema } from "../../lib/zSchemas";
@@ -62,7 +62,7 @@ const ChatPage = () => {
                 // then only the first return needs to be casted to fix it ???????????
                 // ????????????????????????????????????????????????
                 (oldData: TChatroomData | undefined) => {
-                    if (!oldData?.messages) {
+                    if (!oldData?.messages.length) {
                         return {
                             ...oldData,
                             messages: [data],
@@ -225,32 +225,42 @@ const ChatPage = () => {
                             <div>No messages</div>
                         )}
                     </div>
-                    <form
-                        className="my-4 flex min-h-[48px] w-[calc(100%-48px)] items-center justify-between gap-2 self-end px-4 shadow-lg"
-                        onSubmit={handleSubmit(onSubmit)}
-                    >
-                        <label
-                            aria-hidden="true"
-                            aria-label={`Chatroom with id ${chatId}`}
-                            htmlFor="message"
-                            className="hidden"
-                        />
-                        <input
-                            {...register("message")}
-                            name="message"
-                            id="message"
-                            type="text"
-                            placeholder="Message"
-                            className="min-w-0 flex-1 p-2 text-black"
-                        />
+                    <div className="my-4 flex min-h-[48px] w-full items-center justify-between gap-3 px-4 shadow-lg">
                         <button
                             type="submit"
-                            className="rounded-full bg-white p-2 shadow-md"
+                            className="hidden rounded-full bg-white p-2 shadow-md sm:inline-block"
                             aria-label="Send message"
+                            onClick={handleSettings}
                         >
-                            <VscSend fill="black" size={20} />
+                            <FiSettings size={20} stroke="black" />
                         </button>
-                    </form>
+                        <form
+                            onSubmit={handleSubmit(onSubmit)}
+                            className="flex w-full items-center justify-between gap-3"
+                        >
+                            <label
+                                aria-hidden="true"
+                                aria-label={`Chatroom with id ${chatId}`}
+                                htmlFor="message"
+                                className="hidden"
+                            />
+                            <input
+                                {...register("message")}
+                                name="message"
+                                id="message"
+                                type="text"
+                                placeholder="Message"
+                                className="w-full min-w-0 flex-1 rounded-3xl p-2 text-black"
+                            />
+                            <button
+                                type="submit"
+                                className="rounded-full bg-white p-2 shadow-md"
+                                aria-label="Send message"
+                            >
+                                <VscSend fill="black" size={20} />
+                            </button>
+                        </form>
+                    </div>
                     {isMembersActive && (
                         <div className="absolute inset-0 h-full w-full bg-gray-900">
                             <ChatroomMembers
@@ -268,6 +278,12 @@ const ChatPage = () => {
                                 }}
                             >
                                 Generate invite link
+                            </button>
+                            <button
+                                className="shadowm-md rounded-lg bg-white p-2 text-black"
+                                onClick={() => setIsSettingsActive(false)}
+                            >
+                                back xd{" "}
                             </button>
                             {createInvite.data && (
                                 <div>{createInvite.data.value}</div>

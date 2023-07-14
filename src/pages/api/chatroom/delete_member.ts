@@ -91,7 +91,7 @@ export default async function handler(
             }
         );
 
-        res.status(201).end("Success");
+        res.status(204).end("Success");
     } else {
         res.setHeader("Allow", "DELETE");
         res.status(405).end("Method Not Allowed");

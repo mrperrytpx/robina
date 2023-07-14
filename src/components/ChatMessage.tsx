@@ -1,7 +1,10 @@
 import Image from "next/image";
 import { formatTime } from "../util/formatTime";
 import DefaultImage from "../../public/default.png";
-import { TChatroomMessage } from "../hooks/useGetChatroomQuery";
+import {
+    TChatroomMessage,
+    useGetChatroomQuery,
+} from "../hooks/useGetChatroomQuery";
 import { VscCircleSlash } from "react-icons/vsc";
 import { useDeleteMessageMutation } from "../hooks/useDeleteMessageMutation";
 import { useRouter } from "next/router";
@@ -28,6 +31,7 @@ export const ChatMessage = ({
     const chatId = z.string().parse(router.query.chatId);
     const queryClient = useQueryClient();
     const session = useSession();
+    const chatroom = useGetChatroomQuery(chatId);
 
     const deleteMessage = useDeleteMessageMutation();
 
@@ -57,7 +61,7 @@ export const ChatMessage = ({
             pusherClient.unsubscribe(`chat__${chatId}__delete-message`);
             pusherClient.unbind("delete-message", deleteMessageHandler);
         };
-    }, [chatId, queryClient, session.data?.user.id]);
+    }, [chatId, queryClient, chatroom.data?.messages]);
 
     const isAllowedToDelete =
         message.author_id === session.data?.user.id ||
@@ -65,7 +69,7 @@ export const ChatMessage = ({
 
     return (
         <div
-            className="releative group flex w-full items-start justify-center gap-1"
+            className="releative group grid w-full grid-cols-[48px,1fr] gap-1"
             style={{
                 marginTop: !isDifferentAuthor ? "0.75rem" : "",
             }}
@@ -82,7 +86,7 @@ export const ChatMessage = ({
                 </div>
             ) : (
                 <div className="mt-1 w-12 text-xs">
-                    <p className=" hidden w-full text-right font-mono group-hover:block">
+                    <p className="hidden w-full text-right font-mono group-hover:block">
                         {new Intl.DateTimeFormat("en-GB", {
                             hour: "2-digit",
                             minute: "2-digit",
@@ -90,7 +94,7 @@ export const ChatMessage = ({
                     </p>
                 </div>
             )}
-            <div className="flex w-full flex-col pl-1 group-hover:bg-slate-800 group-focus:bg-slate-800 group-active:bg-slate-800 active:bg-slate-800">
+            <div className="flex flex-col overflow-hidden pl-1 group-hover:bg-slate-800 group-focus:bg-slate-800 group-active:bg-slate-800 active:bg-slate-800">
                 {!isDifferentAuthor && (
                     <div className="flex items-end justify-start gap-2">
                         <span className="mb-1 text-sm font-bold">
@@ -102,7 +106,7 @@ export const ChatMessage = ({
                         </span>
                     </div>
                 )}
-                <span className="break-all py-1 text-sm leading-4 ">
+                <span className=" break-words py-1 text-sm leading-4 ">
                     {message.content}
                 </span>
             </div>
