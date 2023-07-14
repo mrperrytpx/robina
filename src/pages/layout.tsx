@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Head from "next/head";
 import { VscMenu, VscChromeClose } from "react-icons/vsc";
@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import { LoadingSpinner } from "../components/LoadingSpinner";
+import { MobileMenu } from "../components/MobileMenu";
 
 interface ILayoutProps {
     children: React.ReactNode;
@@ -33,7 +34,7 @@ const Layout = ({ children }: ILayoutProps) => {
                 />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className="flex min-h-[100svh] flex-col">
+            <div className="relative flex min-h-[100svh] flex-col">
                 <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center border-b-2 border-slate-400 bg-slate-900">
                     <div className="flex w-full max-w-screen-2xl items-center justify-between px-4 py-2">
                         <Link href="/" className="text-3xl">
@@ -69,18 +70,16 @@ const Layout = ({ children }: ILayoutProps) => {
                         </div>
                     </div>
                 </header>
-                {isExpanded ? (
-                    <div className="h-[calc(100svh-64px)] px-4 py-2">Phone</div>
-                ) : (
-                    <>
-                        <main className="mx-auto flex min-h-[calc(100svh-64px)] w-full max-w-screen-2xl flex-1">
-                            {children}
-                        </main>
-                        {/* <footer className="sticky top-0 grid min-h-[128px] place-items-center items-center border-t-2 border-slate-400 bg-slate-900">
-                            Footer
-                        </footer> */}
-                    </>
-                )}
+
+                <main className="mx-auto flex min-h-[calc(100svh-64px)] w-full max-w-screen-2xl flex-1">
+                    {isExpanded && (
+                        <MobileMenu
+                            isExpanded={isExpanded}
+                            setIsExpanded={setIsExpanded}
+                        />
+                    )}
+                    {children}
+                </main>
             </div>
         </>
     );

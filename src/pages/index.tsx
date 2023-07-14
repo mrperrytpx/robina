@@ -29,6 +29,10 @@ export default function Home() {
                 <Link className="p-4" href="/chats/join">
                     join chat
                 </Link>
+
+                <footer className="sticky top-0 grid min-h-[128px] place-items-center items-center border-t-2 border-slate-400 bg-slate-900">
+                    Footer
+                </footer>
             </div>
         );
     }
@@ -57,6 +61,9 @@ export default function Home() {
             <Link className="p-4" href="/chats/join">
                 join chat
             </Link>
+            <footer className="sticky top-0 grid min-h-[128px] place-items-center items-center border-t-2 border-slate-400 bg-slate-900">
+                Footer
+            </footer>
         </div>
     );
 }
