@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface IBanMember {
     memberId: string;
@@ -6,6 +6,8 @@ interface IBanMember {
 }
 
 export const useBanChatroomMemberMutation = () => {
+    const queryClient = useQueryClient();
+
     const banChatroomMember = async ({ memberId, chatId }: IBanMember) => {
         const controller = new AbortController();
 
@@ -20,8 +22,11 @@ export const useBanChatroomMemberMutation = () => {
             }
         );
 
-        return response;
+        return { chatId, response };
     };
 
-    return useMutation(banChatroomMember);
+    return useMutation(banChatroomMember, {
+        onSuccess: (data) =>
+            queryClient.invalidateQueries(["banned_members", data.chatId]),
+    });
 };
