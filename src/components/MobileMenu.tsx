@@ -25,7 +25,7 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
     useEffect(() => {
         mobileRef.current = document.querySelector<HTMLDivElement>("#menu");
         setIsExpanded(true);
-    }, []);
+    }, [setIsExpanded]);
 
     return (
         <div
