@@ -5,7 +5,7 @@ import {
     TChatroomMessage,
     useGetChatroomQuery,
 } from "../hooks/useGetChatroomQuery";
-import { VscCircleSlash } from "react-icons/vsc";
+import { VscTrash } from "react-icons/vsc";
 import { useDeleteMessageMutation } from "../hooks/useDeleteMessageMutation";
 import { useRouter } from "next/router";
 import { z } from "zod";
@@ -120,7 +120,7 @@ export const ChatMessage = ({
                     }
                     className="absolute right-5 hidden -translate-y-4 rounded-lg bg-black p-1.5 shadow-lg group-hover:block  group-focus:block group-active:block active:block"
                 >
-                    <VscCircleSlash size={20} fill="red" />
+                    <VscTrash size={20} fill="#dc2626" />
                 </button>
             )}
         </div>

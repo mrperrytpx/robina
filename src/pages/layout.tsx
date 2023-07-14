@@ -69,15 +69,14 @@ const Layout = ({ children }: ILayoutProps) => {
                             </button>
                         </div>
                     </div>
-                </header>
-
-                <main className="mx-auto flex min-h-[calc(100svh-64px)] w-full max-w-screen-2xl flex-1">
                     {isExpanded && (
                         <MobileMenu
                             isExpanded={isExpanded}
                             setIsExpanded={setIsExpanded}
                         />
                     )}
+                </header>
+                <main className="mx-auto flex min-h-[calc(100svh-64px)] w-full max-w-screen-2xl flex-1">
                     {children}
                 </main>
             </div>

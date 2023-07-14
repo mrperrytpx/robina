@@ -3,12 +3,14 @@ import { useCreateChatroomInviteMutation } from "../hooks/useCreateChatroomInvit
 import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { useDeleteOwnedChatroomMutation } from "../hooks/useDeleteOwnedChatroomMutation";
-import { useEffect } from "react";
-import { pusherClient } from "../lib/pusher";
-import { TChatroomData } from "../pages/api/chatroom/get_chatroom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetChatroomQuery } from "../hooks/useGetChatroomQuery";
 import { useLeaveChatroomMutation } from "../hooks/useLeaveChatroomMutation";
+import { useGetChatroomInviteQuery } from "../hooks/useGetChatroomInviteQuery";
+import { VscCopy, VscCheck, VscRefresh } from "react-icons/vsc";
+import { useState } from "react";
+import { LoadingSpinner } from "./LoadingSpinner";
+import { usePatchChatroomInviteMutation } from "../hooks/usePatchChatroomInviteMutation";
 
 interface IChatroomSettingsProps {
     ownerId: string;
@@ -19,9 +21,11 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
     const chatId = z.string().parse(router.query.chatId);
     const session = useSession();
     const queryClient = useQueryClient();
-    const chatroom = useGetChatroomQuery(chatId);
+    const [copied, setCopied] = useState(false);
 
     const createInvite = useCreateChatroomInviteMutation();
+    const getInvite = useGetChatroomInviteQuery(chatId);
+    const patchInvite = usePatchChatroomInviteMutation();
 
     const deleteChatroom = useDeleteOwnedChatroomMutation();
     const leaveChatroom = useLeaveChatroomMutation();
@@ -45,15 +49,68 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
         router.push("/chats");
     };
 
+    const handleCopyInvite = () => {
+        if (copied) return;
+
+        if (typeof window != "undefined" && window.document) {
+            if (!getInvite.data?.value) return;
+            navigator.clipboard.writeText(getInvite.data.value);
+            setCopied(true);
+
+            const turnBackTimeout = setTimeout(() => setCopied(false), 5000);
+
+            return () => clearTimeout(turnBackTimeout);
+        }
+    };
+
     return (
-        <div className="z-20 flex h-full w-full flex-col items-center justify-center bg-slate-800 px-4">
+        <div className="h-full w-full overflow-y-auto bg-slate-800 px-4">
             {ownerId === session.data?.user.id ? (
-                <button
-                    onClick={handleDeleteChatroom}
-                    className={dangerButtonStyles}
-                >
-                    Delete Chatroom
-                </button>
+                <div className="flex w-full flex-col items-center gap-4">
+                    <div className="mt-2 flex w-full items-center justify-center gap-2">
+                        <span className="text-sm font-semibold">
+                            Invite Link:{" "}
+                        </span>
+                        <span className="rounded-lg bg-slate-900 p-2 font-mono">
+                            {getInvite.data?.value
+                                ? getInvite.data?.value
+                                : "XXXXXXXXXX"}
+                        </span>
+                        {getInvite.data?.value && (
+                            <button
+                                onClick={handleCopyInvite}
+                                className="rounded-lg bg-slate-900 p-2 shadow-md"
+                            >
+                                {copied ? (
+                                    <VscCheck fill="#22c55e" size={24} />
+                                ) : (
+                                    <VscCopy size={24} />
+                                )}
+                            </button>
+                        )}
+                        {getInvite.data?.value && (
+                            <button
+                                onClick={async () =>
+                                    await patchInvite.mutateAsync({ chatId })
+                                }
+                                className="rounded-lg bg-slate-900 p-2 shadow-md"
+                            >
+                                {patchInvite.isLoading ? (
+                                    <LoadingSpinner size={24} />
+                                ) : (
+                                    <VscRefresh size={24} />
+                                )}
+                            </button>
+                        )}
+                    </div>
+
+                    {/* <button
+                        onClick={handleDeleteChatroom}
+                        className={dangerButtonStyles + " mt-2"}
+                    >
+                        Delete Chatroom
+                    </button> */}
+                </div>
             ) : (
                 <button
                     onClick={handleLeaveChatroom}
