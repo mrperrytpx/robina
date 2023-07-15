@@ -1,19 +1,12 @@
 import Image from "next/image";
 import { formatTime } from "../util/formatTime";
 import DefaultImage from "../../public/default.png";
-import {
-    TChatroomMessage,
-    useGetChatroomQuery,
-} from "../hooks/useGetChatroomQuery";
+import { TChatroomMessage } from "../hooks/useGetChatroomQuery";
 import { VscTrash } from "react-icons/vsc";
 import { useDeleteMessageMutation } from "../hooks/useDeleteMessageMutation";
 import { useRouter } from "next/router";
 import { z } from "zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { TChatroomData } from "../pages/api/chatroom/get_chatroom";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
-import { pusherClient } from "../lib/pusher";
 
 interface IChatMessage {
     message: TChatroomMessage;
@@ -29,39 +22,8 @@ export const ChatMessage = ({
     const date = new Date(message.created_at);
     const router = useRouter();
     const chatId = z.string().parse(router.query.chatId);
-    const queryClient = useQueryClient();
     const session = useSession();
-    const chatroom = useGetChatroomQuery(chatId);
-
     const deleteMessage = useDeleteMessageMutation();
-
-    useEffect(() => {
-        const deleteMessageHandler = async (data: { id: string }) => {
-            if (!chatId) return;
-
-            queryClient.setQueryData(
-                ["chatroom", chatId],
-                (oldData: TChatroomData | undefined) => {
-                    if (!oldData?.messages) return;
-
-                    return {
-                        ...oldData,
-                        messages: oldData.messages.filter(
-                            (message) => message.id !== data.id
-                        ),
-                    };
-                }
-            );
-        };
-
-        pusherClient.subscribe(`chat__${chatId}__delete-message`);
-        pusherClient.bind("delete-message", deleteMessageHandler);
-
-        return () => {
-            pusherClient.unsubscribe(`chat__${chatId}__delete-message`);
-            pusherClient.unbind("delete-message", deleteMessageHandler);
-        };
-    }, [chatId, queryClient, chatroom.data?.messages]);
 
     const isAllowedToDelete =
         message.author_id === session.data?.user.id ||
@@ -69,7 +31,7 @@ export const ChatMessage = ({
 
     return (
         <div
-            className="releative group grid w-full grid-cols-[48px,1fr] gap-1"
+            className="group relative z-20 grid w-full grid-cols-[48px,1fr] gap-1"
             style={{
                 marginTop: !isDifferentAuthor ? "0.75rem" : "",
             }}
@@ -118,7 +80,7 @@ export const ChatMessage = ({
                             messageId: message.id,
                         })
                     }
-                    className="absolute right-5 hidden -translate-y-4 rounded-lg bg-black p-1.5 shadow-lg group-hover:block  group-focus:block group-active:block active:block"
+                    className="absolute right-3 hidden -translate-y-4 rounded-lg bg-black p-1.5 shadow-lg group-hover:block  group-focus:block group-active:block active:block"
                 >
                     <VscTrash size={20} fill="#dc2626" />
                 </button>

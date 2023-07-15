@@ -68,10 +68,10 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
     };
 
     return (
-        <div className="h-full w-full overflow-y-auto bg-slate-800 px-4">
+        <div className="flex-1 overflow-y-auto bg-slate-800 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
             {ownerId === session.data?.user.id ? (
                 <div className="flex w-full flex-col items-center gap-4">
-                    <div className="mt-6 flex w-full max-w-[300px] flex-wrap items-center gap-2">
+                    <div className="mt-6 flex w-full max-w-[300px] flex-wrap items-center justify-center gap-2">
                         <span className="text-sm font-semibold">
                             Invite Link:{" "}
                         </span>
@@ -112,11 +112,11 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                         </div>
                     </div>
 
-                    <div className="flex w-full max-w-[300px] flex-col gap-2">
+                    <div className="flex w-full max-w-[300px] flex-col items-center gap-2">
                         <span className="text-sm font-semibold">
-                            Banned users:{" "}
+                            Banned users
                         </span>
-                        <div>
+                        <div className="w-full rounded-md bg-slate-700">
                             {bannedMembers.data?.length ? (
                                 bannedMembers.data.map((member) => (
                                     <div

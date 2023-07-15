@@ -23,6 +23,7 @@ import { TChatroomData } from "../api/chatroom/get_chatroom";
 import { User } from "@prisma/client";
 import { ChatroomMembers } from "../../components/ChatroomMembers";
 import { ChatroomSettings } from "../../components/ChatroomSettings";
+import { ChatroomMessages } from "../../components/ChatroomMessages";
 
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
@@ -34,9 +35,6 @@ const ChatPage = () => {
     const postMessage = usePostChatMessageMutation();
 
     const chatroom = useGetChatroomQuery(chatId);
-
-    const endRef = useRef<HTMLDivElement>(null);
-    const chatRef = useRef<HTMLDivElement>(null);
 
     const {
         register,
@@ -55,22 +53,12 @@ const ChatPage = () => {
             if (!chatId) return;
             queryClient.setQueryData(
                 ["chatroom", chatId],
-                // This is the weirdest shit ever
-                // Spread operator tripping the type
-                // then only the first return needs to be casted to fix it ???????????
-                // ????????????????????????????????????????????????
                 (oldData: TChatroomData | undefined) => {
-                    if (!oldData?.messages.length) {
-                        return {
-                            ...oldData,
-                            messages: [data],
-                        } as TChatroomData;
-                    } else {
-                        return {
-                            ...oldData,
-                            messages: [...oldData.messages, data],
-                        };
-                    }
+                    const newData: TChatroomData = JSON.parse(
+                        JSON.stringify(oldData)
+                    );
+                    newData.messages = [...newData.messages, data];
+                    return newData;
                 }
             );
         };
@@ -150,10 +138,6 @@ const ChatPage = () => {
     }, [chatId, queryClient, chatroom.data, router, session.data?.user.id]);
 
     useEffect(() => {
-        endRef.current?.scrollIntoView({ behavior: "instant" });
-    }, [chatroom.data?.messages]);
-
-    useEffect(() => {
         const leaveChatroomHandler = async (data: { id: string }) => {
             if (!chatId) return;
 
@@ -221,9 +205,9 @@ const ChatPage = () => {
     }
 
     return (
-        <div className="mx-auto flex max-h-[100svh] w-full flex-1">
-            <div className="flex w-full flex-1 flex-col">
-                <div className="flex w-full items-center justify-between border-b border-black px-6 py-4 shadow-lg sm:hidden">
+        <div className="flex max-h-[calc(100svh-64px)] w-full flex-row">
+            <div className="flex max-h-[calc(100svh-64px)] w-full flex-col">
+                <div className="flex h-14 w-full items-center justify-between px-4 shadow-lg sm:hidden">
                     <button onClick={handleSettings}>
                         <FiSettings
                             className="cursor-pointer hover:scale-110 focus:scale-110 active:scale-110"
@@ -237,86 +221,55 @@ const ChatPage = () => {
                         />
                     </button>
                 </div>
-                <div className="relative flex flex-1 flex-col">
-                    <div className="relative flex h-full items-center justify-center ">
-                        {chatroom.isLoading ? (
-                            <div className="flex flex-col items-center gap-4">
-                                <LoadingSpinner />
-                                Loading messages...
-                            </div>
-                        ) : chatroom.data?.messages.length ? (
-                            <div
-                                ref={chatRef}
-                                className="absolute inset-0 w-full flex-1 overflow-clip overflow-y-auto px-4 py-2 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400"
-                            >
-                                {chatroom.data?.messages.map((message, i) => (
-                                    <ChatMessage
-                                        isDifferentAuthor={
-                                            i > 0 &&
-                                            message.author_id ===
-                                                chatroom.data?.messages[i - 1]
-                                                    .author_id
-                                        }
-                                        message={message}
-                                        key={message.id}
-                                        ownerId={chatroom.data.owner_id}
-                                    />
-                                ))}
-                                <div ref={endRef} />
-                            </div>
-                        ) : (
-                            <div>No messages</div>
-                        )}
-                    </div>
-                    <div className="my-2 flex min-h-[48px] w-full items-center justify-between gap-3 px-4 shadow-lg">
+                <ChatroomMessages />
+                <div className="flex h-14 items-center gap-3  px-4">
+                    <button
+                        type="submit"
+                        className="hidden rounded-full bg-white p-2 shadow-md sm:inline-block"
+                        aria-label="Send message"
+                        onClick={handleSettings}
+                    >
+                        <FiSettings size={20} stroke="black" />
+                    </button>
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="flex w-full items-center justify-between gap-3"
+                    >
+                        <label
+                            aria-hidden="true"
+                            aria-label={`Chatroom with id ${chatId}`}
+                            htmlFor="message"
+                            className="hidden"
+                        />
+                        <input
+                            {...register("message")}
+                            autoComplete="off"
+                            name="message"
+                            id="message"
+                            type="text"
+                            placeholder="Message"
+                            className="h-full w-full min-w-0 flex-1 rounded-3xl p-2 pl-3 text-sm text-black"
+                        />
                         <button
                             type="submit"
-                            className="hidden rounded-full bg-white p-2 shadow-md sm:inline-block"
+                            className="rounded-full bg-white p-2 shadow-md"
                             aria-label="Send message"
-                            onClick={handleSettings}
                         >
-                            <FiSettings size={20} stroke="black" />
+                            <VscSend fill="black" size={20} />
                         </button>
-                        <form
-                            onSubmit={handleSubmit(onSubmit)}
-                            className="flex w-full items-center justify-between gap-3"
-                        >
-                            <label
-                                aria-hidden="true"
-                                aria-label={`Chatroom with id ${chatId}`}
-                                htmlFor="message"
-                                className="hidden"
-                            />
-                            <input
-                                {...register("message")}
-                                autoComplete="off"
-                                name="message"
-                                id="message"
-                                type="text"
-                                placeholder="Message"
-                                className="h-full w-full min-w-0 flex-1 rounded-3xl p-2 pl-3 text-sm text-black"
-                            />
-                            <button
-                                type="submit"
-                                className="rounded-full bg-white p-2 shadow-md"
-                                aria-label="Send message"
-                            >
-                                <VscSend fill="black" size={20} />
-                            </button>
-                        </form>
-                    </div>
-                    {isMembersActive && (
-                        <ChatroomMembers
-                            members={chatroom.data.members}
-                            ownerId={chatroom.data.owner_id}
-                        />
-                    )}
-                    {isSettingsActive && (
-                        <ChatroomSettings ownerId={chatroom.data.owner_id} />
-                    )}
+                    </form>
                 </div>
+                {isSettingsActive && (
+                    <ChatroomSettings ownerId={chatroom.data.owner_id} />
+                )}
+                {isMembersActive && (
+                    <ChatroomMembers
+                        members={chatroom.data.members}
+                        ownerId={chatroom.data.owner_id}
+                    />
+                )}
             </div>
-            <div className="hidden sm:block">
+            <div className="hidden h-full sm:block">
                 <ChatroomMembers
                     members={chatroom.data.members}
                     ownerId={chatroom.data.owner_id}
