@@ -91,7 +91,7 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__new-message`);
             pusherClient.unbind("new-message", newMessageHandler);
         };
-    }, [chatId, queryClient, chatroomMessages.data, session.data?.user.id]);
+    }, [chatId, queryClient, session.data?.user.id]);
 
     useEffect(() => {
         const newUserHandler = async (data: User) => {
@@ -104,6 +104,7 @@ const ChatPage = () => {
                     return newData;
                 }
             );
+            queryClient.invalidateQueries(["members", chatId]);
         };
 
         pusherClient.subscribe(`chat__${chatId}__new-member`);
@@ -113,13 +114,15 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__new-member`);
             pusherClient.unbind("new-member", newUserHandler);
         };
-    }, [chatId, queryClient, chatroomMembers.data]);
+    }, [chatId, queryClient]);
 
     useEffect(() => {
         const removeUserHandler = async (data: { id: string }) => {
             if (!chatId) return;
 
             if (data.id === session.data?.user.id) {
+                queryClient.removeQueries(["members", chatId]);
+                queryClient.removeQueries(["messages", chatId]);
                 router.push("/chats");
             } else {
                 queryClient.setQueryData(
@@ -140,6 +143,7 @@ const ChatPage = () => {
                         );
                     }
                 );
+                queryClient.invalidateQueries(["members", chatId]);
             }
         };
 
@@ -150,14 +154,7 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__remove-member`);
             pusherClient.unbind("remove-member", removeUserHandler);
         };
-    }, [
-        chatId,
-        queryClient,
-        chatroomMembers.data,
-        chatroomMessages.data,
-        router,
-        session.data?.user.id,
-    ]);
+    }, [chatId, queryClient, router, session.data?.user.id]);
 
     useEffect(() => {
         const leaveChatroomHandler = async (data: { id: string }) => {

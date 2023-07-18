@@ -51,7 +51,7 @@ export const ChatroomMessages = () => {
             pusherClient.unsubscribe(`chat__${chatId}__delete-message`);
             pusherClient.unbind("delete-message", deleteMessageHandler);
         };
-    }, [chatId, queryClient, chatroomMessages.data, session.data?.user.id]);
+    }, [chatId, queryClient, session.data?.user.id]);
 
     return (
         <div className="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
