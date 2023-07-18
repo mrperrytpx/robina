@@ -47,7 +47,7 @@ const CreateChatPage = () => {
     };
 
     return (
-        <div className="max-w-screen-sm flex-1 p-4 sm:mx-auto sm:my-20">
+        <div className="max-w-screen-sm flex-1 rounded-lg bg-slate-900 p-8 sm:mx-auto sm:my-20">
             <form
                 className="flex flex-col gap-2"
                 onSubmit={handleSubmit(onSubmit)}

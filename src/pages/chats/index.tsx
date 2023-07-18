@@ -6,10 +6,15 @@ import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { CreateChatroom } from "../../components/CreateChatroom";
 import { ChatroomCard } from "../../components/ChatroomCard";
 import { useGetOwnedChatroomtroomsQuery } from "../../hooks/useGetOwnedChatroomtroomsQuery";
+import { useRouter } from "next/router";
+import { Portal } from "../../components/Portal";
+import CreateChatPage from "./create";
 
 const ChatsPage = () => {
     const joinedChatrooms = useGetAllJoinedChatroomsQuery();
     const ownedChatroom = useGetOwnedChatroomtroomsQuery();
+
+    const router = useRouter();
 
     return (
         <div className="flex-1 p-4">
@@ -46,6 +51,11 @@ const ChatsPage = () => {
                         ))}
                 </div>
             </article>
+            {router.query.create && (
+                <Portal>
+                    <CreateChatPage />
+                </Portal>
+            )}
         </div>
     );
 };
