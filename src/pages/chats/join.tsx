@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useJoinChatroomMutation } from "../../hooks/useJoinChatroomMutation";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";

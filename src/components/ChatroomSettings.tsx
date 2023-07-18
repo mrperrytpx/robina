@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { useDeleteOwnedChatroomMutation } from "../hooks/useDeleteOwnedChatroomMutation";
-import { useQueryClient } from "@tanstack/react-query";
 import { useLeaveChatroomMutation } from "../hooks/useLeaveChatroomMutation";
 import { useGetChatroomInviteQuery } from "../hooks/useGetChatroomInviteQuery";
 import { VscCopy, VscCheck, VscRefresh } from "react-icons/vsc";

@@ -8,22 +8,21 @@ import { z } from "zod";
 import { usePostChatMessageMutation } from "../../hooks/usePostChatMessageMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { pusherClient } from "../../lib/pusher";
 import { useQueryClient } from "@tanstack/react-query";
 import { chatMessageSchema } from "../../lib/zSchemas";
 import type { TChatMessage } from "../../lib/zSchemas";
-import { ChatMessage } from "../../components/ChatMessage";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import {
     TChatroomMessage,
     useGetChatroomQuery,
 } from "../../hooks/useGetChatroomQuery";
-import { TChatroomData } from "../api/chatroom/get_chatroom";
 import { User } from "@prisma/client";
 import { ChatroomMembers } from "../../components/ChatroomMembers";
 import { ChatroomSettings } from "../../components/ChatroomSettings";
 import { ChatroomMessages } from "../../components/ChatroomMessages";
+import { TChatroomData } from "../api/chatroom/[chatId]/get";
 
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
@@ -51,16 +50,32 @@ const ChatPage = () => {
     useEffect(() => {
         const newMessageHandler = async (data: TChatroomMessage) => {
             if (!chatId) return;
-            queryClient.setQueryData(
-                ["chatroom", chatId],
-                (oldData: TChatroomData | undefined) => {
-                    const newData: TChatroomData = JSON.parse(
-                        JSON.stringify(oldData)
-                    );
-                    newData.messages = [...newData.messages, data];
-                    return newData;
-                }
-            );
+            if (data.author_id === session.data?.user.id) {
+                queryClient.setQueryData(
+                    ["chatroom", chatId],
+                    (oldData: TChatroomData | undefined) => {
+                        oldData?.messages.map((msg) => {
+                            if (msg.content === data.content) {
+                                msg.id = data.id;
+                            }
+                            return msg;
+                        });
+                        return oldData;
+                    }
+                );
+                return;
+            } else {
+                queryClient.setQueryData(
+                    ["chatroom", chatId],
+                    (oldData: TChatroomData | undefined) => {
+                        const newData: TChatroomData = JSON.parse(
+                            JSON.stringify(oldData)
+                        );
+                        newData.messages = [...newData.messages, data];
+                        return newData;
+                    }
+                );
+            }
         };
 
         pusherClient.subscribe(`chat__${chatId}__new-message`);
@@ -70,7 +85,7 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__new-message`);
             pusherClient.unbind("new-message", newMessageHandler);
         };
-    }, [chatId, queryClient, chatroom.data?.messages]);
+    }, [chatId, queryClient, chatroom.data?.messages, session.data?.user]);
 
     useEffect(() => {
         const newUserHandler = async (data: User) => {

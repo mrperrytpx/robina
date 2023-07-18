@@ -1,6 +1,6 @@
-import { Chatroom } from "@prisma/client";
+import { Chatroom, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import { User, getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { prisma } from "../../../../../prisma/prisma";
 import { TChatroomMessage } from "../../../../hooks/useGetChatroomQuery";

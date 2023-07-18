@@ -5,10 +5,11 @@ import { useRouter } from "next/router";
 import { z } from "zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { pusherClient } from "../lib/pusher";
-import { TChatroomData } from "../pages/api/chatroom/get_chatroom";
+import { TChatroomData } from "../pages/api/chatroom/[chatId]/get";
 
 export const ChatroomMessages = () => {
     const endRef = useRef<HTMLDivElement>(null);
+    const startRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
     const chatId = z.string().parse(router.query.chatId);
     const queryClient = useQueryClient();
@@ -49,6 +50,8 @@ export const ChatroomMessages = () => {
 
     return (
         <div className="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
+            <div ref={startRef} />
+
             {chatroom.data?.messages.map((message, i) => (
                 <ChatMessage
                     isDifferentAuthor={
