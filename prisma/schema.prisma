@@ -49,7 +49,6 @@ model User {
   messages              Message[]
   chatrooms             Chatroom[]  @relation("ChatroomMembers")
   banned_from_chatroom  Chatroom[]  @relation("ChatroomBannedMembers")
-  whitelisted           Chatroom[]  @relation("ChatroomWhitelistedMembers")
   owned_chatroom        Chatroom?
 }
 
@@ -74,13 +73,11 @@ model Message {
 model Chatroom {
   id              String      @id @default(cuid())
   created_at      DateTime    @default(now())
-  is_public       Boolean     @default(true)
   name            String     
   description     String
   messages        Message[]
   members         User[]      @relation("ChatroomMembers")
   banned_members  User[]      @relation("ChatroomBannedMembers")
-  whitelisted     User[]      @relation("ChatroomWhitelistedMembers")
   owner           User        @relation(fields: [owner_id], references: [id], onDelete: Cascade)
   owner_id        String      @unique
   invite_link     InviteLink?
