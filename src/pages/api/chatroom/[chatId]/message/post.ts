@@ -11,6 +11,7 @@ export default async function handler(
 ) {
     if (req.method === "POST") {
         const { message } = chatMessageSchema.parse(req.body);
+        const { fakeId } = req.body;
         const { chatId } = req.query;
 
         if (!chatId) return res.status(400).end("Provide a chat iD");
@@ -57,6 +58,7 @@ export default async function handler(
             "new-message",
             {
                 ...newMessage,
+                fakeId,
             }
         );
 

@@ -7,22 +7,21 @@ import { randomString } from "../util/randomString";
 
 interface IPostMessage extends TChatMessage {
     chatId: string;
+    fakeId: string;
 }
 
 export const usePostChatMessageMutation = () => {
     const queryClient = useQueryClient();
     const session = useSession();
 
-    const postMessage = async ({ message, chatId }: IPostMessage) => {
-        const body: TChatMessage = {
+    const postMessage = async ({ message, chatId, fakeId }: IPostMessage) => {
+        const body: TChatMessage & { fakeId: string } = {
             message,
+            fakeId,
         };
-
-        const controller = new AbortController();
 
         const response = await fetch(`/api/chatroom/${chatId}/message/post`, {
             method: "POST",
-            signal: controller.signal,
             headers: {
                 "Content-Type": "application/json",
             },
@@ -33,19 +32,16 @@ export const usePostChatMessageMutation = () => {
     };
 
     return useMutation(postMessage, {
-        onMutate: async ({ chatId, message }) => {
+        onMutate: async ({ chatId, message, fakeId }) => {
             if (!session.data?.user) return;
 
             await queryClient.cancelQueries(["chatroom", chatId]);
             const previousData: TChatroomData | undefined =
                 queryClient.getQueryData(["chatroom", chatId]);
 
-            let msgId = "";
-
             queryClient.setQueryData(
                 ["chatroom", chatId],
                 (oldData: TChatroomData | undefined) => {
-                    msgId = randomString(10);
                     const newMessage: TChatroomMessage = {
                         author: {
                             ...session.data.user,
@@ -56,7 +52,7 @@ export const usePostChatMessageMutation = () => {
                         chatroom_id: chatId,
                         content: message,
                         created_at: new Date(),
-                        id: msgId,
+                        id: fakeId,
                     };
 
                     const newData: TChatroomData = JSON.parse(
@@ -67,9 +63,7 @@ export const usePostChatMessageMutation = () => {
                 }
             );
 
-            console.log("msgId", msgId);
-
-            return { previousData, msgId, chatId };
+            return { previousData, fakeId, chatId };
         },
         onError: (_err, _player, context) => {
             queryClient.setQueryData(

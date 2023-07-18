@@ -23,6 +23,7 @@ import { ChatroomMembers } from "../../components/ChatroomMembers";
 import { ChatroomSettings } from "../../components/ChatroomSettings";
 import { ChatroomMessages } from "../../components/ChatroomMessages";
 import { TChatroomData } from "../api/chatroom/[chatId]/get";
+import { randomString } from "../../util/randomString";
 
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
@@ -48,14 +49,16 @@ const ChatPage = () => {
     const queryClient = useQueryClient();
 
     useEffect(() => {
-        const newMessageHandler = async (data: TChatroomMessage) => {
+        const newMessageHandler = async (
+            data: TChatroomMessage & { fakeId: string }
+        ) => {
             if (!chatId) return;
             if (data.author_id === session.data?.user.id) {
                 queryClient.setQueryData(
                     ["chatroom", chatId],
                     (oldData: TChatroomData | undefined) => {
                         oldData?.messages.map((msg) => {
-                            if (msg.content === data.content) {
+                            if (msg.id === data.fakeId) {
                                 msg.id = data.id;
                             }
                             return msg;
@@ -85,7 +88,7 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__new-message`);
             pusherClient.unbind("new-message", newMessageHandler);
         };
-    }, [chatId, queryClient, chatroom.data?.messages, session.data?.user]);
+    }, [chatId, queryClient, chatroom.data?.messages, session.data?.user.id]);
 
     useEffect(() => {
         const newUserHandler = async (data: User) => {
@@ -194,6 +197,7 @@ const ChatPage = () => {
         const response = await postMessage.mutateAsync({
             ...data,
             chatId,
+            fakeId: randomString(10),
         });
 
         if (!response?.ok) {

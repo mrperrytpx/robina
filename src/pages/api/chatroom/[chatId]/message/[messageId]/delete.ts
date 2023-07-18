@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "../../../../../../../prisma/prisma";
 import { pusherServer } from "../../../../../../lib/pusher";
 import { authOptions } from "../../../../auth/[...nextauth]";
+import { Message } from "@prisma/client";
 
 export type TDeleteMessage = z.infer<typeof deleteMessageSchema>;
 
@@ -65,6 +66,7 @@ export default async function handler(
             "delete-message",
             {
                 id: message.id,
+                remover_id: user.id,
             }
         );
 
