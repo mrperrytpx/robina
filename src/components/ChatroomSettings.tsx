@@ -11,8 +11,8 @@ import { useState } from "react";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { usePatchChatroomInviteMutation } from "../hooks/usePatchChatroomInviteMutation";
 import { useGetBannedChatroomMembersQuery } from "../hooks/useGetBannedChatroomMembersQuery";
-import Image from "next/image";
-import DefaultPic from "../../public/default.png";
+import { useUnbanChatroomMemberMutation } from "../hooks/useUnbanChatroomMemberMutation";
+import { MemberCard } from "./MemberCard";
 
 interface IChatroomSettingsProps {
     ownerId: string;
@@ -30,6 +30,7 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
     const patchInvite = usePatchChatroomInviteMutation();
 
     const bannedMembers = useGetBannedChatroomMembersQuery(chatId);
+    const unbanMember = useUnbanChatroomMemberMutation();
 
     const deleteChatroom = useDeleteOwnedChatroomMutation();
     const leaveChatroom = useLeaveChatroomMutation();
@@ -70,8 +71,8 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
     return (
         <div className="flex-1 overflow-y-auto bg-slate-800 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
             {ownerId === session.data?.user.id ? (
-                <div className="flex w-full flex-col items-center gap-4">
-                    <div className="mt-6 flex w-full max-w-[300px] flex-wrap items-center justify-center gap-2">
+                <div className="flex w-full flex-col items-center gap-4 md:items-start">
+                    <div className="mt-6 flex w-full max-w-[300px] flex-wrap items-center justify-center gap-2 md:justify-normal">
                         <span className="text-sm font-semibold">
                             Invite Link:{" "}
                         </span>
@@ -112,48 +113,74 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                         </div>
                     </div>
 
-                    <div className="flex w-full max-w-[300px] flex-col items-center gap-2">
-                        <span className="text-sm font-semibold">
+                    <div className="flex w-full max-w-[300px] flex-col items-center gap-2 md:max-w-full">
+                        <span className="text-sm font-semibold md:self-start">
                             Banned users
                         </span>
-                        <div className="w-full rounded-md bg-slate-700">
+                        <div className="grid w-full grid-cols-1 gap-2 rounded-md md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
                             {bannedMembers.data?.length ? (
                                 bannedMembers.data.map((member) => (
-                                    <div
+                                    <MemberCard
                                         key={member.id}
-                                        className="group relative flex items-center gap-2 p-2 hover:bg-slate-900 focus:bg-slate-900 active:bg-slate-900"
-                                    >
-                                        <div className="aspect-square w-8">
-                                            <Image
-                                                src={member.image ?? DefaultPic}
-                                                alt={`${member.username}'s image`}
-                                                width={100}
-                                                height={100}
-                                                className="w-full min-w-[32px] rounded-full"
-                                            />
-                                        </div>
-                                        <span
-                                            style={{
-                                                fontWeight:
-                                                    member.id === ownerId
-                                                        ? "bold"
-                                                        : "",
-                                            }}
-                                            className="truncate text-sm"
-                                        >
-                                            @{member.username}{" "}
-                                        </span>
-                                    </div>
+                                        member={member}
+                                        ownerId={ownerId}
+                                        onClick={async () => {
+                                            await unbanMember.mutateAsync({
+                                                chatId,
+                                                memberId: member.id,
+                                            });
+                                        }}
+                                    />
                                 ))
                             ) : (
-                                <div>No banned members </div>
+                                <p className="p-2 text-center text-sm font-semibold">
+                                    No banned members
+                                </p>
+                            )}
+                            {bannedMembers.data?.length ? (
+                                bannedMembers.data.map((member) => (
+                                    <MemberCard
+                                        key={member.id}
+                                        member={member}
+                                        ownerId={ownerId}
+                                        onClick={async () => {
+                                            await unbanMember.mutateAsync({
+                                                chatId,
+                                                memberId: member.id,
+                                            });
+                                        }}
+                                    />
+                                ))
+                            ) : (
+                                <p className="p-2 text-center text-sm font-semibold">
+                                    No banned members
+                                </p>
+                            )}
+                            {bannedMembers.data?.length ? (
+                                bannedMembers.data.map((member) => (
+                                    <MemberCard
+                                        key={member.id}
+                                        member={member}
+                                        ownerId={ownerId}
+                                        onClick={async () => {
+                                            await unbanMember.mutateAsync({
+                                                chatId,
+                                                memberId: member.id,
+                                            });
+                                        }}
+                                    />
+                                ))
+                            ) : (
+                                <p className="p-2 text-center text-sm font-semibold">
+                                    No banned members
+                                </p>
                             )}
                         </div>
                     </div>
 
                     <button
                         onClick={handleDeleteChatroom}
-                        className={dangerButtonStyles + " mt-2"}
+                        className={dangerButtonStyles + " mb-6 mt-2"}
                     >
                         Delete Chatroom
                     </button>

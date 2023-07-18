@@ -1,12 +1,9 @@
 import { User } from "@prisma/client";
 import React from "react";
-import DefaultPic from "../../public/default.png";
-import Image from "next/image";
-import { VscCircleSlash } from "react-icons/vsc";
 import { useBanChatroomMemberMutation } from "../hooks/useBanChatroomMemberMutation";
 import { z } from "zod";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
+import { MemberCard } from "./MemberCard";
 
 interface IChatroomMembersProps {
     members: User[];
@@ -19,7 +16,6 @@ export const ChatroomMembers = ({
 }: IChatroomMembersProps) => {
     const router = useRouter();
     const chatId = z.string().parse(router.query.chatId);
-    const session = useSession();
 
     const banChatroomMember = useBanChatroomMemberMutation();
 
@@ -30,42 +26,17 @@ export const ChatroomMembers = ({
             </h2>
             <div className="flex w-full flex-col overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
                 {members.map((member) => (
-                    <div
+                    <MemberCard
                         key={member.id}
-                        className="group relative flex items-center gap-2 p-2 hover:bg-slate-900 focus:bg-slate-900 active:bg-slate-900"
-                    >
-                        <div className="aspect-square w-8">
-                            <Image
-                                src={member.image ?? DefaultPic}
-                                alt={`${member.username}'s image`}
-                                width={100}
-                                height={100}
-                                className="w-full min-w-[32px] rounded-full"
-                            />
-                        </div>
-                        <span
-                            style={{
-                                fontWeight: member.id === ownerId ? "bold" : "",
-                            }}
-                            className="truncate text-sm"
-                        >
-                            @{member.username} {member.id === ownerId && "- 🦁"}
-                        </span>
-                        {member.id !== ownerId &&
-                            session.data?.user.id === ownerId && (
-                                <button
-                                    onClick={async () => {
-                                        await banChatroomMember.mutateAsync({
-                                            chatId,
-                                            memberId: member.id,
-                                        });
-                                    }}
-                                    className="group-target::block absolute right-1 top-1/2 hidden -translate-y-1/2 cursor-pointer bg-gray-900 p-1 group-hover:block"
-                                >
-                                    <VscCircleSlash size={28} fill="red" />
-                                </button>
-                            )}
-                    </div>
+                        member={member}
+                        ownerId={ownerId}
+                        onClick={async () => {
+                            await banChatroomMember.mutateAsync({
+                                chatId,
+                                memberId: member.id,
+                            });
+                        }}
+                    />
                 ))}
             </div>
         </div>
