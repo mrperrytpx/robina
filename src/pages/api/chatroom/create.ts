@@ -9,9 +9,7 @@ export default async function handler(
     res: NextApiResponse
 ) {
     if (req.method === "POST") {
-        const { name, description, isPublic } = createChatroomSchema.parse(
-            req.body
-        );
+        const { name, description } = createChatroomSchema.parse(req.body);
 
         const session = await getServerSession(req, res, authOptions);
 
@@ -35,7 +33,6 @@ export default async function handler(
             data: {
                 name,
                 description,
-                is_public: isPublic,
                 owner: {
                     connect: {
                         id: user.id,

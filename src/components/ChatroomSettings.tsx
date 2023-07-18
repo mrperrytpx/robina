@@ -115,47 +115,9 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
 
                     <div className="flex w-full max-w-[300px] flex-col items-center gap-2 md:max-w-full">
                         <span className="text-sm font-semibold md:self-start">
-                            Banned users
+                            Banned members
                         </span>
                         <div className="grid w-full grid-cols-1 gap-2 rounded-md md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
-                            {bannedMembers.data?.length ? (
-                                bannedMembers.data.map((member) => (
-                                    <MemberCard
-                                        key={member.id}
-                                        member={member}
-                                        ownerId={ownerId}
-                                        onClick={async () => {
-                                            await unbanMember.mutateAsync({
-                                                chatId,
-                                                memberId: member.id,
-                                            });
-                                        }}
-                                    />
-                                ))
-                            ) : (
-                                <p className="p-2 text-center text-sm font-semibold">
-                                    No banned members
-                                </p>
-                            )}
-                            {bannedMembers.data?.length ? (
-                                bannedMembers.data.map((member) => (
-                                    <MemberCard
-                                        key={member.id}
-                                        member={member}
-                                        ownerId={ownerId}
-                                        onClick={async () => {
-                                            await unbanMember.mutateAsync({
-                                                chatId,
-                                                memberId: member.id,
-                                            });
-                                        }}
-                                    />
-                                ))
-                            ) : (
-                                <p className="p-2 text-center text-sm font-semibold">
-                                    No banned members
-                                </p>
-                            )}
                             {bannedMembers.data?.length ? (
                                 bannedMembers.data.map((member) => (
                                     <MemberCard
@@ -186,12 +148,14 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                     </button>
                 </div>
             ) : (
-                <button
-                    onClick={handleLeaveChatroom}
-                    className={dangerButtonStyles}
-                >
-                    Leave Chatroom
-                </button>
+                <div className="flex h-full items-center justify-center md:justify-normal">
+                    <button
+                        onClick={handleLeaveChatroom}
+                        className={dangerButtonStyles}
+                    >
+                        Leave Chatroom
+                    </button>
+                </div>
             )}
         </div>
     );

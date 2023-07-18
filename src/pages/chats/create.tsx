@@ -12,7 +12,6 @@ export type TCreateChatroomFormValues = z.infer<typeof createChatroomSchema>;
 export const createChatroomSchema = z.object({
     name: z.string().min(1, "Required"),
     description: z.string().min(1, "Required"),
-    isPublic: z.boolean().optional().default(true),
 });
 
 const CreateChatPage = () => {
@@ -77,26 +76,6 @@ const CreateChatPage = () => {
                 {errors.description && (
                     <span className="text-xs font-semibold text-red-500">
                         {errors.description.message}
-                    </span>
-                )}
-                {/*  */}
-                <div className="flex items-center justify-between">
-                    <label className="block flex-1 text-xs" htmlFor="isPublic">
-                        <strong className="uppercase">
-                            Should the chatroom be public?
-                        </strong>
-                    </label>
-                    <input
-                        {...register("isPublic")}
-                        type="checkbox"
-                        name="isPublic"
-                        id="isPublic"
-                        className="aspect-square w-10"
-                    />
-                </div>
-                {errors.isPublic && (
-                    <span className="text-xs font-semibold text-red-500">
-                        {errors.isPublic.message}
                     </span>
                 )}
 

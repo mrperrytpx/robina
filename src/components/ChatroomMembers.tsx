@@ -20,11 +20,11 @@ export const ChatroomMembers = ({
     const banChatroomMember = useBanChatroomMemberMutation();
 
     return (
-        <div className="flex-1 overflow-y-auto bg-slate-800 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400 sm:h-full sm:w-60">
+        <div className="flex-1 overflow-y-auto bg-slate-800 px-6 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400 sm:h-full sm:w-60">
             <h2 className="p-2 text-xs shadow-md">
                 Members - {members.length}
             </h2>
-            <div className="flex w-full flex-col overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
+            <div className="flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
                 {members.map((member) => (
                     <MemberCard
                         key={member.id}

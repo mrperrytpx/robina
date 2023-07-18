@@ -5,12 +5,10 @@ export const useCreateChatroomMutation = () => {
     const createChatroom = async ({
         name,
         description,
-        isPublic,
     }: TCreateChatroomFormValues) => {
         const body: TCreateChatroomFormValues = {
             name,
             description,
-            isPublic,
         };
 
         const controller = new AbortController();
