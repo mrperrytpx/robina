@@ -20,10 +20,13 @@ async function getBannedMembers(chatId: string): Promise<User[]> {
     return data;
 }
 
-export const useGetBannedChatroomMembersQuery = (chatId: string) => {
+export const useGetBannedChatroomMembersQuery = (
+    chatId: string,
+    isOwner: boolean
+) => {
     return useQuery({
         queryKey: ["banned_members", chatId],
         queryFn: () => getBannedMembers(chatId),
-        enabled: !!chatId,
+        enabled: !!chatId && isOwner,
     });
 };

@@ -10,8 +10,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 export type TCreateChatroomFormValues = z.infer<typeof createChatroomSchema>;
 
 export const createChatroomSchema = z.object({
-    name: z.string().min(1, "Required"),
-    description: z.string().min(1, "Required"),
+    name: z
+        .string()
+        .min(1, "Required")
+        .max(50, "Name can't exceed 50 characters"),
+    description: z
+        .string()
+        .min(1, "Required")
+        .max(500, "Description cann't exceed 500 characters"),
 });
 
 const CreateChatPage = () => {
@@ -41,7 +47,7 @@ const CreateChatPage = () => {
     };
 
     return (
-        <div className="max-w-screen-sm flex-1 sm:mx-auto sm:my-20">
+        <div className="max-w-screen-sm flex-1 p-4 sm:mx-auto sm:my-20">
             <form
                 className="flex flex-col gap-2"
                 onSubmit={handleSubmit(onSubmit)}

@@ -24,7 +24,6 @@ import { ChatroomSettings } from "../../components/ChatroomSettings";
 import { ChatroomMessages } from "../../components/ChatroomMessages";
 import { randomString } from "../../util/randomString";
 import { useGetChatroomMembersQuery } from "../../hooks/useGetChatroomMembersQuery";
-import { useGetChatroomMessagesQuery } from "../../hooks/useGetChatroomMessagesQuery";
 
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
@@ -37,7 +36,6 @@ const ChatPage = () => {
 
     const chatroom = useGetChatroomQuery(chatId);
     const chatroomMembers = useGetChatroomMembersQuery(chatId);
-    const chatroomMessages = useGetChatroomMessagesQuery(chatId);
 
     const {
         register,
@@ -228,18 +226,26 @@ const ChatPage = () => {
         <div className="flex max-h-[calc(100svh-64px)] w-full flex-row">
             <div className="flex max-h-[calc(100svh-64px)] w-full flex-col">
                 <div className="flex h-14 w-full items-center justify-between px-4 shadow-lg sm:hidden">
-                    <button onClick={handleSettings}>
-                        <FiSettings
-                            className="cursor-pointer hover:scale-110 focus:scale-110 active:scale-110"
-                            size={24}
-                        />
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button onClick={handleSettings}>
+                            <FiSettings
+                                className="cursor-pointer hover:scale-110 focus:scale-110 active:scale-110"
+                                size={24}
+                            />
+                        </button>
+                        <span className="line-clamp-2 text-xs font-semibold">
+                            {chatroom.data.name}
+                        </span>
+                    </div>
                     <button onClick={handleMembers}>
                         <FiUsers
                             className="cursor-pointer hover:scale-110 focus:scale-110 active:scale-110"
                             size={24}
                         />
                     </button>
+                </div>
+                <div className="line-clamp-2 hidden border-b border-black px-4 py-2 text-sm font-semibold shadow-md sm:block">
+                    {chatroom.data.name}
                 </div>
                 <ChatroomMessages />
                 <div className="mb-2 flex h-14 items-center gap-3 px-4">

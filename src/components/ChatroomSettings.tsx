@@ -11,6 +11,7 @@ import { usePatchChatroomInviteMutation } from "../hooks/usePatchChatroomInviteM
 import { useGetBannedChatroomMembersQuery } from "../hooks/useGetBannedChatroomMembersQuery";
 import { useUnbanChatroomMemberMutation } from "../hooks/useUnbanChatroomMemberMutation";
 import { MemberCard } from "./MemberCard";
+import { useGetChatroomQuery } from "../hooks/useGetChatroomQuery";
 
 interface IChatroomSettingsProps {
     ownerId: string;
@@ -25,14 +26,18 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
     const getInvite = useGetChatroomInviteQuery(chatId);
     const patchInvite = usePatchChatroomInviteMutation();
 
-    const bannedMembers = useGetBannedChatroomMembersQuery(chatId);
+    const chatroom = useGetChatroomQuery(chatId);
+    const bannedMembers = useGetBannedChatroomMembersQuery(
+        chatId,
+        chatroom.data?.owner_id === session.data?.user.id
+    );
     const unbanMember = useUnbanChatroomMemberMutation();
 
     const deleteChatroom = useDeleteOwnedChatroomMutation();
     const leaveChatroom = useLeaveChatroomMutation();
 
     const dangerButtonStyles =
-        "w-full max-w-[300px] rounded-lg bg-gray-100 p-2 font-semibold text-black shadow-lg hover:bg-red-600 hover:text-gray-100 focus:bg-red-600 focus:text-gray-100 active:bg-red-600 active:text-gray-100";
+        "w-full rounded-lg bg-gray-100 p-2 max-w-[min(100%,400px)] font-semibold text-black shadow-lg hover:bg-red-600 hover:text-gray-100 focus:bg-red-600 focus:text-gray-100 active:bg-red-600 active:text-gray-100";
 
     const handleDeleteChatroom = async () => {
         const response = await deleteChatroom.mutateAsync({ chatId });
@@ -65,11 +70,19 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
     };
 
     return (
-        <div className="flex-1 overflow-y-auto bg-slate-800 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
+        <div className="flex-1 space-y-8 overflow-y-auto bg-slate-800 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
+            <div className="mt-4 space-y-2">
+                <h3 className="block text-center text-sm font-bold uppercase sm:text-left">
+                    Chatroom description:
+                </h3>
+                <p className="rounded-md bg-slate-900 p-2 text-center text-sm sm:text-left">
+                    {chatroom.data?.description}
+                </p>
+            </div>
             {ownerId === session.data?.user.id ? (
                 <div className="flex w-full flex-col items-center gap-4 md:items-start">
-                    <div className="mt-6 flex w-full max-w-[300px] flex-wrap items-center justify-center gap-2 md:justify-normal">
-                        <span className="text-sm font-semibold">
+                    <div className="flex w-full flex-wrap items-center justify-center gap-2 md:justify-normal">
+                        <span className="text-sm font-semibold uppercase">
                             Invite Link:{" "}
                         </span>
                         <span className="rounded-lg bg-slate-900 p-2 font-mono">
@@ -109,8 +122,8 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                         </div>
                     </div>
 
-                    <div className="flex w-full max-w-[300px] flex-col items-center gap-2 md:max-w-full">
-                        <span className="text-sm font-semibold md:self-start">
+                    <div className="flex w-full flex-col items-center gap-2 md:max-w-full">
+                        <span className="text-sm font-semibold uppercase md:self-start">
                             Banned members
                         </span>
                         <div className="grid w-full grid-cols-1 gap-2 rounded-md md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
@@ -144,7 +157,7 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                     </button>
                 </div>
             ) : (
-                <div className="flex h-full items-center justify-center md:justify-normal">
+                <div className="flex flex-1 items-center justify-center gap-6 md:justify-normal">
                     <button
                         onClick={handleLeaveChatroom}
                         className={dangerButtonStyles}

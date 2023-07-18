@@ -31,6 +31,7 @@ export const MemberCard = ({ member, onClick, ownerId }: IMemberCardProps) => {
                 className="truncate text-sm"
             >
                 @{member.username}
+                {member.id === ownerId && " - 🦁"}
             </span>
             {member.id !== ownerId && session.data?.user.id === ownerId && (
                 <button

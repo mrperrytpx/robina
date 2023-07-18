@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";
-import { getSession, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { useGetAllJoinedChatroomsQuery } from "../../hooks/useGetAllJoinedChatroomsQuery";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { CreateChatroom } from "../../components/CreateChatroom";
@@ -10,15 +10,14 @@ import { useGetOwnedChatroomtroomsQuery } from "../../hooks/useGetOwnedChatroomt
 const ChatsPage = () => {
     const joinedChatrooms = useGetAllJoinedChatroomsQuery();
     const ownedChatroom = useGetOwnedChatroomtroomsQuery();
-    const session = useSession();
 
     return (
-        <div className="flex-1">
-            <article className="mb-4 space-y-4 ">
-                <h2 className="block border-b border-slate-200">
-                    Owned Chatrooms {session.data?.user.username}
+        <div className="flex-1 p-4">
+            <article className="mb-4 flex flex-col space-y-2">
+                <h2 className="block text-center font-bold uppercase md:pl-2 md:text-left">
+                    Owned Chatrooms
                 </h2>
-                <div className="flex flex-col gap-4 sm:flex-row">
+                <div className="flex flex-col items-center gap-4 sm:flex-row">
                     {ownedChatroom.isLoading && <LoadingSpinner size={32} />}
                     {ownedChatroom.data?.id && (
                         <ChatroomCard
@@ -30,11 +29,11 @@ const ChatsPage = () => {
                     <CreateChatroom />
                 </div>
             </article>
-            <article className="mb-4 space-y-4 ">
-                <h2 className="block border-b border-slate-200">
+            <article className="my-8 space-y-2">
+                <h2 className="block text-center font-bold uppercase md:pl-2 md:text-left">
                     Joined Chatrooms
                 </h2>
-                <div className="flex flex-col gap-4 sm:flex-row">
+                <div className="flex flex-col items-center gap-4 sm:flex-row">
                     {joinedChatrooms.isLoading && <LoadingSpinner size={32} />}
                     {joinedChatrooms.data &&
                         joinedChatrooms.data.map((chatroom) => (
