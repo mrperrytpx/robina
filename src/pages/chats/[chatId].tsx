@@ -22,8 +22,9 @@ import { User } from "@prisma/client";
 import { ChatroomMembers } from "../../components/ChatroomMembers";
 import { ChatroomSettings } from "../../components/ChatroomSettings";
 import { ChatroomMessages } from "../../components/ChatroomMessages";
-import { TChatroomData } from "../api/chatroom/[chatId]/get";
 import { randomString } from "../../util/randomString";
+import { useGetChatroomMembersQuery } from "../../hooks/useGetChatroomMembersQuery";
+import { useGetChatroomMessagesQuery } from "../../hooks/useGetChatroomMessagesQuery";
 
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
@@ -35,6 +36,8 @@ const ChatPage = () => {
     const postMessage = usePostChatMessageMutation();
 
     const chatroom = useGetChatroomQuery(chatId);
+    const chatroomMembers = useGetChatroomMembersQuery(chatId);
+    const chatroomMessages = useGetChatroomMessagesQuery(chatId);
 
     const {
         register,
@@ -55,9 +58,9 @@ const ChatPage = () => {
             if (!chatId) return;
             if (data.author_id === session.data?.user.id) {
                 queryClient.setQueryData(
-                    ["chatroom", chatId],
-                    (oldData: TChatroomData | undefined) => {
-                        oldData?.messages.map((msg) => {
+                    ["messages", chatId],
+                    (oldData: TChatroomMessage[] | undefined) => {
+                        oldData?.map((msg) => {
                             if (msg.id === data.fakeId) {
                                 msg.id = data.id;
                             }
@@ -69,12 +72,12 @@ const ChatPage = () => {
                 return;
             } else {
                 queryClient.setQueryData(
-                    ["chatroom", chatId],
-                    (oldData: TChatroomData | undefined) => {
-                        const newData: TChatroomData = JSON.parse(
+                    ["messages", chatId],
+                    (oldData: TChatroomMessage[] | undefined) => {
+                        const newData: TChatroomMessage[] = JSON.parse(
                             JSON.stringify(oldData)
                         );
-                        newData.messages = [...newData.messages, data];
+                        newData.push(data);
                         return newData;
                     }
                 );
@@ -88,25 +91,17 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__new-message`);
             pusherClient.unbind("new-message", newMessageHandler);
         };
-    }, [chatId, queryClient, chatroom.data?.messages, session.data?.user.id]);
+    }, [chatId, queryClient, chatroomMessages.data, session.data?.user.id]);
 
     useEffect(() => {
         const newUserHandler = async (data: User) => {
             if (!chatId) return;
             queryClient.setQueryData(
-                ["chatroom", chatId],
-                (oldData: TChatroomData | undefined) => {
-                    if (!oldData?.members) {
-                        return {
-                            ...oldData,
-                            members: [data],
-                        } as TChatroomData;
-                    } else {
-                        return {
-                            ...oldData,
-                            members: [...oldData.members, data],
-                        };
-                    }
+                ["members", chatId],
+                (oldData: User[] | undefined) => {
+                    const newData: User[] = JSON.parse(JSON.stringify(oldData));
+                    newData.push(data);
+                    return newData;
                 }
             );
         };
@@ -118,7 +113,7 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__new-member`);
             pusherClient.unbind("new-member", newUserHandler);
         };
-    }, [chatId, queryClient, chatroom.data?.members]);
+    }, [chatId, queryClient, chatroomMembers.data]);
 
     useEffect(() => {
         const removeUserHandler = async (data: { id: string }) => {
@@ -128,19 +123,21 @@ const ChatPage = () => {
                 router.push("/chats");
             } else {
                 queryClient.setQueryData(
-                    ["chatroom", chatId],
-                    (oldData: TChatroomData | undefined) => {
-                        if (!oldData?.members) return;
+                    ["members", chatId],
+                    (oldData: User[] | undefined) => {
+                        if (!oldData) return;
 
-                        return {
-                            ...oldData,
-                            messages: oldData.messages.filter(
-                                (message) => message.author_id !== data.id
-                            ),
-                            members: oldData.members.filter(
-                                (member) => member.id !== data.id
-                            ),
-                        };
+                        return oldData.filter(
+                            (member) => member.id !== data.id
+                        );
+                    }
+                );
+                queryClient.setQueryData(
+                    ["messages", chatId],
+                    (oldData: TChatroomMessage[] | undefined) => {
+                        return oldData?.filter(
+                            (msg) => msg.author_id !== data.id
+                        );
                     }
                 );
             }
@@ -153,7 +150,14 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__remove-member`);
             pusherClient.unbind("remove-member", removeUserHandler);
         };
-    }, [chatId, queryClient, chatroom.data, router, session.data?.user.id]);
+    }, [
+        chatId,
+        queryClient,
+        chatroomMembers.data,
+        chatroomMessages.data,
+        router,
+        session.data?.user.id,
+    ]);
 
     useEffect(() => {
         const leaveChatroomHandler = async (data: { id: string }) => {
@@ -163,19 +167,13 @@ const ChatPage = () => {
                 router.push("/chats");
             } else {
                 queryClient.setQueryData(
-                    ["chatroom", chatId],
-                    (oldData: TChatroomData | undefined) => {
-                        if (!oldData?.members) return;
+                    ["members", chatId],
+                    (oldData: User[] | undefined) => {
+                        if (!oldData) return;
 
-                        return {
-                            ...oldData,
-                            messages: oldData.messages.filter(
-                                (message) => message.author_id !== data.id
-                            ),
-                            members: oldData.members.filter(
-                                (member) => member.id !== data.id
-                            ),
-                        };
+                        return oldData.filter(
+                            (member) => member.id !== data.id
+                        );
                     }
                 );
             }
@@ -188,7 +186,13 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__member-leave`);
             pusherClient.unbind("member-leave", leaveChatroomHandler);
         };
-    }, [chatId, queryClient, chatroom.data, router, session.data?.user.id]);
+    }, [
+        chatId,
+        queryClient,
+        chatroomMembers.data,
+        router,
+        session.data?.user.id,
+    ]);
 
     const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
         if (!chatId) return;
@@ -282,17 +286,11 @@ const ChatPage = () => {
                     <ChatroomSettings ownerId={chatroom.data.owner_id} />
                 )}
                 {isMembersActive && (
-                    <ChatroomMembers
-                        members={chatroom.data.members}
-                        ownerId={chatroom.data.owner_id}
-                    />
+                    <ChatroomMembers ownerId={chatroom.data.owner_id} />
                 )}
             </div>
             <div className="hidden h-full sm:block">
-                <ChatroomMembers
-                    members={chatroom.data.members}
-                    ownerId={chatroom.data.owner_id}
-                />
+                <ChatroomMembers ownerId={chatroom.data.owner_id} />
             </div>
         </div>
     );

@@ -1,9 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { TChatroomData } from "../pages/api/chatroom/[chatId]/get";
 import { useSession } from "next-auth/react";
 import { TChatroomMessage } from "./useGetChatroomQuery";
 import { TChatMessage } from "../lib/zSchemas";
-import { randomString } from "../util/randomString";
 
 interface IPostMessage extends TChatMessage {
     chatId: string;
@@ -35,13 +33,14 @@ export const usePostChatMessageMutation = () => {
         onMutate: async ({ chatId, message, fakeId }) => {
             if (!session.data?.user) return;
 
-            await queryClient.cancelQueries(["chatroom", chatId]);
-            const previousData: TChatroomData | undefined =
-                queryClient.getQueryData(["chatroom", chatId]);
+            await queryClient.cancelQueries(["messages", chatId]);
+            const previousData: TChatroomMessage[] | undefined =
+                queryClient.getQueryData(["messages", chatId]);
 
             queryClient.setQueryData(
-                ["chatroom", chatId],
-                (oldData: TChatroomData | undefined) => {
+                ["messages", chatId],
+                (oldData: TChatroomMessage[] | undefined) => {
+                    if (!oldData) return;
                     const newMessage: TChatroomMessage = {
                         author: {
                             ...session.data.user,
@@ -55,11 +54,7 @@ export const usePostChatMessageMutation = () => {
                         id: fakeId,
                     };
 
-                    const newData: TChatroomData = JSON.parse(
-                        JSON.stringify(oldData)
-                    );
-                    newData.messages = [...newData.messages, newMessage];
-                    return newData;
+                    return [...oldData, newMessage];
                 }
             );
 
@@ -67,7 +62,7 @@ export const usePostChatMessageMutation = () => {
         },
         onError: (_err, _player, context) => {
             queryClient.setQueryData(
-                ["chatroom", context?.chatId],
+                ["messages", context?.chatId],
                 context?.previousData
             );
         },

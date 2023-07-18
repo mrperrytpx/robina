@@ -29,11 +29,7 @@ export const usePatchChatroomInviteMutation = () => {
         onSuccess: async (data) => {
             if (!data.response.ok) return;
 
-            console.log(data);
-
             const inviteLink: TInviteLink = await data.response.json();
-
-            console.log("INV", inviteLink);
 
             queryClient.setQueryData(["invite", data.chatId], {
                 value: inviteLink.value,

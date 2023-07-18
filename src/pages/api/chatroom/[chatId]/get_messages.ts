@@ -1,8 +1,16 @@
+import { Chatroom, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { prisma } from "../../../../../prisma/prisma";
+import { TChatroomMessage } from "../../../../hooks/useGetChatroomQuery";
 import { authOptions } from "../../auth/[...nextauth]";
+
+export type TChatroomData = Chatroom & {
+    members: User[];
+    owner: User;
+    messages: TChatroomMessage[];
+};
 
 export default async function handler(
     req: NextApiRequest,
@@ -36,11 +44,18 @@ export default async function handler(
             where: {
                 id: chatId,
             },
+            include: {
+                messages: {
+                    include: {
+                        author: true,
+                    },
+                },
+            },
         });
 
-        if (!chatroom) return res.status(404).end("No chatroom with that ID");
+        if (!chatroom) return res.status(404).end("No chatroom");
 
-        res.status(201).json(chatroom);
+        res.status(201).json(chatroom?.messages);
     } else {
         res.setHeader("Allow", "GET");
         res.status(405).end("Method Not Allowed");

@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Message, User } from "@prisma/client";
-import { TChatroomData } from "../pages/api/chatroom/[chatId]/get";
+import { Chatroom, Message, User } from "@prisma/client";
 
 export type TChatroomMessage = Message & {
     author: User;
@@ -20,7 +19,7 @@ async function getChatroom(chatId: string) {
         throw new Error("Failed to get chatroom messages");
     }
 
-    const data: TChatroomData = await response.json();
+    const data: Chatroom = await response.json();
 
     return data;
 }

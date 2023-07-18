@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react";
 interface IChatMessage {
     message: TChatroomMessage;
     isDifferentAuthor: boolean;
-    ownerId: string;
+    ownerId: string | undefined;
 }
 
 export const ChatMessage = ({

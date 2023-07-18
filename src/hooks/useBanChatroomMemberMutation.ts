@@ -1,6 +1,5 @@
 import { User } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { TChatroomData } from "../pages/api/chatroom/[chatId]/get";
 
 interface IBanMember {
     memberId: string;
@@ -35,10 +34,10 @@ export const useBanChatroomMemberMutation = () => {
                 data.chatId,
             ]);
 
-            const chatroom: TChatroomData | undefined =
-                queryClient.getQueryData(["chatroom", data.chatId]);
+            const chatroomMembers: User[] | undefined =
+                queryClient.getQueryData(["members", data.chatId]);
 
-            const member = chatroom?.members.find(
+            const member = chatroomMembers?.find(
                 (member) => member.id === data.memberId
             );
             if (!member) return;
@@ -46,9 +45,8 @@ export const useBanChatroomMemberMutation = () => {
             queryClient.setQueryData(
                 ["banned_members", data.chatId],
                 (oldData: typeof previousData) => {
-                    const newData: User[] = JSON.parse(JSON.stringify(oldData));
-                    newData.push(member);
-                    return newData;
+                    if (!oldData) return;
+                    return [...oldData, member];
                 }
             );
 
