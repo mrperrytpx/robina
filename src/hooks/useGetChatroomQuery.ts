@@ -30,5 +30,6 @@ export const useGetChatroomQuery = (chatId: string) => {
         queryKey: ["chatroom", chatId],
         queryFn: () => getChatroom(chatId),
         enabled: !!chatId,
+        refetchInterval: 300000,
     });
 };

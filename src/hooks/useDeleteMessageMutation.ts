@@ -1,8 +1,4 @@
-import {
-    QueryClient,
-    useMutation,
-    useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TDeleteMessage } from "../pages/api/chatroom/[chatId]/message/[messageId]/delete";
 import { TChatroomData } from "../pages/api/chatroom/[chatId]/get";
 

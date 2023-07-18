@@ -12,8 +12,6 @@ export default async function handler(
         const chatId = z.string().parse(req.query.chatId);
         const memberId = z.string().parse(req.query.memberId);
 
-        console.log("unban attempt");
-
         if (!chatId) return res.status(400).end("Please provide an ID");
         if (!memberId) return res.status(400).end("Please provide a user ID");
 
