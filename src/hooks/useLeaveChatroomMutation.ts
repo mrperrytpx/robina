@@ -8,7 +8,7 @@ export const useLeaveChatroomMutation = () => {
     const leaveChatroom = async ({ chatId }: ILeaveChatroom) => {
         const controller = new AbortController();
 
-        const response = await fetch(`/api/chatroom/leave?chatId=${chatId}`, {
+        const response = await fetch(`/api/chatroom/${chatId}/leave`, {
             method: "DELETE",
             signal: controller.signal,
             headers: {

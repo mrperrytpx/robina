@@ -11,16 +11,13 @@ export const usePatchChatroomInviteMutation = () => {
     const patchInvite = async ({ chatId }: IPatchInvite) => {
         const controller = new AbortController();
 
-        const response = await fetch(
-            `/api/chatroom/patch_invite?chatId=${chatId}`,
-            {
-                method: "PATCH",
-                signal: controller.signal,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        );
+        const response = await fetch(`/api/chatroom/${chatId}/invite/update`, {
+            method: "PATCH",
+            signal: controller.signal,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
         if (controller.signal.aborted)
             throw new Error("patch chatroom invite req aborted");

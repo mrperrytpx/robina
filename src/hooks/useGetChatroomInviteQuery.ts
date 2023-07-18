@@ -7,7 +7,7 @@ export type TInviteLink = {
 const getInviteLink = async (chatId: string) => {
     const controller = new AbortController();
 
-    const response = await fetch(`/api/chatroom/get_invite?chatId=${chatId}`, {
+    const response = await fetch(`/api/chatroom/${chatId}/invite/get`, {
         signal: controller.signal,
     });
 

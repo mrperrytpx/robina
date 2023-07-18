@@ -1,16 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { prisma } from "../../../../prisma/prisma";
-import { authOptions } from "../auth/[...nextauth]";
 import { z } from "zod";
-import { randomString } from "../../../util/randomString";
+import { prisma } from "../../../../../prisma/prisma";
+import { authOptions } from "../../auth/[...nextauth]";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    if (req.method === "POST") {
+    if (req.method === "GET") {
         const chatId = z.string().parse(req.query.chatId);
+
+        if (!chatId) return res.status(404).end("Provide a chat ID");
+
         const session = await getServerSession(req, res, authOptions);
 
         if (!session) return res.status(401).end("No session");
@@ -20,7 +22,11 @@ export default async function handler(
                 id: session.user.id,
             },
             include: {
-                owned_chatroom: true,
+                owned_chatroom: {
+                    include: {
+                        banned_members: true,
+                    },
+                },
             },
         });
 
@@ -32,18 +38,11 @@ export default async function handler(
         if (user.owned_chatroom.id !== chatId)
             return res.status(401).end("You don't own this chatroom");
 
-        const inviteString = randomString(10);
+        const bannedMembers = user.owned_chatroom.banned_members;
 
-        const inviteLink = await prisma.inviteLink.create({
-            data: {
-                chatroom_id: user.owned_chatroom.id,
-                value: inviteString,
-            },
-        });
-
-        res.status(200).json(inviteLink);
+        res.status(200).json(bannedMembers);
     } else {
-        res.setHeader("Allow", "POST");
-        res.status(405).end("Method not allowed");
+        res.setHeader("Allow", "GET");
+        res.status(405).end("Method Not Allowed");
     }
 }

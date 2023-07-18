@@ -8,16 +8,13 @@ export const useDeleteOwnedChatroomMutation = () => {
     const deleteOwnedChatroom = async ({ chatId }: IDeleteChatroom) => {
         const controller = new AbortController();
 
-        const response = await fetch(
-            `/api/chatroom/delete_owned?chatId=${chatId}`,
-            {
-                method: "DELETE",
-                signal: controller.signal,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        );
+        const response = await fetch(`/api/chatroom/${chatId}/delete`, {
+            method: "DELETE",
+            signal: controller.signal,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
         return response;
     };

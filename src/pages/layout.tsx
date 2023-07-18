@@ -36,7 +36,7 @@ const Layout = ({ children }: ILayoutProps) => {
             </Head>
             <div className="relative flex min-h-[100svh] flex-col">
                 <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center border-b-2 border-slate-400 bg-slate-900">
-                    <div className="flex w-full max-w-screen-2xl items-center justify-between px-4 py-2">
+                    <div className="flex w-full items-center justify-between px-4 py-2">
                         <Link href="/" className="text-3xl">
                             LOGO
                         </Link>
@@ -76,7 +76,7 @@ const Layout = ({ children }: ILayoutProps) => {
                         />
                     )}
                 </header>
-                <main className="mx-auto flex min-h-[calc(100svh-64px)] w-full max-w-screen-2xl flex-1">
+                <main className="mx-auto flex min-h-[calc(100svh-64px)] w-full flex-1">
                     {children}
                 </main>
             </div>

@@ -13,17 +13,14 @@ export const usePostChatMessageMutation = () => {
 
         const controller = new AbortController();
 
-        const response = await fetch(
-            `/api/chatroom/post_message?chatId=${chatId}`,
-            {
-                method: "POST",
-                signal: controller.signal,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(body),
-            }
-        );
+        const response = await fetch(`/api/chatroom/${chatId}/message/post`, {
+            method: "POST",
+            signal: controller.signal,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
 
         return response;
     };

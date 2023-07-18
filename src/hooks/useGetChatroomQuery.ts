@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { TChatroomData } from "../pages/api/chatroom/get_chatroom";
 import { Message, User } from "@prisma/client";
+import { TChatroomData } from "../pages/api/chatroom/[chatId]/get";
 
 export type TChatroomMessage = Message & {
     author: User;
@@ -9,12 +9,9 @@ export type TChatroomMessage = Message & {
 async function getChatroom(chatId: string) {
     const controller = new AbortController();
 
-    const response = await fetch(
-        `/api/chatroom/get_chatroom?chatId=${chatId}`,
-        {
-            signal: controller.signal,
-        }
-    );
+    const response = await fetch(`/api/chatroom/${chatId}/get`, {
+        signal: controller.signal,
+    });
 
     if (controller.signal.aborted)
         throw new Error("Get chatroom messages req aborted");

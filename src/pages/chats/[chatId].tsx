@@ -222,7 +222,7 @@ const ChatPage = () => {
                     </button>
                 </div>
                 <ChatroomMessages />
-                <div className="flex h-14 items-center gap-3  px-4">
+                <div className="mb-2 flex h-14 items-center gap-3 px-4">
                     <button
                         type="submit"
                         className="hidden rounded-full bg-white p-2 shadow-md sm:inline-block"

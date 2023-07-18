@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { prisma } from "../../../../prisma/prisma";
-import { authOptions } from "../auth/[...nextauth]";
+import { randomString } from "../../../util/randomString";
 import { createChatroomSchema } from "../../chats/create";
+import { authOptions } from "../auth/[...nextauth]";
 
 export default async function handler(
     req: NextApiRequest,
@@ -46,7 +47,16 @@ export default async function handler(
             },
         });
 
+        const inviteString = randomString(10);
+
         if (!chatroom) return res.status(500).end("Server issues");
+
+        await prisma.inviteLink.create({
+            data: {
+                chatroom_id: chatroom.id,
+                value: inviteString,
+            },
+        });
 
         res.status(201).end("Success");
     } else {

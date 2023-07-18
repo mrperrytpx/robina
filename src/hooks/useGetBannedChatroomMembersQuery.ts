@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 async function getBannedMembers(chatId: string): Promise<User[]> {
     const controller = new AbortController();
 
-    const response = await fetch(`/api/chatroom/get_banned?chatId=${chatId}`, {
+    const response = await fetch(`/api/chatroom/${chatId}/get_banned_members`, {
         signal: controller.signal,
     });
 

@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { useCreateChatroomInviteMutation } from "../hooks/useCreateChatroomInviteMutation";
 import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { useDeleteOwnedChatroomMutation } from "../hooks/useDeleteOwnedChatroomMutation";
@@ -22,10 +21,8 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
     const router = useRouter();
     const chatId = z.string().parse(router.query.chatId);
     const session = useSession();
-    const queryClient = useQueryClient();
     const [copied, setCopied] = useState(false);
 
-    const createInvite = useCreateChatroomInviteMutation();
     const getInvite = useGetChatroomInviteQuery(chatId);
     const patchInvite = usePatchChatroomInviteMutation();
 

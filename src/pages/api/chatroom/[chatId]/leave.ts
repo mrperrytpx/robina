@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
-import { prisma } from "../../../../prisma/prisma";
-import { authOptions } from "../auth/[...nextauth]";
-import { pusherServer } from "../../../lib/pusher";
+import { prisma } from "../../../../../prisma/prisma";
+import { pusherServer } from "../../../../lib/pusher";
+import { authOptions } from "../../auth/[...nextauth]";
 
 export default async function handler(
     req: NextApiRequest,
@@ -25,10 +25,16 @@ export default async function handler(
             include: {
                 chatrooms: true,
                 messages: true,
+                owned_chatroom: true,
             },
         });
 
         if (!user) return res.status(401).end("No user");
+
+        if (user.owned_chatroom?.id === chatId)
+            return res
+                .status(404)
+                .end("You cannot leave your own chatroom, delete it instead");
 
         await prisma.user.update({
             where: {

@@ -12,7 +12,7 @@ export const useUnbanChatroomMemberMutation = () => {
         const controller = new AbortController();
 
         const response = await fetch(
-            `/api/chatroom/unban_member?chatId=${chatId}&memberId=${memberId}`,
+            `/api/chatroom/${chatId}/member/${memberId}/unban`,
             {
                 method: "PATCH",
                 signal: controller.signal,

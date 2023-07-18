@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { prisma } from "../../../../prisma/prisma";
-import { authOptions } from "../auth/[...nextauth]";
-import { pusherServer } from "../../../lib/pusher";
-import { chatMessageSchema } from "../../../lib/zSchemas";
+import { prisma } from "../../../../../../prisma/prisma";
+import { pusherServer } from "../../../../../lib/pusher";
+import { chatMessageSchema } from "../../../../../lib/zSchemas";
+import { authOptions } from "../../../auth/[...nextauth]";
 
 export default async function handler(
     req: NextApiRequest,

@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { prisma } from "../../../../prisma/prisma";
-import { authOptions } from "../auth/[...nextauth]";
 import { z } from "zod";
-import { pusherServer } from "../../../lib/pusher";
+import { prisma } from "../../../../../../../prisma/prisma";
+import { pusherServer } from "../../../../../../lib/pusher";
+import { authOptions } from "../../../../auth/[...nextauth]";
 
 export type TDeleteMessage = z.infer<typeof deleteMessageSchema>;
 

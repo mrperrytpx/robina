@@ -12,7 +12,7 @@ export const useBanChatroomMemberMutation = () => {
         const controller = new AbortController();
 
         const response = await fetch(
-            `/api/chatroom/delete_member?chatId=${chatId}&memberId=${memberId}`,
+            `/api/chatroom/${chatId}/member/${memberId}/ban`,
             {
                 method: "DELETE",
                 signal: controller.signal,
