@@ -40,7 +40,7 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
         "w-full rounded-lg bg-gray-100 p-2 max-w-[min(100%,400px)] font-semibold text-black shadow-lg hover:bg-red-600 hover:text-gray-100 focus:bg-red-600 focus:text-gray-100 active:bg-red-600 active:text-gray-100";
 
     const handleDeleteChatroom = async () => {
-        const response = await deleteChatroom.mutateAsync({ chatId });
+        const { response } = await deleteChatroom.mutateAsync({ chatId });
 
         if (!response.ok) return;
 
@@ -48,7 +48,7 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
     };
 
     const handleLeaveChatroom = async () => {
-        const response = await leaveChatroom.mutateAsync({ chatId });
+        const { response } = await leaveChatroom.mutateAsync({ chatId });
 
         if (!response.ok) return;
 

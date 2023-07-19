@@ -58,7 +58,7 @@ export default async function handler(
             },
         });
 
-        res.status(201).end("Success");
+        res.status(201).json(chatroom);
     } else {
         res.setHeader("Allow", "POST");
         res.status(405).end("Method Not Allowed");

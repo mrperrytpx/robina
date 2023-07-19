@@ -25,9 +25,10 @@ export const useGetAllJoinedChatroomsQuery = () => {
     const session = useSession();
 
     return useQuery({
-        queryKey: ["chatrooms"],
+        queryKey: ["chatrooms", session.data?.user.id],
         queryFn: getJoinedChatrooms,
         select: (data) =>
             data.filter((room) => room.owner_id !== session.data?.user.id),
+        enabled: !!session.data?.user.id,
     });
 };

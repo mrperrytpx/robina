@@ -1,10 +1,15 @@
-import { useMutation } from "@tanstack/react-query";
+import { Chatroom } from "@prisma/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 interface IDeleteChatroom {
     chatId: string | string[];
 }
 
 export const useDeleteOwnedChatroomMutation = () => {
+    const queryClient = useQueryClient();
+    const session = useSession();
+
     const deleteOwnedChatroom = async ({ chatId }: IDeleteChatroom) => {
         const controller = new AbortController();
 
@@ -16,8 +21,36 @@ export const useDeleteOwnedChatroomMutation = () => {
             },
         });
 
-        return response;
+        return { response, chatId };
     };
 
-    return useMutation(deleteOwnedChatroom);
+    return useMutation(deleteOwnedChatroom, {
+        onMutate: async (data) => {
+            await queryClient.cancelQueries([
+                "owned_chatroom",
+                session.data?.user.id,
+            ]);
+            const previousData: Chatroom | undefined = queryClient.getQueryData(
+                ["owned_chatroom", session.data?.user.id]
+            );
+            queryClient.setQueryData(
+                ["owned_chatroom", session.data?.user.id],
+                null
+            );
+            return { previousData };
+        },
+        onError: (_err, _vars, context) => {
+            queryClient.setQueryData(
+                ["owned_chatroom", session.data?.user.id],
+                context?.previousData
+            );
+        },
+        onSuccess: async (data) => {
+            if (!data.response.ok) return;
+            queryClient.invalidateQueries([
+                "owned_chatroom",
+                session.data?.user.id,
+            ]);
+        },
+    });
 };

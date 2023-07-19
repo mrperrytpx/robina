@@ -6,6 +6,7 @@ import { z } from "zod";
 import { useCreateChatroomMutation } from "../../hooks/useCreateChatroomMutation";
 import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Chatroom } from "@prisma/client";
 
 export type TCreateChatroomFormValues = z.infer<typeof createChatroomSchema>;
 

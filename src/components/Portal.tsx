@@ -15,7 +15,6 @@ export const Portal = ({ children }: PortalProps) => {
     useEffect(() => {
         const close = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
-                setMounted(false);
                 router.push("/chats");
             }
         };
@@ -53,7 +52,6 @@ export const Portal = ({ children }: PortalProps) => {
     const handleClosePortal = (e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
         if (target.id === "bg" && bgRef.current && mounted) {
-            setMounted(false);
             router.push("/chats");
         }
     };
