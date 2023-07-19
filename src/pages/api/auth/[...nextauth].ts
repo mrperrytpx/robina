@@ -25,10 +25,6 @@ declare module "next-auth" {
 export const authOptions: AuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
-        GoogleProvider({
-            clientId: process.env.GOOGLE_AUTH_CLIENT_ID as string,
-            clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET as string,
-        }),
         EmailProvider({
             server: {
                 host: process.env.EMAIL_SERVER_HOST,
@@ -60,6 +56,10 @@ export const authOptions: AuthOptions = {
                     );
                 }
             },
+        }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_AUTH_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET as string,
         }),
     ],
     callbacks: {

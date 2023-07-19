@@ -19,10 +19,10 @@ const ChatsPage = () => {
     return (
         <div className="flex-1 p-4">
             <article className="mb-4 flex flex-col space-y-2">
-                <h2 className="block text-center font-bold uppercase md:pl-2 md:text-left">
+                <h2 className="block text-center font-bold uppercase sm:pl-2 sm:text-left">
                     Owned Chatrooms
                 </h2>
-                <div className="flex flex-col items-center gap-4 sm:flex-row">
+                <div className="flex flex-col flex-wrap items-center gap-4 sm:flex-row">
                     {ownedChatroom.isLoading && <LoadingSpinner size={32} />}
                     {ownedChatroom.data?.id && (
                         <ChatroomCard
@@ -35,10 +35,10 @@ const ChatsPage = () => {
                 </div>
             </article>
             <article className="my-8 space-y-2">
-                <h2 className="block text-center font-bold uppercase md:pl-2 md:text-left">
+                <h2 className="block text-center font-bold uppercase sm:pl-2 sm:text-left">
                     Joined Chatrooms
                 </h2>
-                <div className="flex flex-col items-center gap-4 sm:flex-row">
+                <div className="flex flex-col flex-wrap items-center gap-4 sm:flex-row">
                     {joinedChatrooms.isLoading && <LoadingSpinner size={32} />}
                     {joinedChatrooms.data &&
                         joinedChatrooms.data.map((chatroom) => (

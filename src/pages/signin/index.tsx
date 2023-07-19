@@ -2,9 +2,7 @@ import type {
     GetServerSidePropsContext,
     InferGetServerSidePropsType,
 } from "next";
-import { getProviders, signIn } from "next-auth/react";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../api/auth/[...nextauth]";
+import { getProviders, getSession, signIn } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { z } from "zod";
@@ -26,13 +24,13 @@ export default function SignIn({
 
     const {
         register,
-        formState: { errors },
+        formState: { errors, isSubmitting },
         handleSubmit,
     } = useForm<ValidatedLoginForm>({
         resolver: zodResolver(loginValidationSchema),
     });
 
-    // config provider order matters
+    // config provider order matters - same as order in authConfig file
     const allProviders = Object.values(providers).slice(1);
 
     const onSubmit = handleSubmit((data) => {
@@ -43,113 +41,108 @@ export default function SignIn({
     });
 
     return (
-        <>
-            <Head>
-                <title>GarbGarb - Sign In</title>
-            </Head>
-            <div className="mx-auto mt-4 w-full max-w-md flex-1 text-gray-200 lg:mt-20">
-                <div className="mb-10 flex w-full flex-col items-center justify-start gap-8 rounded-lg p-4">
-                    <div className="flex w-full flex-col items-center gap-2">
-                        {error === "SessionRequired" && (
-                            <p className="text-sm">
-                                <u>
-                                    Please <strong>Sign In</strong> to access
-                                    this page.
-                                </u>
-                            </p>
-                        )}
-                        {error === "OAuthAccountNotLinked" && (
-                            <p className="text-sm">
-                                <u>
-                                    This email is already linked to another
-                                    account.
-                                </u>
-                            </p>
-                        )}
-                        {error === "Default" && (
-                            <p className="text-sm text-red-600">
-                                Something is wrong... Try again.
-                            </p>
-                        )}
+        <div className="flex w-full flex-col items-center sm:flex-auto">
+            <div className="flex w-full max-w-screen-sm flex-col gap-4 p-8 sm:mt-12 sm:h-auto sm:max-w-md">
+                <div className="flex w-full flex-col items-center gap-2">
+                    <div className="mb-4 w-full break-all rounded-md p-2 text-center text-lg shadow-md">
+                        YetAnotherMessagingApp
                     </div>
-                    <form
-                        method="post"
-                        action="/api/auth/signin/email"
-                        onSubmit={onSubmit}
-                        className="flex w-full flex-col gap-2"
-                    >
-                        <div className="flex w-full flex-col gap-1">
-                            <label
-                                className="pl-1 text-sm font-semibold"
-                                htmlFor="email"
-                            >
-                                Email
-                            </label>
+                    {error === "SessionRequired" && (
+                        <p className="text-sm">
+                            <u>
+                                Please <strong>Sign In</strong> to access this
+                                page.
+                            </u>
+                        </p>
+                    )}
+                    {error === "OAuthAccountNotLinked" && (
+                        <p>
+                            <u>
+                                This email is already linked to another account.
+                            </u>
+                        </p>
+                    )}
+                    {error === "Default" && (
+                        <p className="text-sm text-red-600">
+                            Something is wrong... Try again.
+                        </p>
+                    )}
+                </div>
+                <form
+                    method="post"
+                    action="/api/auth/signin/email"
+                    onSubmit={onSubmit}
+                    className="flex w-full flex-col gap-2"
+                >
+                    <fieldset>
+                        <label
+                            className="pl-1 text-sm font-semibold"
+                            htmlFor="email"
+                        >
+                            Email
                             <input
                                 style={{
                                     borderColor: errors.email
                                         ? "rgb(220 38 38)"
-                                        : "rgb(107 114 128)",
+                                        : "",
                                 }}
                                 {...register("email")}
-                                className="h-10 w-full rounded-md border border-slate-500 bg-black p-2 text-sm font-medium focus:bg-slate-200 focus:text-black"
+                                className="h-10 w-full rounded-md border-2 border-black p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
                                 type="email"
                                 id="email"
                                 name="email"
                                 required
                                 placeholder="john.doe@foo.com"
                             />
-                            {errors.email && (
-                                <span className="pl-1 text-xs font-semibold text-red-500">
-                                    {errors.email.message}
-                                </span>
-                            )}
-                        </div>
-                        <button
-                            type="submit"
-                            className="animate-hop h-10 rounded-lg border border-slate-500 bg-black p-2 text-sm font-medium text-gray-200 shadow-sm shadow-slate-500 enabled:hover:bg-slate-200 enabled:hover:text-black enabled:focus:bg-slate-200 enabled:focus:text-black disabled:opacity-50"
-                        >
-                            Sign in
-                        </button>
-                    </form>
-                    <div className="relative flex w-full items-center justify-center text-xs">
-                        <span className="absolute left-0 top-1/2 h-0.5 w-1/2 -translate-y-1/2 transform bg-slate-500" />
-                        <span className="z-10 bg-zinc-950 p-2">OR</span>
-                        <span className="absolute right-0 top-1/2 h-0.5 w-1/2 -translate-y-1/2 transform bg-slate-500" />
-                    </div>
-                    {allProviders.map((provider) => (
-                        <button
-                            aria-label={`${provider.name} sign in.`}
-                            key={provider.id}
-                            className="group mb-2 flex h-[40px] w-full items-center justify-center gap-2 rounded-lg border-2 border-[#4285F4] bg-[#4285F4] text-sm hover:border-slate-200 hover:bg-white hover:text-black"
-                            onClick={() => signIn(provider.id)}
-                        >
-                            <div className="rounded-sm bg-white p-2">
-                                <Image
-                                    className="h-[18px] w-[18px]"
-                                    src="https://authjs.dev/img/providers/google.svg"
-                                    alt="Google Logo"
-                                    width={18}
-                                    height={18}
-                                />
-                            </div>
-                            <span className="google pr-2 text-white group-hover:text-black">
-                                Sign in with {provider.name}
+                        </label>
+
+                        {errors.email && (
+                            <span className="pl-1 text-xs font-semibold text-red-500">
+                                {errors.email.message}
                             </span>
-                        </button>
-                    ))}
+                        )}
+                    </fieldset>
+                    <button
+                        type="submit"
+                        className="h-10 rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500   enabled:hover:text-sky-50 enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-sky-50 enabled:focus:shadow-sm disabled:opacity-50"
+                        disabled={!!isSubmitting}
+                    >
+                        Sign in
+                    </button>
+                </form>
+                <div className="relative flex w-full items-center justify-center text-xs">
+                    <span className="absolute left-0 top-1/2 h-0.5 w-1/2 -translate-y-1/2 transform bg-black" />
+                    <span className="z-10 bg-white p-2 font-bold">OR</span>
+                    <span className="absolute right-0 top-1/2 h-0.5 w-1/2 -translate-y-1/2 transform bg-black" />
                 </div>
+                {allProviders.map((provider) => (
+                    <button
+                        aria-label={`${provider.name} sign in.`}
+                        key={provider.id}
+                        className="group mb-2 flex h-[40px] w-full items-center justify-center gap-2 rounded-lg border-2 border-[#4285F4] bg-[#4285F4] text-sm hover:border-black hover:bg-white hover:text-black"
+                        onClick={() => signIn(provider.id)}
+                    >
+                        <div className="rounded-sm bg-white p-2">
+                            <Image
+                                className="h-[18px] w-[18px]"
+                                src="https://authjs.dev/img/providers/google.svg"
+                                alt="Google Logo"
+                                width={18}
+                                height={18}
+                            />
+                        </div>
+                        <span className="google pr-2 text-white group-hover:text-black">
+                            Sign in with {provider.name}
+                        </span>
+                    </button>
+                ))}
             </div>
-        </>
+        </div>
     );
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-    const session = await getServerSession(
-        context.req,
-        context.res,
-        authOptions
-    );
+    const session = await getSession(context);
 
     // If the user is already logged in, redirect.
     // Note: Make sure not to redirect to the same page
