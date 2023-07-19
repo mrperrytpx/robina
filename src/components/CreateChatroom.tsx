@@ -4,7 +4,8 @@ import { VscAdd } from "react-icons/vsc";
 export const CreateChatroom = () => {
     return (
         <Link
-            href="/chats/create"
+            href="/chats?create=1"
+            as="/chats/create"
             className="group relative grid aspect-video w-[min(100%,300px)] items-center rounded-xl border-black bg-gray-950 text-center shadow-lg"
         >
             <span className="group-hover:hidden">Create New Chatroom</span>

@@ -25,8 +25,6 @@ import { ChatroomMessages } from "../../components/ChatroomMessages";
 import { randomString } from "../../util/randomString";
 import { useGetChatroomMembersQuery } from "../../hooks/useGetChatroomMembersQuery";
 
-export const runtime = "experimental-edge";
-
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
     const [isSettingsActive, setIsSettingsActive] = useState(false);
