@@ -14,6 +14,7 @@
     "@prisma/client": "^5.0.0",
     "@tanstack/react-query": "^4.29.19",
     "@tanstack/react-query-devtools": "^4.29.19",
+    "edge-runtime": "^2.4.5",
     "next": "13.4.5",
     "next-auth": "^4.22.1",
     "pusher": "^5.1.3",

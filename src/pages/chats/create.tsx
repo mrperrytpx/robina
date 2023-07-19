@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { useCreateChatroomMutation } from "../../hooks/useCreateChatroomMutation";
@@ -31,7 +31,6 @@ const CreateChatPage = () => {
     });
 
     const router = useRouter();
-
     const createRoom = useCreateChatroomMutation();
 
     const onSubmit: SubmitHandler<TCreateChatroomFormValues> = async (data) => {
@@ -47,7 +46,7 @@ const CreateChatPage = () => {
     };
 
     return (
-        <div className="max-w-screen-sm flex-1 rounded-lg bg-slate-900 p-8 sm:mx-auto sm:my-20">
+        <div className="max-w-screen-sm flex-1 rounded-xl bg-slate-900 p-8 sm:mx-auto sm:my-20">
             <form
                 className="flex flex-col gap-2"
                 onSubmit={handleSubmit(onSubmit)}
@@ -68,7 +67,6 @@ const CreateChatPage = () => {
                         {errors.name.message}
                     </span>
                 )}
-                {/*  */}
                 <label className="block text-xs" htmlFor="description">
                     <strong className="uppercase">Chatroom description</strong>
                 </label>
@@ -103,33 +101,3 @@ const CreateChatPage = () => {
 };
 
 export default CreateChatPage;
-
-export const getServerSideProps = async (
-    ctx: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ session: Session | null }>> => {
-    const session = await getSession(ctx);
-
-    if (!session) {
-        return {
-            redirect: {
-                destination: `/api/auth/signin?callbackUrl=${encodeURIComponent(
-                    process.env.NEXTAUTH_URL + ctx.resolvedUrl
-                )}`,
-                permanent: false,
-            },
-        };
-    }
-
-    if (session && !session.user.username) {
-        return {
-            redirect: {
-                destination: `/profile/username`,
-                permanent: false,
-            },
-        };
-    }
-
-    return {
-        props: { session },
-    };
-};

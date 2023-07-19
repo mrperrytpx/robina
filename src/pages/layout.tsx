@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { MobileMenu } from "../components/MobileMenu";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 
 interface ILayoutProps {
     children: React.ReactNode;
@@ -76,9 +77,11 @@ const Layout = ({ children }: ILayoutProps) => {
                         />
                     )}
                 </header>
-                <main className="mx-auto flex min-h-[calc(100svh-64px)] w-full flex-1">
-                    {children}
-                </main>
+                <ErrorBoundary>
+                    <main className="mx-auto flex min-h-[calc(100svh-64px)] w-full flex-1">
+                        {children}
+                    </main>
+                </ErrorBoundary>
             </div>
         </>
     );

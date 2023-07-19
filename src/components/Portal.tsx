@@ -16,15 +16,15 @@ export const Portal = ({ children }: PortalProps) => {
         const close = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
                 setMounted(false);
-                router.back();
+                router.push("/chats");
             }
         };
 
-        window.addEventListener("keydown", close);
+        if (mounted) window.addEventListener("keydown", close);
         return () => {
             window.removeEventListener("keydown", close);
         };
-    }, [setMounted]);
+    }, [mounted, router]);
 
     useEffect(() => {
         if (typeof window != "undefined" && window.document) {
@@ -43,22 +43,32 @@ export const Portal = ({ children }: PortalProps) => {
     useEffect(() => {
         ref.current = document.querySelector<HTMLElement>("#portal");
         setMounted(true);
+
+        return () => {
+            ref.current = null;
+            setMounted(false);
+        };
     }, []);
+
+    const handleClosePortal = (e: React.MouseEvent<HTMLDivElement>) => {
+        const target = e.target as HTMLDivElement;
+        if (target.id === "bg" && bgRef.current && mounted) {
+            setMounted(false);
+            router.push("/chats");
+        }
+    };
 
     return mounted && ref.current
         ? createPortal(
-              <>
-                  <div
-                      ref={bgRef}
-                      className="fixed inset-0 z-40 bg-slate-800 bg-opacity-60"
-                  />
-                  <div
-                      role="dialog"
-                      className="fixed inset-0 z-50 flex max-h-screen items-center justify-center overflow-y-auto p-1 opacity-100"
-                  >
-                      {children}
-                  </div>
-              </>,
+              <div
+                  id="bg"
+                  role="dialog"
+                  ref={bgRef}
+                  onClick={handleClosePortal}
+                  className="fixed inset-0 top-16 flex overflow-y-auto bg-slate-800 bg-opacity-75 sm:top-0 sm:items-center sm:justify-center"
+              >
+                  {children}
+              </div>,
               ref.current
           )
         : null;
