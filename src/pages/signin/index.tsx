@@ -109,7 +109,7 @@ export default function SignIn({
                             type="submit"
                             className="animate-hop h-10 rounded-lg border border-slate-500 bg-black p-2 text-sm font-medium text-gray-200 shadow-sm shadow-slate-500 enabled:hover:bg-slate-200 enabled:hover:text-black enabled:focus:bg-slate-200 enabled:focus:text-black disabled:opacity-50"
                         >
-                            "Sign in"
+                            Sign in
                         </button>
                     </form>
                     <div className="relative flex w-full items-center justify-center text-xs">
