@@ -63,7 +63,7 @@ export const Portal = ({ children }: PortalProps) => {
                   role="dialog"
                   ref={bgRef}
                   onClick={handleClosePortal}
-                  className="fixed inset-0 top-16 flex overflow-y-auto bg-slate-800 bg-opacity-75 sm:top-0 sm:items-center sm:justify-center"
+                  className="fixed inset-0 top-16 flex overflow-y-auto bg-black bg-opacity-75 sm:top-0 sm:items-center sm:justify-center"
               >
                   {children}
               </div>,

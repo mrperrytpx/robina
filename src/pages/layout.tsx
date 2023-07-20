@@ -44,7 +44,7 @@ const Layout = ({ children }: ILayoutProps) => {
                         </Link>
                         <div className="flex items-center gap-4">
                             {session.status === "loading" ? (
-                                <LoadingSpinner size={28} />
+                                <LoadingSpinner size={36} />
                             ) : null}
                             {session?.data?.user && (
                                 <Link
@@ -53,7 +53,7 @@ const Layout = ({ children }: ILayoutProps) => {
                                     aria-label="Profile"
                                 >
                                     <Image
-                                        className="w-7 rounded-full"
+                                        className="w-9 rounded-full"
                                         width={100}
                                         height={100}
                                         src={

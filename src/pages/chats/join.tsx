@@ -1,32 +1,96 @@
-import { useState } from "react";
 import { useJoinChatroomMutation } from "../../hooks/useJoinChatroomMutation";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
+import { z } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { VscArrowLeft } from "react-icons/vsc";
+
+const joinChatroomSchema = z.object({
+    invite: z.string().length(10, "Invite string must be 10 characters long"),
+});
+
+type TJoinChatroomFormValues = z.infer<typeof joinChatroomSchema>;
 
 const JoinChatroomPage = () => {
     const joinChatroom = useJoinChatroomMutation();
+    const router = useRouter();
 
-    const [inv, setInv] = useState("");
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        setError,
+    } = useForm<TJoinChatroomFormValues>({
+        resolver: zodResolver(joinChatroomSchema),
+    });
+
+    const onSubmit: SubmitHandler<TJoinChatroomFormValues> = async (data) => {
+        const response = await joinChatroom.mutateAsync({ ...data });
+
+        if (!response?.ok) {
+            const error = await response?.text();
+            setError("root", { message: error || "Server Error" });
+            return;
+        } else {
+            router.push("/chats");
+        }
+    };
 
     return (
-        <div>
-            <button
-                className="w-40 bg-white p-2 text-black shadow-md"
-                onClick={async () => {
-                    await joinChatroom.mutateAsync({
-                        invite: inv,
-                    });
-                }}
-            >
-                join chat
-            </button>
-            <input
-                className="text-black"
-                type="text"
-                value={inv}
-                onChange={(e) => setInv(e.target.value)}
-            />
+        <div className="flex w-full max-w-screen-sm flex-1 flex-col items-center rounded-xl bg-white p-4 sm:mx-auto sm:my-20 sm:max-w-md">
+            <div className="flex w-full max-w-sm flex-col p-2">
+                <Link
+                    className="mb-6 flex items-center gap-2 self-start p-2 text-sm font-semibold uppercase antialiased shadow-md"
+                    href="/chats"
+                >
+                    <VscArrowLeft size={40} /> Go Back
+                </Link>
+                <form
+                    className="flex w-full flex-col items-center gap-8"
+                    onSubmit={handleSubmit(onSubmit)}
+                >
+                    <div className="flex w-full flex-col items-center gap-2">
+                        <div className="flex w-full items-center gap-2">
+                            <label className="block text-sm" htmlFor="name">
+                                <strong className="uppercase">
+                                    Invite String:
+                                </strong>
+                            </label>
+                            <input
+                                {...register("invite")}
+                                name="invite"
+                                id="invite"
+                                type="text"
+                                className="h-10 flex-1 border-b-2 border-black p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
+                                placeholder="xXxXxxXxXX"
+                            />
+                        </div>
+                        {errors.invite && (
+                            <span className="text-xs font-semibold text-red-500">
+                                {errors.invite.message}
+                            </span>
+                        )}
+                    </div>
+                    <div className="flex w-full flex-col items-center gap-2">
+                        <button
+                            className="h-10 w-full max-w-[250px] rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500   enabled:hover:text-sky-50 enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-sky-50 enabled:focus:shadow-sm disabled:opacity-50"
+                            type="submit"
+                            disabled={joinChatroom.isLoading}
+                        >
+                            {joinChatroom.isLoading ? "Joining..." : "Join!"}
+                        </button>
+                        {errors.root && (
+                            <span className="text-xs font-semibold text-red-500">
+                                {errors.root.message}
+                            </span>
+                        )}
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };
