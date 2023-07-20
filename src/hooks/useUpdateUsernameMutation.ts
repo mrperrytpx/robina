@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { TUsernameFormValues } from "../pages/profile/username";
+import { TUsernameFormValues } from "../pages/force-username";
 
 export const useUpdateUsernameMutation = () => {
     const updateUsername = async ({ username }: TUsernameFormValues) => {
