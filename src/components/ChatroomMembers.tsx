@@ -17,8 +17,8 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
     const chatroomMembers = useGetChatroomMembersQuery(chatId);
 
     return (
-        <div className="flex-1 overflow-y-auto bg-slate-800 px-6 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400 sm:h-full sm:w-60">
-            <h2 className="p-2 text-xs shadow-md">
+        <div className="flex-1 overflow-y-auto border-t-2 border-black bg-sky-100 px-3 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400 sm:h-full sm:w-60 sm:border-l-2 sm:border-t-0 sm:border-black">
+            <h2 className="my-2 bg-white p-2 text-xs shadow">
                 Members - {chatroomMembers.data?.length}
             </h2>
             <div className="flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">

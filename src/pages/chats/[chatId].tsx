@@ -222,11 +222,11 @@ const ChatPage = () => {
     return (
         <div className="flex max-h-[calc(100svh-64px)] w-full flex-row">
             <div className="flex max-h-[calc(100svh-64px)] w-full flex-col">
-                <div className="flex h-14 w-full items-center justify-between px-4 shadow-lg sm:hidden">
+                <div className="flex h-14 w-full items-center justify-between px-4 shadow sm:hidden">
                     <div className="flex items-center gap-2">
-                        <button onClick={handleSettings}>
+                        <button className="group p-2" onClick={handleSettings}>
                             <FiSettings
-                                className="cursor-pointer hover:scale-110 focus:scale-110 active:scale-110"
+                                className=" group-hover:scale-110 group-hover:stroke-sky-500 group-focus:scale-110 group-focus:stroke-sky-500 group-active:scale-110"
                                 size={24}
                             />
                         </button>
@@ -234,25 +234,28 @@ const ChatPage = () => {
                             {chatroom.data.name}
                         </span>
                     </div>
-                    <button onClick={handleMembers}>
+                    <button className="group p-2" onClick={handleMembers}>
                         <FiUsers
-                            className="cursor-pointer hover:scale-110 focus:scale-110 active:scale-110"
+                            className="group-hover:scale-110 group-hover:stroke-sky-500 group-focus:scale-110 group-focus:stroke-sky-500 group-active:scale-110"
                             size={24}
                         />
                     </button>
                 </div>
-                <div className="line-clamp-2 hidden border-b border-black px-4 py-2 text-sm font-semibold shadow-md sm:block">
+                <div className="line-clamp-2 hidden border-b-2 border-black px-4 py-2 text-sm font-semibold shadow sm:block">
                     {chatroom.data.name}
                 </div>
                 <ChatroomMessages />
                 <div className="mb-2 flex h-14 items-center gap-3 px-4">
                     <button
                         type="submit"
-                        className="hidden rounded-full bg-white p-2 shadow-md sm:inline-block"
+                        className="group hidden rounded-full border-2 border-black p-2 sm:inline-block"
                         aria-label="Send message"
                         onClick={handleSettings}
                     >
-                        <FiSettings size={20} stroke="black" />
+                        <FiSettings
+                            size={20}
+                            className="group-hover:stroke-sky-500 group-focus:stroke-sky-500"
+                        />
                     </button>
                     <form
                         onSubmit={handleSubmit(onSubmit)}
@@ -271,14 +274,17 @@ const ChatPage = () => {
                             id="message"
                             type="text"
                             placeholder="Message"
-                            className="h-full w-full min-w-0 flex-1 rounded-3xl p-2 pl-3 text-sm text-black"
+                            className="h-10 w-full rounded-md border-2 border-black p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
                         />
                         <button
                             type="submit"
-                            className="rounded-full bg-white p-2 shadow-md"
+                            className="group rounded-full border-2 border-black p-2"
                             aria-label="Send message"
                         >
-                            <VscSend fill="black" size={20} />
+                            <VscSend
+                                className="fill-black group-hover:fill-sky-500 group-focus:fill-sky-500 group-active:fill-sky-500"
+                                size={20}
+                            />
                         </button>
                     </form>
                 </div>

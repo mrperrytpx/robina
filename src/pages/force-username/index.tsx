@@ -48,7 +48,7 @@ const UsernamePage = () => {
     };
 
     return (
-        <div className="flex w-full max-w-screen-sm flex-1 flex-col items-center rounded-xl bg-white p-4 sm:mx-auto sm:my-20 sm:max-w-md">
+        <div className="flex w-full max-w-screen-sm flex-1 flex-col items-center bg-white p-4 sm:mx-auto sm:my-20 sm:max-w-md">
             <div className="flex w-full max-w-sm flex-col p-2">
                 <h2 className="mb-8 w-full text-center text-xl font-bold uppercase">
                     Let&apos;s give you a username 😊
@@ -58,18 +58,18 @@ const UsernamePage = () => {
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <div className="flex w-full flex-col items-center gap-2">
-                        <div className="flex w-full items-center gap-2">
-                            <label className="block text-sm" htmlFor="username">
-                                <strong className="uppercase">
-                                    Username:*
-                                </strong>
-                            </label>
+                        <div className="flex w-full flex-col items-center gap-2 sm:flex-row">
+                            <label
+                                className="block w-full text-center text-sm sm:w-auto"
+                                htmlFor="username"
+                                aria-label="username"
+                            />
                             <input
                                 {...register("username")}
                                 name="username"
                                 id="username"
                                 type="text"
-                                className="h-10 flex-1 border-b-2 border-black p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500"
+                                className="h-10 w-full border-b-2 border-black p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500"
                                 placeholder="lazyfox123_"
                             />
                         </div>
@@ -78,7 +78,7 @@ const UsernamePage = () => {
                                 {errors.username.message}
                             </span>
                         )}
-                        <p className="w-full text-left text-xs">
+                        <p className="w-full text-center text-xs">
                             *Usernames get converted to lowercase letters.
                         </p>
                     </div>

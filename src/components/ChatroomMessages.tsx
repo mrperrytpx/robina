@@ -54,8 +54,8 @@ export const ChatroomMessages = () => {
     }, [chatId, queryClient, session.data?.user.id]);
 
     return (
-        <div className="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
-            <div ref={startRef} />
+        <div className="flex flex-1 flex-col overflow-y-auto p-2 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
+            <div className="mt-auto" ref={startRef} />
 
             {chatroomMessages.data?.map((message, i) => (
                 <ChatMessage

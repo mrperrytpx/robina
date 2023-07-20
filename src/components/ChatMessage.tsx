@@ -56,7 +56,20 @@ export const ChatMessage = ({
                     </span>
                 </div>
             )}
-            <div className="flex flex-col overflow-hidden pl-1">
+            {isAllowedToDelete && (
+                <button
+                    onClick={async () =>
+                        await deleteMessage.mutateAsync({
+                            chatId,
+                            messageId: message.id,
+                        })
+                    }
+                    className="peer absolute right-3 hidden -translate-y-4 rounded-lg bg-white p-1.5 text-black shadow-lg group-hover:block  group-focus:block group-active:block active:block"
+                >
+                    <VscTrash size={20} fill="#dc2626" />
+                </button>
+            )}
+            <div className="flex flex-col overflow-hidden pl-1 peer-hover:bg-sky-50 hover:bg-sky-50">
                 {!isDifferentAuthor && (
                     <div className="flex items-end justify-start gap-2">
                         <span className="mb-1 text-sm font-bold">
@@ -69,7 +82,7 @@ export const ChatMessage = ({
                     </div>
                 )}
                 <span
-                    className="break-words py-1 text-sm leading-4"
+                    className="break-words py-1 pl-1 text-sm leading-4"
                     style={{
                         opacity: message.id.length === 10 ? "0.5" : "1",
                     }}
@@ -77,19 +90,6 @@ export const ChatMessage = ({
                     {message.content}
                 </span>
             </div>
-            {isAllowedToDelete && (
-                <button
-                    onClick={async () =>
-                        await deleteMessage.mutateAsync({
-                            chatId,
-                            messageId: message.id,
-                        })
-                    }
-                    className="absolute right-3 hidden -translate-y-4 rounded-lg p-1.5 text-black shadow-lg group-hover:block  group-focus:block group-active:block active:block"
-                >
-                    <VscTrash size={20} fill="#dc2626" />
-                </button>
-            )}
         </div>
     );
 };

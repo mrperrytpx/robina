@@ -37,7 +37,7 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
     const leaveChatroom = useLeaveChatroomMutation();
 
     const dangerButtonStyles =
-        "w-full rounded-lg bg-gray-100 p-2 max-w-[min(100%,400px)] font-semibold text-black shadow-lg hover:bg-red-600 hover:text-gray-100 focus:bg-red-600 focus:text-gray-100 active:bg-red-600 active:text-gray-100";
+        "w-full rounded-lg bg-white p-2 max-w-[min(100%,400px)] font-semibold text-black shadow hover:bg-red-600 hover:text-gray-100 focus:bg-red-600 focus:text-gray-100 active:bg-red-600 active:text-gray-100";
 
     const handleDeleteChatroom = async () => {
         const { response } = await deleteChatroom.mutateAsync({ chatId });
@@ -70,12 +70,12 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
     };
 
     return (
-        <div className="flex-1 space-y-8 overflow-y-auto bg-slate-800 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
+        <div className="flex-1 space-y-8 overflow-y-auto border-t-2 border-black bg-sky-100 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
             <div className="mt-4 space-y-2">
                 <h3 className="block text-center text-sm font-bold uppercase sm:text-left">
                     Chatroom description:
                 </h3>
-                <p className="rounded-md bg-slate-900 p-2 text-center text-sm sm:text-left">
+                <p className="rounded-md bg-white p-2 text-center text-sm shadow sm:text-left">
                     {chatroom.data?.description}
                 </p>
             </div>
@@ -85,7 +85,7 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                         <span className="text-sm font-semibold uppercase">
                             Invite Link:{" "}
                         </span>
-                        <span className="rounded-lg bg-slate-900 p-2 font-mono">
+                        <span className="rounded-lg bg-white p-2 font-mono shadow">
                             {getInvite.data?.value
                                 ? getInvite.data?.value
                                 : "XXXXXXXXXX"}
@@ -94,10 +94,13 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                             {getInvite.data?.value && (
                                 <button
                                     onClick={handleCopyInvite}
-                                    className="rounded-lg bg-slate-900 p-2 shadow-md"
+                                    className="rounded-lg bg-white p-2 shadow"
                                 >
                                     {copied ? (
-                                        <VscCheck fill="#22c55e" size={24} />
+                                        <VscCheck
+                                            fill="rgb(14 165 233)"
+                                            size={24}
+                                        />
                                     ) : (
                                         <VscCopy size={24} />
                                     )}
@@ -110,10 +113,13 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                                             chatId,
                                         })
                                     }
-                                    className="rounded-lg bg-slate-900 p-2 shadow-md"
+                                    className="rounded-lg bg-white p-2 shadow"
                                 >
                                     {patchInvite.isLoading ? (
-                                        <LoadingSpinner size={24} />
+                                        <LoadingSpinner
+                                            color="rgb(14 165 233)"
+                                            size={24}
+                                        />
                                     ) : (
                                         <VscRefresh size={24} />
                                     )}
@@ -142,7 +148,7 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                                     />
                                 ))
                             ) : (
-                                <p className="p-2 text-center text-sm font-semibold">
+                                <p className="rounded-md bg-white p-4 text-center text-sm font-semibold shadow">
                                     No banned members
                                 </p>
                             )}

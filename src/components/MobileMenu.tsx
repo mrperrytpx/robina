@@ -31,7 +31,7 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
         <div
             id="menu"
             ref={mobileRef}
-            className="absolute inset-0 top-16 z-20 h-[calc(100svh-64px)] w-full bg-gray-900 px-4 py-2"
+            className="absolute inset-0 top-16 z-20 h-[calc(100svh-64px)] w-full bg-white px-4 py-2"
         >
             Phone dasd asds
         </div>

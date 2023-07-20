@@ -42,7 +42,7 @@ const JoinChatroomPage = () => {
 
     return (
         <div className="flex w-full max-w-screen-sm flex-1 flex-col items-center rounded-xl bg-white p-4 sm:mx-auto sm:my-20 sm:max-w-md">
-            <div className="flex w-full max-w-sm flex-col p-2">
+            <div className="flex w-full max-w-md flex-col p-2">
                 <Link
                     className="group mb-6 flex items-center gap-1 self-start rounded-md border-2 border-black px-2 py-1 text-sm font-semibold uppercase antialiased shadow  hover:border-white hover:shadow-sky-500 focus:border-white focus:shadow-sky-500"
                     href="/chats"
@@ -58,8 +58,8 @@ const JoinChatroomPage = () => {
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <div className="flex w-full flex-col items-center gap-2">
-                        <div className="flex w-full items-center gap-2">
-                            <label className="block text-sm" htmlFor="invite">
+                        <div className="flex w-full flex-col items-center gap-2 sm:flex-row">
+                            <label className="text-sm" htmlFor="invite">
                                 <strong className="uppercase">
                                     Invite String:
                                 </strong>
@@ -69,8 +69,9 @@ const JoinChatroomPage = () => {
                                 name="invite"
                                 id="invite"
                                 type="text"
-                                className="h-10 flex-1 border-b-2 border-black p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
-                                placeholder="xXxXxxXxXX"
+                                className="h-10 w-full border-b-2 border-black p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500 sm:w-auto sm:text-left"
+                                placeholder="__________"
+                                autoComplete="false"
                             />
                         </div>
                         {errors.invite && (
