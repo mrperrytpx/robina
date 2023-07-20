@@ -44,10 +44,14 @@ const JoinChatroomPage = () => {
         <div className="flex w-full max-w-screen-sm flex-1 flex-col items-center rounded-xl bg-white p-4 sm:mx-auto sm:my-20 sm:max-w-md">
             <div className="flex w-full max-w-sm flex-col p-2">
                 <Link
-                    className="mb-6 flex items-center gap-2 self-start p-2 text-sm font-semibold uppercase antialiased shadow-md"
+                    className="group mb-6 flex items-center gap-1 self-start rounded-md border-2 border-black px-2 py-1 text-sm font-semibold uppercase antialiased shadow  hover:border-white hover:shadow-sky-500 focus:border-white focus:shadow-sky-500"
                     href="/chats"
                 >
-                    <VscArrowLeft size={40} /> Go Back
+                    <VscArrowLeft
+                        className="group-hover:fill-sky-500 group-focus:fill-sky-500"
+                        size={32}
+                    />{" "}
+                    Go Back
                 </Link>
                 <form
                     className="flex w-full flex-col items-center gap-8"
@@ -55,7 +59,7 @@ const JoinChatroomPage = () => {
                 >
                     <div className="flex w-full flex-col items-center gap-2">
                         <div className="flex w-full items-center gap-2">
-                            <label className="block text-sm" htmlFor="name">
+                            <label className="block text-sm" htmlFor="invite">
                                 <strong className="uppercase">
                                     Invite String:
                                 </strong>

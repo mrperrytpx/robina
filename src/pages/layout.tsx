@@ -37,7 +37,7 @@ const Layout = ({ children }: ILayoutProps) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="relative flex min-h-[100svh] flex-col">
-                <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center border-b-2 border-black bg-sky-500">
+                <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center bg-sky-500">
                     <div className="flex w-full items-center justify-between px-4 py-2">
                         <Link href="/" className="text-3xl text-sky-50">
                             LOGO

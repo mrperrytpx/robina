@@ -1,12 +1,11 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";
-import { getSession, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { useCreateChatroomMutation } from "../../hooks/useCreateChatroomMutation";
 import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Chatroom } from "@prisma/client";
 import { VscArrowLeft } from "react-icons/vsc";
 import Link from "next/link";
 
@@ -52,10 +51,14 @@ const CreateChatPage = () => {
         <div className="max-w-screen-sm flex-1 rounded-xl bg-white p-4 sm:mx-auto sm:my-20">
             <div className="flex w-full flex-col p-2">
                 <Link
-                    className="mb-6 flex items-center gap-2 self-start p-2 text-sm font-semibold uppercase antialiased shadow-md"
+                    className="group mb-6 flex items-center gap-1 self-start rounded-md border-2 border-black px-2 py-1 text-sm font-semibold uppercase antialiased shadow  hover:border-white hover:shadow-sky-500 focus:border-white focus:shadow-sky-500"
                     href="/chats"
                 >
-                    <VscArrowLeft size={40} /> Go Back
+                    <VscArrowLeft
+                        className="group-hover:fill-sky-500 group-focus:fill-sky-500"
+                        size={32}
+                    />{" "}
+                    Go Back
                 </Link>
                 <form
                     className="flex flex-col gap-2"
@@ -68,7 +71,7 @@ const CreateChatPage = () => {
                         {...register("name")}
                         name="name"
                         id="name"
-                        type="name"
+                        type="text"
                         className="h-10 w-full rounded-md border-2 border-black p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
                         placeholder="Chatroom name"
                     />
@@ -116,3 +119,33 @@ const CreateChatPage = () => {
 };
 
 export default CreateChatPage;
+
+export const getServerSideProps = async (
+    ctx: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<{ session: Session | null }>> => {
+    const session = await getSession(ctx);
+
+    if (!session) {
+        return {
+            redirect: {
+                destination: `/api/auth/signin?callbackUrl=${encodeURIComponent(
+                    process.env.NEXTAUTH_URL + ctx.resolvedUrl
+                )}`,
+                permanent: false,
+            },
+        };
+    }
+
+    if (!session.user.username) {
+        return {
+            redirect: {
+                destination: `/force-username`,
+                permanent: false,
+            },
+        };
+    }
+
+    return {
+        props: { session },
+    };
+};

@@ -17,7 +17,7 @@ export default function Home() {
                 <Link className="p-4" href="/profile">
                     Profile
                 </Link>
-                <Link className="p-4" href="/profile/username">
+                <Link className="p-4" href="/force-username">
                     username
                 </Link>
                 <Link className="p-4" href="/chats">
@@ -49,7 +49,7 @@ export default function Home() {
             <Link className="p-4" href="/profile">
                 Profile
             </Link>
-            <Link className="p-4" href="/profile/username">
+            <Link className="p-4" href="/force-username">
                 username
             </Link>
             <Link className="p-4" href="/chats">

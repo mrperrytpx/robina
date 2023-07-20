@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { useGetAllJoinedChatroomsQuery } from "../../hooks/useGetAllJoinedChatroomsQuery";
 import {
     EnterChatroomCard,
@@ -16,11 +16,20 @@ import JoinChatroomPage from "./join";
 const ChatsPage = () => {
     const joinedChatrooms = useGetAllJoinedChatroomsQuery();
     const ownedChatroom = useGetOwnedChatroomtroomsQuery();
+    // const session = useSession();
 
     const router = useRouter();
 
     return (
-        <div className="flex-1 p-4">
+        <div className="mx-auto max-w-screen-lg flex-1 p-4">
+            {/* {session.data?.user.username && (
+                <h2 className="mb-8 block text-center font-bold uppercase sm:pl-2 sm:text-left">
+                    Username -{" "}
+                    <span className="font-normal normal-case">
+                        {session.data.user.username}
+                    </span>
+                </h2>
+            )} */}
             <article className="mb-4 flex flex-col space-y-2">
                 <h2 className="block text-center font-bold uppercase sm:pl-2 sm:text-left">
                     Owned Chatroom
@@ -104,7 +113,7 @@ export const getServerSideProps = async (
     if (!session.user.username) {
         return {
             redirect: {
-                destination: `/profile/username`,
+                destination: `/force-username`,
                 permanent: false,
             },
         };

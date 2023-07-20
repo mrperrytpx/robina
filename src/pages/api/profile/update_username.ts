@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { prisma } from "../../../../prisma/prisma";
 import { authOptions } from "../auth/[...nextauth]";
-import { usernameSchema } from "../../profile/username";
+import { usernameSchema } from "../../force-username";
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,9 +11,11 @@ export default async function handler(
     if (req.method === "PATCH") {
         const { username } = usernameSchema.parse(req.body);
 
+        if (!username) return res.status(404).end("No username provided!");
+
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session");
+        if (!session) return res.status(401).end("No session!");
 
         const user = await prisma.user.findFirst({
             where: {
@@ -21,7 +23,7 @@ export default async function handler(
             },
         });
 
-        if (!user) return res.status(401).end("No user");
+        if (!user) return res.status(401).end("No user!");
 
         const usernameExsits = await prisma.user.findFirst({
             where: {
@@ -30,7 +32,7 @@ export default async function handler(
         });
 
         if (usernameExsits)
-            return res.status(409).end("Username already taken");
+            return res.status(409).end("Username already taken!");
 
         await prisma.user.update({
             where: {
@@ -41,9 +43,9 @@ export default async function handler(
             },
         });
 
-        res.status(201).end("Success");
+        res.status(201).end("Success!");
     } else {
         res.setHeader("Allow", "PATCH");
-        res.status(405).end("Method Not Allowed");
+        res.status(405).end("Method Not Allowed!");
     }
 }

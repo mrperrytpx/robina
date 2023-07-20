@@ -15,7 +15,7 @@ export default async function handler(
             .min(10, "Invite link needs to be 10 chars")
             .parse(req.body.inviteLink);
 
-        if (!inviteLink) return res.status(404).end("Invalid invite link");
+        if (!inviteLink) return res.status(404).end("Invalid invite string");
 
         const session = await getServerSession(req, res, authOptions);
 
@@ -40,7 +40,7 @@ export default async function handler(
             },
         });
 
-        if (!chatroom) return res.status(404).end("Invalid invite link");
+        if (!chatroom) return res.status(404).end("Invalid invite string");
 
         if (chatroom.banned_members.find((member) => member.id === user.id)) {
             return res.status(403).end("You are banned from this chatroom");

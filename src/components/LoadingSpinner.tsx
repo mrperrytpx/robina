@@ -1,6 +1,8 @@
-import React from "react";
-
-export const LoadingSpinner = ({ size = 32 }: { size?: number }) => {
+interface ILoadingSpinnerProps {
+    size?: number;
+    color?: string;
+}
+export const LoadingSpinner = ({ size = 32, color }: ILoadingSpinnerProps) => {
     return (
         <div className="flex items-center justify-center">
             <div
@@ -9,12 +11,10 @@ export const LoadingSpinner = ({ size = 32 }: { size?: number }) => {
                 style={{
                     width: size + "px",
                     height: size + "px",
+                    borderColor: color ? color : "black",
+                    borderRightColor: "transparent",
                 }}
-            >
-                {/* <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-                    Loading...
-                </span> */}
-            </div>
+            />
         </div>
     );
 };

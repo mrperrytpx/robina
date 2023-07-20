@@ -53,7 +53,7 @@ export const EnterChatroomCard = ({
         <Link
             href={`/chats/${id}`}
             aria-label={`Visit a chatroom named ${name}`}
-            className="relative flex aspect-video w-[min(100%,280px)] flex-col items-center justify-center gap-4 rounded-xl p-4 shadow-md outline outline-2 hover:shadow-sky-500 hover:outline-sky-500  focus:shadow-sky-500 focus:outline-sky-500"
+            className="relative flex aspect-video w-[min(100%,280px)] flex-col items-center justify-center gap-4 rounded-xl p-4 shadow-md outline outline-2 hover:shadow-sky-500  hover:outline-sky-500 focus:shadow-sky-500 focus:outline-sky-500"
         >
             <span className="line-clamp-2 w-full break-words text-center text-xl">
                 {name}
