@@ -72,11 +72,8 @@ const ChatPage = () => {
                 queryClient.setQueryData(
                     ["messages", chatId],
                     (oldData: TChatroomMessage[] | undefined) => {
-                        const newData: TChatroomMessage[] = JSON.parse(
-                            JSON.stringify(oldData)
-                        );
-                        newData.push(data);
-                        return newData;
+                        if (!oldData) return [data];
+                        return [...oldData, data];
                     }
                 );
             }

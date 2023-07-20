@@ -56,7 +56,7 @@ export const ChatMessage = ({
                     </span>
                 </div>
             )}
-            <div className="flex flex-col overflow-hidden pl-1 group-hover:bg-slate-800 group-focus:bg-slate-800 group-active:bg-slate-800 active:bg-slate-800">
+            <div className="flex flex-col overflow-hidden pl-1">
                 {!isDifferentAuthor && (
                     <div className="flex items-end justify-start gap-2">
                         <span className="mb-1 text-sm font-bold">
@@ -68,7 +68,12 @@ export const ChatMessage = ({
                         </span>
                     </div>
                 )}
-                <span className=" break-words py-1 text-sm leading-4 ">
+                <span
+                    className="break-words py-1 text-sm leading-4"
+                    style={{
+                        opacity: message.id.length === 10 ? "0.5" : "1",
+                    }}
+                >
                     {message.content}
                 </span>
             </div>
@@ -80,7 +85,7 @@ export const ChatMessage = ({
                             messageId: message.id,
                         })
                     }
-                    className="absolute right-3 hidden -translate-y-4 rounded-lg bg-black p-1.5 shadow-lg group-hover:block  group-focus:block group-active:block active:block"
+                    className="absolute right-3 hidden -translate-y-4 rounded-lg p-1.5 text-black shadow-lg group-hover:block  group-focus:block group-active:block active:block"
                 >
                     <VscTrash size={20} fill="#dc2626" />
                 </button>
