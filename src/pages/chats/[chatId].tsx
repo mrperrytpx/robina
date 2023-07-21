@@ -2,7 +2,7 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { VscSend } from "react-icons/vsc";
+import { VscArrowLeft, VscSend } from "react-icons/vsc";
 import { FiSettings, FiUsers } from "react-icons/fi";
 import { z } from "zod";
 import { usePostChatMessageMutation } from "../../hooks/usePostChatMessageMutation";
@@ -24,6 +24,8 @@ import { ChatroomSettings } from "../../components/ChatroomSettings";
 import { ChatroomMessages } from "../../components/ChatroomMessages";
 import { randomString } from "../../util/randomString";
 import { useGetChatroomMembersQuery } from "../../hooks/useGetChatroomMembersQuery";
+import Link from "next/link";
+import { useGetChatroomMessagesQuery } from "../../hooks/useGetChatroomMessagesQuery";
 
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
@@ -36,6 +38,7 @@ const ChatPage = () => {
 
     const chatroom = useGetChatroomQuery(chatId);
     const chatroomMembers = useGetChatroomMembersQuery(chatId);
+    const chatroomMessages = useGetChatroomMessagesQuery(chatId);
 
     const {
         register,
@@ -213,7 +216,17 @@ const ChatPage = () => {
         setIsSettingsActive(false);
     };
 
-    if (chatroom.isLoading) return <LoadingSpinner />;
+    if (chatroom.isLoading || chatroomMessages.isLoading)
+        return (
+            <div className="flex w-full flex-1 items-center justify-center">
+                <div className="flex flex-col gap-4">
+                    <LoadingSpinner size={50} color="#0ea5e9" />
+                    <span className="text-center font-mono">
+                        Loading Chatroom...
+                    </span>
+                </div>
+            </div>
+        );
 
     if (!chatroom.data) {
         return <div>You&apos;re not a part of this chatroom :)</div>;
@@ -223,26 +236,46 @@ const ChatPage = () => {
         <div className="flex max-h-[calc(100svh-64px)] w-full flex-row">
             <div className="flex max-h-[calc(100svh-64px)] w-full flex-col">
                 <div className="flex h-14 w-full items-center justify-between px-4 shadow sm:hidden">
-                    <div className="flex items-center gap-2">
+                    <div className="line-clamp-2 flex items-center gap-2 text-sm font-semibold">
+                        <Link
+                            href="/chats"
+                            className="group px-2 py-1"
+                            aria-label="Back to all chats page"
+                        >
+                            <VscArrowLeft
+                                className="fill-black group-hover:fill-sky-500 group-focus:fill-sky-500"
+                                size={24}
+                            />
+                        </Link>
+                        <span>{chatroom.data.name}</span>
+                    </div>
+                    <div className="flex items-center gap-4">
                         <button className="group p-2" onClick={handleSettings}>
                             <FiSettings
                                 className=" group-hover:scale-110 group-hover:stroke-sky-500 group-focus:scale-110 group-focus:stroke-sky-500 group-active:scale-110"
                                 size={24}
                             />
                         </button>
-                        <span className="line-clamp-2 text-xs font-semibold">
-                            {chatroom.data.name}
-                        </span>
+                        <button className="group p-2" onClick={handleMembers}>
+                            <FiUsers
+                                className="group-hover:scale-110 group-hover:stroke-sky-500 group-focus:scale-110 group-focus:stroke-sky-500 group-active:scale-110"
+                                size={24}
+                            />
+                        </button>
                     </div>
-                    <button className="group p-2" onClick={handleMembers}>
-                        <FiUsers
-                            className="group-hover:scale-110 group-hover:stroke-sky-500 group-focus:scale-110 group-focus:stroke-sky-500 group-active:scale-110"
+                </div>
+                <div className="line-clamp-2 hidden border-b-2 border-black px-4 py-1 text-sm font-semibold shadow sm:flex sm:items-center sm:gap-4">
+                    <Link
+                        href="/chats"
+                        className="group px-2 py-1"
+                        aria-label="Back to all chats page"
+                    >
+                        <VscArrowLeft
+                            className="fill-black group-hover:fill-sky-500 group-focus:fill-sky-500"
                             size={24}
                         />
-                    </button>
-                </div>
-                <div className="line-clamp-2 hidden border-b-2 border-black px-4 py-2 text-sm font-semibold shadow sm:block">
-                    {chatroom.data.name}
+                    </Link>
+                    <span>{chatroom.data.name}</span>
                 </div>
                 <ChatroomMessages />
                 <div className="mb-2 flex h-14 items-center gap-3 px-4">
@@ -274,6 +307,8 @@ const ChatPage = () => {
                             id="message"
                             type="text"
                             placeholder="Message"
+                            maxLength={150}
+                            minLength={1}
                             className="h-10 w-full rounded-md border-2 border-black p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
                         />
                         <button

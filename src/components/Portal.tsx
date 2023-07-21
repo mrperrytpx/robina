@@ -11,7 +11,7 @@ import { createPortal } from "react-dom";
 
 interface PortalProps {
     children: ReactNode;
-    shouldRoute?: boolean;
+    shouldRoute: boolean;
     setState?: Dispatch<SetStateAction<boolean>>;
 }
 

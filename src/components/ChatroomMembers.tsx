@@ -2,8 +2,9 @@ import React from "react";
 import { useBanChatroomMemberMutation } from "../hooks/useBanChatroomMemberMutation";
 import { z } from "zod";
 import { useRouter } from "next/router";
-import { MemberCard } from "./MemberCard";
+import { MemberCard, SkeletonLoadingCard } from "./MemberCard";
 import { useGetChatroomMembersQuery } from "../hooks/useGetChatroomMembersQuery";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 interface IChatroomMembersProps {
     ownerId: string;
@@ -17,25 +18,38 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
     const chatroomMembers = useGetChatroomMembersQuery(chatId);
 
     return (
-        <div className="flex-1 overflow-y-auto border-t-2 border-black bg-sky-100 px-3 scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400 sm:h-full sm:w-60 sm:border-l-2 sm:border-t-0 sm:border-black">
-            <h2 className="my-2 bg-white p-2 text-xs shadow">
-                Members - {chatroomMembers.data?.length}
-            </h2>
-            <div className="flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-400">
-                {chatroomMembers.data?.map((member) => (
-                    <MemberCard
-                        key={member.id}
-                        member={member}
-                        ownerId={ownerId}
-                        onClick={async () => {
-                            await banChatroomMember.mutateAsync({
-                                chatId,
-                                memberId: member.id,
-                            });
-                        }}
-                    />
-                ))}
-            </div>
+        <div className="flex-1 overflow-y-auto border-t-2 border-black bg-sky-500 px-3 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100 sm:h-full sm:w-60 sm:border-t-0 sm:border-black">
+            {chatroomMembers.isLoading ? (
+                <div className="h4 flex w-full flex-col gap-2">
+                    <div className="mt-2 h-4 w-full animate-pulse rounded-md bg-white p-4 shadow" />
+                    <SkeletonLoadingCard />
+                    <SkeletonLoadingCard />
+                    <SkeletonLoadingCard />
+                    <SkeletonLoadingCard />
+                    <SkeletonLoadingCard />
+                </div>
+            ) : (
+                <>
+                    <h2 className="my-2 rounded-md bg-white p-2 text-xs font-bold shadow">
+                        Members - {chatroomMembers.data?.length}
+                    </h2>
+                    <div className="flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">
+                        {chatroomMembers.data?.map((member) => (
+                            <MemberCard
+                                key={member.id}
+                                member={member}
+                                ownerId={ownerId}
+                                onClick={async () => {
+                                    await banChatroomMember.mutateAsync({
+                                        chatId,
+                                        memberId: member.id,
+                                    });
+                                }}
+                            />
+                        ))}
+                    </div>
+                </>
+            )}
         </div>
     );
 };

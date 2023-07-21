@@ -6,13 +6,47 @@ export default function Home() {
 
     if (session.status === "authenticated") {
         return (
-            <div className="flex flex-col items-center gap-4">
-                <p>Signed in as {session.data?.user?.email}</p>
+            <div className="flex w-full  flex-1 flex-col items-center">
+                <div className="flex h-full w-full max-w-screen-lg flex-col gap-4">
+                    <p>Signed in as {session.data?.user?.email}</p>
+                    <button
+                        className="w-40 bg-white p-2 text-black shadow-md"
+                        onClick={() => signOut()}
+                    >
+                        Sign out
+                    </button>
+                    <Link className="p-4" href="/profile">
+                        Profile
+                    </Link>
+                    <Link className="p-4" href="/force-username">
+                        username
+                    </Link>
+                    <Link className="p-4" href="/chats">
+                        chats
+                    </Link>
+                    <Link className="p-4" href="/chats/create">
+                        create chat
+                    </Link>
+                    <Link className="p-4" href="/chats/join">
+                        join chat
+                    </Link>
+                </div>
+
+                <footer className="grid min-h-[128px] w-full place-items-center items-center bg-sky-500 text-sky-50">
+                    Footer
+                </footer>
+            </div>
+        );
+    }
+
+    return (
+        <div className="flex w-full  flex-1 flex-col items-center">
+            <div className="flex h-full w-full max-w-screen-lg flex-col gap-4">
                 <button
                     className="w-40 bg-white p-2 text-black shadow-md"
-                    onClick={() => signOut()}
+                    onClick={() => signIn()}
                 >
-                    Sign out
+                    Sign In
                 </button>
                 <Link className="p-4" href="/profile">
                     Profile
@@ -29,39 +63,9 @@ export default function Home() {
                 <Link className="p-4" href="/chats/join">
                     join chat
                 </Link>
-
-                <footer className="sticky top-0 grid min-h-[128px] place-items-center items-center border-t-2 border-slate-400 bg-sky-100">
-                    Footer
-                </footer>
             </div>
-        );
-    }
 
-    return (
-        <div className="flex flex-col items-center gap-4">
-            <div>Yo</div>
-            <button
-                className="w-40 bg-white p-2 text-black shadow-md"
-                onClick={() => signIn()}
-            >
-                Sign in
-            </button>
-            <Link className="p-4" href="/profile">
-                Profile
-            </Link>
-            <Link className="p-4" href="/force-username">
-                username
-            </Link>
-            <Link className="p-4" href="/chats">
-                chats
-            </Link>
-            <Link className="p-4" href="/chats/create">
-                create chat
-            </Link>
-            <Link className="p-4" href="/chats/join">
-                join chat
-            </Link>
-            <footer className="sticky top-0 grid min-h-[128px] place-items-center items-center border-t-2 border-slate-400 bg-sky-100">
+            <footer className="grid min-h-[128px] w-full place-items-center items-center bg-sky-500 text-sky-50">
                 Footer
             </footer>
         </div>

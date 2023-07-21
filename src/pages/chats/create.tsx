@@ -7,7 +7,6 @@ import { useCreateChatroomMutation } from "../../hooks/useCreateChatroomMutation
 import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { VscArrowLeft } from "react-icons/vsc";
-import Link from "next/link";
 
 export type TCreateChatroomFormValues = z.infer<typeof createChatroomSchema>;
 
@@ -28,6 +27,7 @@ const CreateChatPage = () => {
         handleSubmit,
         formState: { errors },
         setError,
+        reset,
     } = useForm<TCreateChatroomFormValues>({
         resolver: zodResolver(createChatroomSchema),
     });
@@ -43,6 +43,7 @@ const CreateChatPage = () => {
             setError("root", { message: error || "Server Error" });
             return;
         } else {
+            reset();
             router.push("/chats");
         }
     };
@@ -50,16 +51,16 @@ const CreateChatPage = () => {
     return (
         <div className="max-w-screen-sm flex-1 rounded-xl bg-white p-4 sm:mx-auto sm:my-20">
             <div className="flex w-full flex-col p-2">
-                <Link
+                <button
+                    onClick={() => router.back()}
                     className="group mb-6 flex items-center gap-1 self-start rounded-md border-2 border-black px-2 py-1 text-sm font-semibold uppercase antialiased shadow  hover:border-white hover:shadow-sky-500 focus:border-white focus:shadow-sky-500"
-                    href="/chats"
                 >
                     <VscArrowLeft
                         className="group-hover:fill-sky-500 group-focus:fill-sky-500"
                         size={32}
                     />{" "}
                     Go Back
-                </Link>
+                </button>
                 <form
                     className="flex flex-col gap-2"
                     onSubmit={handleSubmit(onSubmit)}
@@ -68,12 +69,17 @@ const CreateChatPage = () => {
                         <strong className="uppercase">Chatroom name</strong>
                     </label>
                     <input
+                        style={{
+                            borderColor: errors.name ? "rgb(220 38 38)" : "",
+                        }}
                         {...register("name")}
                         name="name"
                         id="name"
                         type="text"
                         className="h-10 w-full rounded-md border-2 border-black p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
                         placeholder="Chatroom name"
+                        maxLength={50}
+                        minLength={1}
                     />
                     {errors.name && (
                         <span className="text-xs font-semibold text-red-500">
@@ -86,11 +92,18 @@ const CreateChatPage = () => {
                         </strong>
                     </label>
                     <textarea
+                        style={{
+                            borderColor: errors.description
+                                ? "rgb(220 38 38)"
+                                : "",
+                        }}
                         {...register("description")}
                         name="description"
                         id="description"
                         className="h-44 w-full rounded-md border-2 border-black p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
                         placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+                        maxLength={500}
+                        minLength={1}
                     />
                     {errors.description && (
                         <span className="text-xs font-semibold text-red-500">

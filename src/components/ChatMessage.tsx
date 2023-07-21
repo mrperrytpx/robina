@@ -31,7 +31,7 @@ export const ChatMessage = ({
 
     return (
         <div
-            className="group relative z-20 grid w-full grid-cols-[48px,1fr] gap-1"
+            className="group/message relative grid w-full grid-cols-[48px,1fr] gap-1"
             style={{
                 marginTop: !isDifferentAuthor ? "0.75rem" : "",
             }}
@@ -64,9 +64,12 @@ export const ChatMessage = ({
                             messageId: message.id,
                         })
                     }
-                    className="peer absolute right-3 hidden -translate-y-4 rounded-lg bg-white p-1.5 text-black shadow-lg group-hover:block  group-focus:block group-active:block active:block"
+                    className="group/delete peer absolute right-3 hidden -translate-y-4 rounded-lg bg-white p-1.5 text-black shadow-lg group-hover/message:block  group-focus/message:block group-active/message:block active:block"
                 >
-                    <VscTrash size={20} fill="#dc2626" />
+                    <VscTrash
+                        className="fill-black group-hover/delete:fill-red-600 group-focus/delete:fill-red-600"
+                        size={20}
+                    />
                 </button>
             )}
             <div className="flex flex-col overflow-hidden pl-1 peer-hover:bg-sky-50 hover:bg-sky-50">
@@ -82,7 +85,7 @@ export const ChatMessage = ({
                     </div>
                 )}
                 <span
-                    className="break-words py-1 pl-1 text-sm leading-4"
+                    className="select-text break-words py-1 pl-1 text-sm leading-4"
                     style={{
                         opacity: message.id.length === 10 ? "0.5" : "1",
                     }}

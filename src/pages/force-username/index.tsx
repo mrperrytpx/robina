@@ -65,12 +65,19 @@ const UsernamePage = () => {
                                 aria-label="username"
                             />
                             <input
+                                style={{
+                                    borderColor: errors.username
+                                        ? "rgb(220 38 38)"
+                                        : "",
+                                }}
                                 {...register("username")}
                                 name="username"
                                 id="username"
                                 type="text"
                                 className="h-10 w-full border-b-2 border-black p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500"
                                 placeholder="lazyfox123_"
+                                maxLength={20}
+                                minLength={1}
                             />
                         </div>
                         {errors.username && (

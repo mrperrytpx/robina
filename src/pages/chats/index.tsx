@@ -79,12 +79,12 @@ const ChatsPage = () => {
                 </div>
             </article>
             {router.query.create && (
-                <Portal>
+                <Portal shouldRoute={true}>
                     <CreateChatPage />
                 </Portal>
             )}
             {router.query.join && (
-                <Portal>
+                <Portal shouldRoute={true}>
                     <JoinChatroomPage />
                 </Portal>
             )}

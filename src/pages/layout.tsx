@@ -48,7 +48,7 @@ const Layout = ({ children }: ILayoutProps) => {
                             ) : null}
                             {session?.data?.user && (
                                 <Link
-                                    className="rounded-full p-0.5"
+                                    className="rounded-full border-2 border-sky-500 hover:border-white"
                                     href="/profile"
                                     aria-label="Profile"
                                 >

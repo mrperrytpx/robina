@@ -79,6 +79,11 @@ const ProfilePage = () => {
                             </span>
                         </label>
                         <input
+                            style={{
+                                borderColor: errors.username
+                                    ? "rgb(220 38 38)"
+                                    : "",
+                            }}
                             {...register("username")}
                             name="username"
                             id="username"
@@ -86,6 +91,8 @@ const ProfilePage = () => {
                             className="h-10 w-full max-w-md border-b-2 border-black p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500"
                             placeholder="lazyfox123_"
                             autoComplete="false"
+                            maxLength={20}
+                            minLength={1}
                         />
                     </div>
                     {errors.username && (
@@ -100,7 +107,7 @@ const ProfilePage = () => {
 
                 <div className="flex w-full flex-col items-center gap-2">
                     <button
-                        className="flex h-10 w-full max-w-md items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500   enabled:hover:text-sky-50 enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-sky-50 enabled:focus:shadow-sm disabled:opacity-50"
+                        className="flex h-10 w-full max-w-md items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-sky-50 enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-sky-50 enabled:focus:shadow-sm disabled:opacity-50"
                         type="submit"
                         disabled={updateUsername.isLoading}
                     >
@@ -121,12 +128,12 @@ const ProfilePage = () => {
                 <h2 className="text-sm font-bold uppercase">Account:</h2>
 
                 <button
-                    className="w-full max-w-md rounded-md border-2 border-black bg-white p-2 font-medium text-black shadow hover:border-red-600 hover:bg-red-600 hover:text-gray-100 focus:border-red-600 focus:bg-red-600 focus:text-gray-100 active:bg-red-600 active:text-gray-100 disabled:opacity-50"
+                    className="flex h-10 w-full max-w-md items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium text-black shadow hover:border-red-600 hover:bg-red-600 hover:text-gray-100 focus:border-red-600 focus:bg-red-600 focus:text-gray-100 active:bg-red-600 active:text-gray-100 disabled:opacity-50"
                     onClick={() => setIsModalOpen(!isModalOpen)}
                     disabled={deleteProfile.isLoading}
                 >
                     {deleteProfile.isLoading ? (
-                        <LoadingSpinner color="rgb(2 132 199)" size={20} />
+                        <LoadingSpinner color="rgb(2 132 199)" size={24} />
                     ) : (
                         "Delete Account"
                     )}

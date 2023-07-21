@@ -6,7 +6,6 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { VscArrowLeft } from "react-icons/vsc";
 
 const joinChatroomSchema = z.object({
@@ -24,6 +23,7 @@ const JoinChatroomPage = () => {
         handleSubmit,
         formState: { errors },
         setError,
+        reset,
     } = useForm<TJoinChatroomFormValues>({
         resolver: zodResolver(joinChatroomSchema),
     });
@@ -36,6 +36,7 @@ const JoinChatroomPage = () => {
             setError("root", { message: error || "Server Error" });
             return;
         } else {
+            reset();
             router.push("/chats");
         }
     };
@@ -43,16 +44,16 @@ const JoinChatroomPage = () => {
     return (
         <div className="flex w-full max-w-screen-sm flex-1 flex-col items-center rounded-xl bg-white p-4 sm:mx-auto sm:my-20 sm:max-w-md">
             <div className="flex w-full max-w-md flex-col p-2">
-                <Link
+                <button
+                    onClick={() => router.back()}
                     className="group mb-6 flex items-center gap-1 self-start rounded-md border-2 border-black px-2 py-1 text-sm font-semibold uppercase antialiased shadow  hover:border-white hover:shadow-sky-500 focus:border-white focus:shadow-sky-500"
-                    href="/chats"
                 >
                     <VscArrowLeft
                         className="group-hover:fill-sky-500 group-focus:fill-sky-500"
                         size={32}
                     />{" "}
                     Go Back
-                </Link>
+                </button>
                 <form
                     className="flex w-full flex-col items-center gap-8"
                     onSubmit={handleSubmit(onSubmit)}
@@ -65,6 +66,11 @@ const JoinChatroomPage = () => {
                                 </strong>
                             </label>
                             <input
+                                style={{
+                                    borderColor: errors.invite
+                                        ? "rgb(220 38 38)"
+                                        : "",
+                                }}
                                 {...register("invite")}
                                 name="invite"
                                 id="invite"
@@ -72,6 +78,8 @@ const JoinChatroomPage = () => {
                                 className="h-10 w-full border-b-2 border-black p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500 sm:w-auto sm:text-left"
                                 placeholder="__________"
                                 autoComplete="false"
+                                maxLength={10}
+                                minLength={1}
                             />
                         </div>
                         {errors.invite && (
