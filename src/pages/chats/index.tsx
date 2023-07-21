@@ -56,7 +56,7 @@ const ChatsPage = () => {
                 <h2 className="block text-center font-bold uppercase sm:pl-2 sm:text-left">
                     Joined Chatrooms
                 </h2>
-                <div className="flex flex-col flex-wrap items-center gap-4 sm:flex-row">
+                <div className="flex flex-col flex-wrap items-center gap-4 sm:flex-row sm:items-start">
                     {joinedChatrooms.isLoading ? (
                         <LoadingChatroomCard />
                     ) : (

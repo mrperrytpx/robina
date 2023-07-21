@@ -1,12 +1,21 @@
 import { useRouter } from "next/router";
-import { useRef, useEffect, useState, ReactNode } from "react";
+import {
+    useRef,
+    useEffect,
+    useState,
+    ReactNode,
+    Dispatch,
+    SetStateAction,
+} from "react";
 import { createPortal } from "react-dom";
 
 interface PortalProps {
     children: ReactNode;
+    shouldRoute?: boolean;
+    setState?: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Portal = ({ children }: PortalProps) => {
+export const Portal = ({ shouldRoute, children, setState }: PortalProps) => {
     const ref = useRef<Element | null>(null);
     const bgRef = useRef<HTMLDivElement>(null);
     const [mounted, setMounted] = useState(false);
@@ -15,15 +24,20 @@ export const Portal = ({ children }: PortalProps) => {
     useEffect(() => {
         const close = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
-                router.push("/chats");
+                if (shouldRoute) {
+                    router.back();
+                } else {
+                    setMounted(false);
+                }
             }
         };
 
         if (mounted) window.addEventListener("keydown", close);
+
         return () => {
             window.removeEventListener("keydown", close);
         };
-    }, [mounted, router]);
+    }, [mounted, router, shouldRoute]);
 
     useEffect(() => {
         if (typeof window != "undefined" && window.document) {
@@ -52,7 +66,12 @@ export const Portal = ({ children }: PortalProps) => {
     const handleClosePortal = (e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
         if (target.id === "bg" && bgRef.current && mounted) {
-            router.push("/chats");
+            if (shouldRoute) {
+                router.push("/chats");
+            } else {
+                setMounted(false);
+                if (setState) setState(false);
+            }
         }
     };
 

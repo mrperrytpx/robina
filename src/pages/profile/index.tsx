@@ -1,28 +1,170 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { useDeleteProfileMutation } from "../../hooks/useDeleteProfileMutation";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { Portal } from "../../components/Portal";
+import UsernamePage, {
+    TUsernameFormValues,
+    usernameSchema,
+} from "../force-username";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useUpdateUsernameMutation } from "../../hooks/useUpdateUsernameMutation";
 
 const ProfilePage = () => {
     const deleteProfile = useDeleteProfileMutation();
+    const updateUsername = useUpdateUsernameMutation();
+
     const router = useRouter();
+    const session = useSession();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        setError,
+    } = useForm<TUsernameFormValues>({
+        resolver: zodResolver(usernameSchema),
+        defaultValues: {
+            username: session.data?.user.username,
+        },
+    });
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [err, setErr] = useState("");
 
     const handleDelete = async () => {
+        setIsModalOpen(false);
         const response = await deleteProfile.mutateAsync();
 
         if (!response?.ok) {
             const error = await response?.text();
+            setErr(error);
             return;
         } else {
             router.reload();
         }
     };
 
+    const onSubmit: SubmitHandler<TUsernameFormValues> = async (data) => {
+        const response = await updateUsername.mutateAsync({ ...data });
+
+        if (!response?.ok) {
+            const error = await response?.text();
+            setError("root", { message: error || "Server Error" });
+            return;
+        } else {
+            session.update();
+        }
+    };
+
     return (
-        <div>
-            Profile Page
-            <button onClick={handleDelete}>Delete user</button>
+        <div className="mx-auto flex w-full max-w-screen-md flex-1 flex-col p-2 px-4">
+            <form
+                className="mt-4 flex w-full flex-col items-center gap-8"
+                onSubmit={handleSubmit(onSubmit)}
+            >
+                <div className="flex w-full flex-col items-center gap-2">
+                    <div className="flex w-full flex-col items-center gap-1">
+                        <label
+                            className="block w-full text-center text-sm sm:w-auto"
+                            htmlFor="username"
+                            aria-label="username"
+                        >
+                            <span className="font-bold uppercase">
+                                Username:
+                            </span>
+                        </label>
+                        <input
+                            {...register("username")}
+                            name="username"
+                            id="username"
+                            type="text"
+                            className="h-10 w-full max-w-md border-b-2 border-black p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500"
+                            placeholder="lazyfox123_"
+                            autoComplete="false"
+                        />
+                    </div>
+                    {errors.username && (
+                        <span className="text-xs font-semibold text-red-500">
+                            {errors.username.message}
+                        </span>
+                    )}
+                    <p className="w-full text-center text-xs">
+                        *Usernames get converted to lowercase letters.
+                    </p>
+                </div>
+
+                <div className="flex w-full flex-col items-center gap-2">
+                    <button
+                        className="flex h-10 w-full max-w-md items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500   enabled:hover:text-sky-50 enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-sky-50 enabled:focus:shadow-sm disabled:opacity-50"
+                        type="submit"
+                        disabled={updateUsername.isLoading}
+                    >
+                        {updateUsername.isLoading ? (
+                            <LoadingSpinner color="rgb(2 132 199)" size={24} />
+                        ) : (
+                            "Change username"
+                        )}
+                    </button>
+                    {errors.root && (
+                        <span className="text-xs font-semibold text-red-500">
+                            {errors.root.message}
+                        </span>
+                    )}
+                </div>
+            </form>
+            <article className="mb-4 mt-auto flex w-full flex-col items-center gap-1 sm:mt-8">
+                <h2 className="text-sm font-bold uppercase">Account:</h2>
+
+                <button
+                    className="w-full max-w-md rounded-md border-2 border-black bg-white p-2 font-medium text-black shadow hover:border-red-600 hover:bg-red-600 hover:text-gray-100 focus:border-red-600 focus:bg-red-600 focus:text-gray-100 active:bg-red-600 active:text-gray-100 disabled:opacity-50"
+                    onClick={() => setIsModalOpen(!isModalOpen)}
+                    disabled={deleteProfile.isLoading}
+                >
+                    {deleteProfile.isLoading ? (
+                        <LoadingSpinner color="rgb(2 132 199)" size={20} />
+                    ) : (
+                        "Delete Account"
+                    )}
+                </button>
+                {err && (
+                    <span className="text-xs font-semibold text-red-500">
+                        {err}
+                    </span>
+                )}
+            </article>
+            {isModalOpen && (
+                <Portal setState={setIsModalOpen} shouldRoute={false}>
+                    <div className="relative flex max-h-full w-full flex-col items-center gap-8 overflow-y-auto rounded-md border-2 border-white bg-white p-4 text-center text-sm text-sky-50 hover:border-sky-500 sm:max-w-md">
+                        <h1 className="mb-2  mt-4 text-xl font-bold uppercase sm:mt-0">
+                            Are you sure?
+                        </h1>
+                        <p className="mb-2 text-sm">
+                            This will also delete <strong>ALL</strong> of Your
+                            sent messages <strong>AND</strong> created
+                            chatrooms!
+                        </p>
+                        <div className="flex w-full items-center justify-center gap-4">
+                            <button
+                                onClick={handleDelete}
+                                className="min-w-[100px] rounded-lg border-2 border-black bg-white p-2 font-semibold text-black hover:border-red-600 hover:bg-red-600 hover:text-gray-100 hover:shadow-sm focus:bg-red-600 focus:text-gray-100 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-gray-100"
+                            >
+                                DELETE
+                            </button>
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="flex h-10 min-w-[100px] items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-sky-50 enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-sky-50 enabled:focus:shadow-sm disabled:opacity-50"
+                            >
+                                NO
+                            </button>
+                        </div>
+                    </div>
+                </Portal>
+            )}
         </div>
     );
 };
