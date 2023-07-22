@@ -27,6 +27,7 @@ import { useGetChatroomMembersQuery } from "../../hooks/useGetChatroomMembersQue
 import Link from "next/link";
 import { useGetChatroomMessagesInfQuery } from "../../hooks/useGetChatroomMessagesInfQuery";
 import { toast } from "react-toastify";
+import { useInviteUserMutation } from "../../hooks/useInviteUserMutation";
 
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
@@ -35,7 +36,9 @@ const ChatPage = () => {
     const router = useRouter();
     const chatId = z.string().parse(router.query.chatId);
     const session = useSession();
+
     const postMessage = usePostChatMessageMutation();
+    const inviteUser = useInviteUserMutation();
 
     const chatroom = useGetChatroomQuery(chatId);
     const chatroomMembers = useGetChatroomMembersQuery(chatId);
@@ -241,6 +244,24 @@ const ChatPage = () => {
     const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
         if (!chatId) return;
         reset();
+
+        const splitMessage = data.message.split(" ");
+        if (splitMessage[0] === "/invite") {
+            console.log("username posting", splitMessage[1]);
+
+            const response = await inviteUser.mutateAsync({
+                chatId,
+                username: splitMessage[1],
+            });
+
+            if (!response?.ok) {
+                const error = await response?.text();
+                setError("root", { message: error || "Server Error" });
+                return;
+            }
+
+            return;
+        }
 
         const response = await postMessage.mutateAsync({
             ...data,

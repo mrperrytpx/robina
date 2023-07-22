@@ -13,6 +13,9 @@ export default async function handler(
 
         if (!username) return res.status(404).end("No username provided!");
 
+        if (username.split(" ").length > 1)
+            return res.status(404).end("No spaces allowed!");
+
         const session = await getServerSession(req, res, authOptions);
 
         if (!session) return res.status(401).end("No session!");

@@ -49,6 +49,7 @@ model User {
   messages              Message[]
   chatrooms             Chatroom[]  @relation("ChatroomMembers")
   banned_from_chatroom  Chatroom[]  @relation("ChatroomBannedMembers")
+  invited_to_chatroom   Chatroom[]  @relation("ChatroomInvitedMembers")
   owned_chatroom        Chatroom?
 }
 
@@ -78,6 +79,7 @@ model Chatroom {
   messages        Message[]
   members         User[]      @relation("ChatroomMembers")
   banned_members  User[]      @relation("ChatroomBannedMembers")
+  invited_members User[]      @relation("ChatroomInvitedMembers")
   owner           User        @relation(fields: [owner_id], references: [id], onDelete: Cascade)
   owner_id        String      @unique
   invite_link     InviteLink?

@@ -6,10 +6,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { Portal } from "../../components/Portal";
-import UsernamePage, {
-    TUsernameFormValues,
-    usernameSchema,
-} from "../force-username";
+import { TUsernameFormValues, usernameSchema } from "../force-username";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useUpdateUsernameMutation } from "../../hooks/useUpdateUsernameMutation";
