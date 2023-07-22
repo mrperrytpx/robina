@@ -20,7 +20,7 @@ async function getChatroomMessages(chatId: string, pageParam: number) {
 
     const data: TChatroomMessage[] = await response.json();
 
-    return data;
+    return data.reverse();
 }
 
 export const useGetChatroomMessagesInfQuery = (chatId: string) => {

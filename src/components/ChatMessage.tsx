@@ -10,13 +10,13 @@ import { useSession } from "next-auth/react";
 
 interface IChatMessage {
     message: TChatroomMessage;
-    isDifferentAuthor: boolean;
+    isSameAuthor: boolean;
     ownerId: string | undefined;
 }
 
 export const ChatMessage = ({
     message,
-    isDifferentAuthor,
+    isSameAuthor,
     ownerId,
 }: IChatMessage) => {
     const date = new Date(message.created_at);
@@ -33,10 +33,11 @@ export const ChatMessage = ({
         <div
             className="group/message relative grid w-full grid-cols-[48px,1fr] gap-1"
             style={{
-                marginTop: !isDifferentAuthor ? "0.75rem" : "",
+                marginTop: !isSameAuthor ? "0.75rem" : "",
             }}
+            onClick={() => console.log("message", message, isSameAuthor)}
         >
-            {!isDifferentAuthor ? (
+            {!isSameAuthor ? (
                 <div className="aspect-square w-12">
                     <Image
                         src={message.author.image || DefaultImage}
@@ -48,7 +49,7 @@ export const ChatMessage = ({
                 </div>
             ) : (
                 <div className="mt-1 w-12 text-xs">
-                    <span className="hidden w-full text-center font-mono group-hover:block">
+                    <span className="hidden w-full text-center font-mono group-hover/message:block">
                         {new Intl.DateTimeFormat("en-GB", {
                             hour: "2-digit",
                             minute: "2-digit",
@@ -73,12 +74,11 @@ export const ChatMessage = ({
                 </button>
             )}
             <div className="flex flex-col overflow-hidden pl-1 peer-hover:bg-sky-50 hover:bg-sky-50">
-                {!isDifferentAuthor && (
+                {!isSameAuthor && (
                     <div className="flex items-end justify-start gap-2">
                         <span className="mb-1 text-sm font-bold">
                             @{message.author.username}{" "}
-                            {message.author_id === ownerId && "- 🦁"} -{" "}
-                            {message.id}
+                            {message.author_id === ownerId && "- 🦁"}
                         </span>
                         <span className="mb-1 text-xs font-extralight">
                             {formatTime(date).replace(",", "")}

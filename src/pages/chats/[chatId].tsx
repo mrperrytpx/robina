@@ -73,11 +73,13 @@ const ChatPage = () => {
                 queryClient.setQueryData(
                     ["messages", chatId],
                     (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
-                        oldData?.pages[oldData.pages.length - 1 ?? 0].push(
+                        const newData: typeof oldData = JSON.parse(
+                            JSON.stringify(oldData)
+                        );
+                        newData?.pages[newData.pages.length - 1 || 0].push(
                             data
                         );
-
-                        return oldData;
+                        return newData;
                     }
                 );
             }

@@ -55,19 +55,19 @@ export const ChatroomMessages = () => {
     const chatroom = useGetChatroomQuery(chatId);
     const chatroomMessages = useGetChatroomMessagesInfQuery(chatId);
 
-    const isIntersecting = useIntersectionObserver(startRef, {});
+    const isStartIntersecting = useIntersectionObserver(startRef, {});
 
     useEffect(() => {
         if (chatroomMessages.hasPreviousPage) {
-            if (isIntersecting) {
+            if (isStartIntersecting) {
                 chatroomMessages.fetchPreviousPage();
             }
         }
-    }, [isIntersecting, chatroomMessages]);
+    }, [isStartIntersecting, chatroomMessages]);
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "instant" });
-    }, [chatroomMessages.data?.pages]);
+    }, [chatroomMessages.data]);
 
     useEffect(() => {
         const deleteMessageHandler = async (data: {
@@ -103,19 +103,16 @@ export const ChatroomMessages = () => {
 
     return (
         <div className="flex flex-1 flex-col overflow-y-auto p-2 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">
-            <div
-                onClick={() => chatroomMessages.fetchPreviousPage()}
-                className="mt-auto w-full bg-red-900"
-                ref={startRef}
-            >
-                {isIntersecting ? "Intersecting" : "not intersecting"}
-            </div>
+            <div className="mt-auto w-full" ref={startRef} />
 
             {chatroomMessages.data?.pages.map((page, i) => (
                 <Fragment key={i}>
                     {page.map((message, msgIdx) => (
                         <ChatMessage
-                            isDifferentAuthor={true}
+                            isSameAuthor={
+                                msgIdx > 0 &&
+                                page[msgIdx - 1].author_id === message.author_id
+                            }
                             message={message}
                             key={message.id}
                             ownerId={chatroom.data?.owner_id}
