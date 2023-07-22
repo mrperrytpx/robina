@@ -12,24 +12,53 @@ import { useRouter } from "next/router";
 import { Portal } from "../../components/Portal";
 import CreateChatPage from "./create";
 import JoinChatroomPage from "./join";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { pusherClient } from "../../lib/pusher";
+import { useQueryClient } from "@tanstack/react-query";
+import { Chatroom } from "@prisma/client";
 
 const ChatsPage = () => {
     const joinedChatrooms = useGetAllJoinedChatroomsQuery();
     const ownedChatroom = useGetOwnedChatroomtroomsQuery();
-    // const session = useSession();
+    const session = useSession();
+    const queryClient = useQueryClient();
 
     const router = useRouter();
 
+    useEffect(() => {
+        const banUser = async (data: {
+            id: string;
+            chatId: string;
+            chatroomName: string;
+        }) => {
+            if (data.id === session.data?.user.id) {
+                toast.error(`You got removed from "${data.chatroomName}"!`);
+                queryClient.setQueryData(
+                    ["chatrooms", session.data?.user.id],
+                    (oldData: Chatroom[] | undefined) => {
+                        if (!oldData) return;
+                        return oldData.filter(
+                            (chatroom) => chatroom.id !== data.chatId
+                        );
+                    }
+                );
+                queryClient.removeQueries(["members", data.chatId]);
+                queryClient.removeQueries(["messages", data.chatId]);
+            }
+        };
+
+        pusherClient.subscribe(`chat__${session.data?.user.id}__ban`);
+        pusherClient.bind("ban", banUser);
+
+        return () => {
+            pusherClient.unsubscribe(`chat__${session.data?.user.id}__ban`);
+            pusherClient.unbind("ban", banUser);
+        };
+    }, [queryClient, router, session.data?.user.id]);
+
     return (
         <div className="mx-auto max-w-screen-lg flex-1 p-4">
-            {/* {session.data?.user.username && (
-                <h2 className="mb-8 block text-center font-bold uppercase sm:pl-2 sm:text-left">
-                    Username -{" "}
-                    <span className="font-normal normal-case">
-                        {session.data.user.username}
-                    </span>
-                </h2>
-            )} */}
             <article className="mb-4 flex flex-col space-y-2">
                 <h2 className="block text-center font-bold uppercase sm:pl-2 sm:text-left">
                     Owned Chatroom

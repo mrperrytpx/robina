@@ -70,7 +70,7 @@ export default async function handler(
             },
         });
 
-        await prisma.chatroom.update({
+        const chatroom = await prisma.chatroom.update({
             where: {
                 id: chatId,
             },
@@ -90,6 +90,12 @@ export default async function handler(
                 id: memberId,
             }
         );
+
+        await pusherServer.trigger(`chat__${member.id}__ban`, "ban", {
+            id: member.id,
+            chatId: chatroom.id,
+            chatroomName: chatroom.name,
+        });
 
         res.status(204).end("Success");
     } else {

@@ -1,6 +1,7 @@
 import { Chatroom } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 interface IDeleteChatroom {
     chatId: string | string[];
@@ -25,7 +26,7 @@ export const useDeleteOwnedChatroomMutation = () => {
     };
 
     return useMutation(deleteOwnedChatroom, {
-        onMutate: async (data) => {
+        onMutate: async () => {
             await queryClient.cancelQueries([
                 "owned_chatroom",
                 session.data?.user.id,
@@ -45,8 +46,12 @@ export const useDeleteOwnedChatroomMutation = () => {
                 context?.previousData
             );
         },
-        onSuccess: async (data) => {
+        onSuccess: async (data, _vars, context) => {
             if (!data.response.ok) return;
+            toast.success(
+                `You successfully deleted "${context?.previousData?.name}"!`
+            );
+
             queryClient.invalidateQueries([
                 "owned_chatroom",
                 session.data?.user.id,

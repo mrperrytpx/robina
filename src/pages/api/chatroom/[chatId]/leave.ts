@@ -62,6 +62,7 @@ export default async function handler(
             "member-leave",
             {
                 id: user.id,
+                chatId: chatId,
             }
         );
 

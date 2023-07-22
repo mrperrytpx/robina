@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { TUsernameFormValues } from "../pages/force-username";
+import { toast } from "react-toastify";
 
 export const useUpdateUsernameMutation = () => {
     const updateUsername = async ({ username }: TUsernameFormValues) => {
@@ -21,5 +22,12 @@ export const useUpdateUsernameMutation = () => {
         return response;
     };
 
-    return useMutation(updateUsername);
+    return useMutation(updateUsername, {
+        onMutate: (data) => {
+            return { ...data };
+        },
+        onSuccess: async (_data, _vars, context) => {
+            toast.success(`Username changed to "${context?.username}"!`);
+        },
+    });
 };

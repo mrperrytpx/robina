@@ -6,6 +6,15 @@ import Layout from "./layout";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ToastContainer } from "react-toastify";
+import type { ToastContainerProps } from "react-toastify/dist/types";
+import "react-toastify/dist/ReactToastify.css";
+
+const toastProps: ToastContainerProps = {
+    autoClose: 1500,
+    theme: "light",
+    limit: 5,
+};
 
 export default function App({
     Component,
@@ -28,6 +37,7 @@ export default function App({
             <QueryClientProvider client={queryClient}>
                 <Layout>
                     <Component {...pageProps} />
+                    <ToastContainer {...toastProps} />
                     <ReactQueryDevtools
                         initialIsOpen={false}
                         position="top-left"

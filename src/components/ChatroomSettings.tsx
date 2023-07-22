@@ -142,6 +142,7 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                                         key={member.id}
                                         member={member}
                                         ownerId={ownerId}
+                                        loading={unbanMember.isLoading}
                                         onClick={async () => {
                                             await unbanMember.mutateAsync({
                                                 chatId,
@@ -212,7 +213,7 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                         disabled={leaveChatroom.isLoading}
                     >
                         {leaveChatroom.isLoading ? (
-                            <LoadingSpinner color="rgb(14 165 233)" size={28} />
+                            <LoadingSpinner color="white" size={28} />
                         ) : (
                             "Leave Chatroom"
                         )}

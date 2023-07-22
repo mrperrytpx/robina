@@ -1,5 +1,6 @@
 import { User } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 interface IBanMember {
     memberId: string;
@@ -50,7 +51,11 @@ export const useBanChatroomMemberMutation = () => {
                 }
             );
 
-            return { previousData, chatId: data.chatId };
+            return {
+                previousData,
+                chatId: data.chatId,
+                username: member.username,
+            };
         },
         onError: (_err, _vars, context) => {
             queryClient.setQueryData(
@@ -58,7 +63,9 @@ export const useBanChatroomMemberMutation = () => {
                 context?.previousData
             );
         },
-        onSuccess: (data) =>
-            queryClient.invalidateQueries(["banned_members", data.chatId]),
+        onSuccess: (data, _vars, context) => {
+            toast.success(`You banned "${context?.username}"!`);
+            queryClient.invalidateQueries(["banned_members", data.chatId]);
+        },
     });
 };

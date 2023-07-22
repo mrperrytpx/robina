@@ -18,7 +18,7 @@ import {
     TChatroomMessage,
     useGetChatroomQuery,
 } from "../../hooks/useGetChatroomQuery";
-import { User } from "@prisma/client";
+import { Chatroom, User } from "@prisma/client";
 import { ChatroomMembers } from "../../components/ChatroomMembers";
 import { ChatroomSettings } from "../../components/ChatroomSettings";
 import { ChatroomMessages } from "../../components/ChatroomMessages";
@@ -26,6 +26,7 @@ import { randomString } from "../../util/randomString";
 import { useGetChatroomMembersQuery } from "../../hooks/useGetChatroomMembersQuery";
 import Link from "next/link";
 import { useGetChatroomMessagesQuery } from "../../hooks/useGetChatroomMessagesQuery";
+import { toast } from "react-toastify";
 
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
@@ -40,13 +41,7 @@ const ChatPage = () => {
     const chatroomMembers = useGetChatroomMembersQuery(chatId);
     const chatroomMessages = useGetChatroomMessagesQuery(chatId);
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        setError,
-        reset,
-    } = useForm<TChatMessage>({
+    const { register, handleSubmit, setError, reset } = useForm<TChatMessage>({
         resolver: zodResolver(chatMessageSchema),
     });
 
@@ -94,6 +89,8 @@ const ChatPage = () => {
     useEffect(() => {
         const newUserHandler = async (data: User) => {
             if (!chatId) return;
+
+            toast.success(`${data.username} joined the chatroom!`);
             queryClient.setQueryData(
                 ["members", chatId],
                 (oldData: User[] | undefined) => {
@@ -119,10 +116,18 @@ const ChatPage = () => {
             if (!chatId) return;
 
             if (data.id === session.data?.user.id) {
+                toast.error("You got removed from the chatroom!");
                 queryClient.removeQueries(["members", chatId]);
                 queryClient.removeQueries(["messages", chatId]);
                 router.push("/chats");
             } else {
+                if (session.data?.user.id !== chatroom.data?.owner_id) {
+                    const member = (
+                        queryClient.getQueryData(["members", chatId]) as User[]
+                    ).find((user) => user.id === data.id);
+                    toast.error(`${member?.username} got banned!`);
+                }
+
                 queryClient.setQueryData(
                     ["members", chatId],
                     (oldData: User[] | undefined) => {
@@ -152,15 +157,39 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__remove-member`);
             pusherClient.unbind("remove-member", removeUserHandler);
         };
-    }, [chatId, queryClient, router, session.data?.user.id]);
+    }, [
+        chatId,
+        queryClient,
+        router,
+        session.data?.user.id,
+        chatroom.data?.owner_id,
+    ]);
 
     useEffect(() => {
-        const leaveChatroomHandler = async (data: { id: string }) => {
+        const leaveChatroomHandler = async (data: {
+            id: string;
+            chatId: string;
+        }) => {
             if (!chatId) return;
 
             if (data.id === session.data?.user.id) {
                 router.push("/chats");
+                queryClient.setQueryData(
+                    ["chatrooms", session.data.user.id],
+                    (oldData: Chatroom[] | undefined) => {
+                        if (!oldData) return;
+                        return oldData.filter(
+                            (chatroom) => chatroom.id !== data.chatId
+                        );
+                    }
+                );
             } else {
+                const member = (
+                    queryClient.getQueryData(["members", chatId]) as User[]
+                ).find((user) => user.id === data.id);
+
+                toast.warn(`${member?.username} left the chatroom!`);
+
                 queryClient.setQueryData(
                     ["members", chatId],
                     (oldData: User[] | undefined) => {

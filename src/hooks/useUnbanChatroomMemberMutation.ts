@@ -1,5 +1,6 @@
 import { User } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 interface IUnbanMember {
     memberId: string;
@@ -34,6 +35,10 @@ export const useUnbanChatroomMemberMutation = () => {
                 data.chatId,
             ]);
 
+            const unbannedUser = previousData?.find(
+                (user) => user.id === data.memberId
+            );
+
             queryClient.setQueryData(
                 ["banned_members", data.chatId],
                 (oldData: typeof previousData) => {
@@ -42,6 +47,8 @@ export const useUnbanChatroomMemberMutation = () => {
                     );
                 }
             );
+
+            toast.success(`You unbanned ${unbannedUser?.username}!`);
 
             return { previousData, chatId: data.chatId };
         },

@@ -1,6 +1,7 @@
 import { Chatroom } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 interface ILeaveChatroom {
     chatId: string;
@@ -32,6 +33,12 @@ export const useLeaveChatroomMutation = () => {
             ]);
             const previousData: Chatroom[] | undefined =
                 queryClient.getQueryData(["chatrooms", session.data?.user.id]);
+
+            const chatroom: Chatroom | undefined = queryClient.getQueryData([
+                "chatroom",
+                data.chatId,
+            ]);
+
             queryClient.setQueryData(
                 ["chatrooms", session.data?.user.id],
                 (oldData: Chatroom[] | undefined) => {
@@ -41,7 +48,7 @@ export const useLeaveChatroomMutation = () => {
                     );
                 }
             );
-            return { previousData };
+            return { previousData, chatName: chatroom?.name };
         },
         onError: (_err, _vars, context) => {
             queryClient.setQueryData(
@@ -49,8 +56,9 @@ export const useLeaveChatroomMutation = () => {
                 context?.previousData
             );
         },
-        onSuccess: async (data) => {
+        onSuccess: async (data, _vars, context) => {
             if (!data.response.ok) return;
+            toast.success(`You left "${context?.chatName}"!`);
             queryClient.invalidateQueries(["chatrooms", session.data?.user.id]);
         },
     });

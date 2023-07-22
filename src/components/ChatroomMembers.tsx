@@ -39,6 +39,7 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
                                 key={member.id}
                                 member={member}
                                 ownerId={ownerId}
+                                loading={banChatroomMember.isLoading}
                                 onClick={async () => {
                                     await banChatroomMember.mutateAsync({
                                         chatId,

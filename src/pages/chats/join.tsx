@@ -42,7 +42,7 @@ const JoinChatroomPage = () => {
     };
 
     return (
-        <div className="flex w-full max-w-screen-sm flex-1 flex-col items-center rounded-xl bg-white p-4 sm:mx-auto sm:my-20 sm:max-w-md">
+        <div className="flex w-full max-w-screen-sm flex-1 flex-col items-center bg-white p-4 sm:mx-auto sm:my-20 sm:max-w-md sm:rounded-xl">
             <div className="flex w-full max-w-md flex-col p-2">
                 <button
                     onClick={() => router.back()}
