@@ -26,7 +26,8 @@ export const useUpdateUsernameMutation = () => {
         onMutate: (data) => {
             return { ...data };
         },
-        onSuccess: async (_data, _vars, context) => {
+        onSuccess: async (data, _vars, context) => {
+            if (!data.ok) return;
             toast.success(`Username changed to "${context?.username}"!`);
         },
     });

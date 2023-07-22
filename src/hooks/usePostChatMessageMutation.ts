@@ -40,7 +40,6 @@ export const usePostChatMessageMutation = () => {
             queryClient.setQueryData(
                 ["messages", chatId],
                 (oldData: TChatroomMessage[] | undefined) => {
-                    if (!oldData) return;
                     const newMessage: TChatroomMessage = {
                         author: {
                             ...session.data.user,
@@ -53,6 +52,7 @@ export const usePostChatMessageMutation = () => {
                         created_at: new Date(),
                         id: fakeId,
                     };
+                    if (!oldData) return [newMessage];
 
                     return [...oldData, newMessage];
                 }

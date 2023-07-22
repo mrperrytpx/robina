@@ -46,7 +46,7 @@ export const useBanChatroomMemberMutation = () => {
             queryClient.setQueryData(
                 ["banned_members", data.chatId],
                 (oldData: typeof previousData) => {
-                    if (!oldData) return;
+                    if (!oldData) return [member];
                     return [...oldData, member];
                 }
             );

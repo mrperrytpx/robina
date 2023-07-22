@@ -112,11 +112,23 @@ const ChatPage = () => {
     }, [chatId, queryClient]);
 
     useEffect(() => {
-        const removeUserHandler = async (data: { id: string }) => {
+        const removeUserHandler = async (data: {
+            id: string;
+            chatId: string;
+        }) => {
             if (!chatId) return;
 
             if (data.id === session.data?.user.id) {
                 toast.error("You got removed from the chatroom!");
+                queryClient.setQueryData(
+                    ["chatrooms", data.id],
+                    (oldData: Chatroom[] | undefined) => {
+                        if (!oldData) return;
+                        return oldData.filter(
+                            (chatroom) => chatroom.id === data.chatId
+                        );
+                    }
+                );
                 queryClient.removeQueries(["members", chatId]);
                 queryClient.removeQueries(["messages", chatId]);
                 router.push("/chats");

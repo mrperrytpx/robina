@@ -49,7 +49,7 @@ const CreateChatPage = () => {
     };
 
     return (
-        <div className="max-w-screen-sm flex-1 rounded-xl bg-white p-4 sm:mx-auto sm:my-20">
+        <div className="max-w-screen-sm flex-1 bg-white p-4 sm:mx-auto sm:my-20 sm:rounded-xl">
             <div className="flex w-full flex-col p-2">
                 <button
                     onClick={() => router.back()}

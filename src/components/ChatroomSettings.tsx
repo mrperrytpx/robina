@@ -142,7 +142,6 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                                         key={member.id}
                                         member={member}
                                         ownerId={ownerId}
-                                        loading={unbanMember.isLoading}
                                         onClick={async () => {
                                             await unbanMember.mutateAsync({
                                                 chatId,
@@ -175,7 +174,7 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                     </button>
                     {isModalOpen && (
                         <Portal setState={setIsModalOpen} shouldRoute={false}>
-                            <div className="relative flex max-h-full w-full flex-col items-center gap-2 overflow-y-auto rounded-md border-2 border-white bg-white p-4 text-center text-sm text-sky-50 hover:border-sky-500 sm:max-w-md">
+                            <div className="relative flex max-h-full w-full flex-col items-center gap-2 overflow-y-auto rounded-md border-2 border-white bg-white p-4 text-center text-sm hover:border-sky-500 sm:max-w-md">
                                 <h1 className="my-4 text-xl font-bold uppercase sm:mt-0">
                                     Are you sure?
                                 </h1>
@@ -213,7 +212,7 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                         disabled={leaveChatroom.isLoading}
                     >
                         {leaveChatroom.isLoading ? (
-                            <LoadingSpinner color="white" size={28} />
+                            <LoadingSpinner size={28} />
                         ) : (
                             "Leave Chatroom"
                         )}

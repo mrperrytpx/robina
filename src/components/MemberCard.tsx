@@ -9,7 +9,7 @@ interface IMemberCardProps {
     member: User;
     onClick?: () => Promise<void>;
     ownerId: string;
-    loading: boolean;
+    loading?: boolean;
 }
 
 export const SkeletonLoadingCard = () => {
