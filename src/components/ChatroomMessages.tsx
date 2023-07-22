@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { Fragment, RefObject, useEffect, useRef, useState } from "react";
 import { ChatMessage } from "./ChatMessage";
 import {
     TChatroomMessage,
@@ -6,10 +6,43 @@ import {
 } from "../hooks/useGetChatroomQuery";
 import { useRouter } from "next/router";
 import { z } from "zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { pusherClient } from "../lib/pusher";
 import { useSession } from "next-auth/react";
-import { useGetChatroomMessagesQuery } from "../hooks/useGetChatroomMessagesQuery";
+import { useGetChatroomMessagesInfQuery } from "../hooks/useGetChatroomMessagesInfQuery";
+
+type TIntersectionObserverOptions = {
+    root?: Element | null;
+    rootMargin?: string;
+    threshold?: number | number[];
+};
+
+export const useIntersectionObserver = (
+    ref: RefObject<HTMLDivElement>,
+    options: TIntersectionObserverOptions
+) => {
+    const [isIntersecting, setIsIntersecting] = useState(false);
+
+    useEffect(() => {
+        const current = ref.current as HTMLDivElement;
+
+        const hasIOSupport = !!window.IntersectionObserver;
+
+        if (!hasIOSupport || !current) return;
+
+        const observer = new IntersectionObserver(([entry]) => {
+            setIsIntersecting(entry.isIntersecting);
+        }, options);
+
+        observer.observe(current);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [ref, options]);
+
+    return isIntersecting;
+};
 
 export const ChatroomMessages = () => {
     const endRef = useRef<HTMLDivElement>(null);
@@ -20,11 +53,21 @@ export const ChatroomMessages = () => {
     const session = useSession();
 
     const chatroom = useGetChatroomQuery(chatId);
-    const chatroomMessages = useGetChatroomMessagesQuery(chatId);
+    const chatroomMessages = useGetChatroomMessagesInfQuery(chatId);
+
+    const isIntersecting = useIntersectionObserver(startRef, {});
+
+    useEffect(() => {
+        if (chatroomMessages.hasPreviousPage) {
+            if (isIntersecting) {
+                chatroomMessages.fetchPreviousPage();
+            }
+        }
+    }, [isIntersecting, chatroomMessages]);
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "instant" });
-    }, [chatroomMessages?.data]);
+    }, [chatroomMessages.data?.pages]);
 
     useEffect(() => {
         const deleteMessageHandler = async (data: {
@@ -37,9 +80,14 @@ export const ChatroomMessages = () => {
 
             queryClient.setQueryData(
                 ["messages", chatId],
-                (oldData: TChatroomMessage[] | undefined) => {
+                (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
                     if (!oldData) return;
-                    return oldData.filter((msg) => msg.id !== data.id);
+
+                    const newData = oldData.pages.map((page) =>
+                        page.filter((msg) => msg.id !== data.id)
+                    );
+
+                    return { pages: newData, pageParams: oldData.pageParams };
                 }
             );
         };
@@ -55,19 +103,25 @@ export const ChatroomMessages = () => {
 
     return (
         <div className="flex flex-1 flex-col overflow-y-auto p-2 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">
-            <div className="mt-auto" ref={startRef} />
+            <div
+                onClick={() => chatroomMessages.fetchPreviousPage()}
+                className="mt-auto w-full bg-red-900"
+                ref={startRef}
+            >
+                {isIntersecting ? "Intersecting" : "not intersecting"}
+            </div>
 
-            {chatroomMessages.data?.map((message, i) => (
-                <ChatMessage
-                    isDifferentAuthor={
-                        i > 0 &&
-                        message.author_id ===
-                            chatroomMessages.data?.[i - 1].author_id
-                    }
-                    message={message}
-                    key={message.id}
-                    ownerId={chatroom.data?.owner_id}
-                />
+            {chatroomMessages.data?.pages.map((page, i) => (
+                <Fragment key={i}>
+                    {page.map((message, msgIdx) => (
+                        <ChatMessage
+                            isDifferentAuthor={true}
+                            message={message}
+                            key={message.id}
+                            ownerId={chatroom.data?.owner_id}
+                        />
+                    ))}
+                </Fragment>
             ))}
             <div ref={endRef} />
         </div>

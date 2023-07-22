@@ -77,7 +77,8 @@ export const ChatMessage = ({
                     <div className="flex items-end justify-start gap-2">
                         <span className="mb-1 text-sm font-bold">
                             @{message.author.username}{" "}
-                            {message.author_id === ownerId && "- 🦁"}
+                            {message.author_id === ownerId && "- 🦁"} -{" "}
+                            {message.id}
                         </span>
                         <span className="mb-1 text-xs font-extralight">
                             {formatTime(date).replace(",", "")}

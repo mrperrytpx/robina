@@ -18,6 +18,7 @@ export default async function handler(
 ) {
     if (req.method === "GET") {
         const chatId = z.string().parse(req.query.chatId);
+        const offset = +z.string().parse(req.query.offset);
 
         if (!chatId) return res.status(400).end("Provide a chat iD");
 
@@ -40,7 +41,7 @@ export default async function handler(
             return res.status(401).end("You're not a member of this chatroom");
         }
 
-        const chatroom = await prisma.chatroom.findFirst({
+        let chatroom = await prisma.chatroom.findFirst({
             where: {
                 id: chatId,
             },
@@ -49,10 +50,14 @@ export default async function handler(
                     include: {
                         author: true,
                     },
+                    take: 50,
+                    orderBy: {
+                        created_at: "desc",
+                    },
+                    skip: (offset - 1) * 50,
                 },
             },
         });
-
         if (!chatroom) return res.status(404).end("No chatroom");
 
         res.status(201).json(chatroom?.messages);

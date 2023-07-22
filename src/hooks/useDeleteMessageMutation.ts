@@ -1,4 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+    InfiniteData,
+    useMutation,
+    useQueryClient,
+} from "@tanstack/react-query";
 import { TDeleteMessage } from "../pages/api/chatroom/[chatId]/message/[messageId]/delete";
 import { TChatroomMessage } from "./useGetChatroomQuery";
 
@@ -25,18 +29,19 @@ export const useDeleteMessageMutation = () => {
     return useMutation(deleteMessage, {
         onMutate: async ({ chatId, messageId }) => {
             await queryClient.cancelQueries(["messages", chatId]);
-            const previousData: TChatroomMessage[] | undefined =
+            const previousData: InfiniteData<TChatroomMessage[]> | undefined =
                 queryClient.getQueryData(["messages", chatId]);
 
             queryClient.setQueryData(
                 ["messages", chatId],
                 (oldData: typeof previousData) => {
-                    let newData: TChatroomMessage[] = JSON.parse(
-                        JSON.stringify(oldData)
+                    if (!oldData) return;
+
+                    const newData = oldData.pages.map((page) =>
+                        page.filter((msg) => msg.id !== messageId)
                     );
 
-                    newData = newData.filter((msg) => msg.id !== messageId);
-                    return newData;
+                    return { pages: newData, pageParams: oldData.pageParams };
                 }
             );
 

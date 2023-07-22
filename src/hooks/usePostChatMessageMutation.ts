@@ -1,4 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+    InfiniteData,
+    useMutation,
+    useQueryClient,
+} from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { TChatroomMessage } from "./useGetChatroomQuery";
 import { TChatMessage } from "../lib/zSchemas";
@@ -34,12 +38,16 @@ export const usePostChatMessageMutation = () => {
             if (!session.data?.user) return;
 
             await queryClient.cancelQueries(["messages", chatId]);
-            const previousData: TChatroomMessage[] | undefined =
+            const previousData: InfiniteData<TChatroomMessage[]> | undefined =
                 queryClient.getQueryData(["messages", chatId]);
 
-            queryClient.setQueryData(
+            queryClient.setQueryData<typeof previousData>(
                 ["messages", chatId],
-                (oldData: TChatroomMessage[] | undefined) => {
+                (oldData) => {
+                    const newData: typeof previousData = JSON.parse(
+                        JSON.stringify(oldData)
+                    );
+
                     const newMessage: TChatroomMessage = {
                         author: {
                             ...session.data.user,
@@ -52,9 +60,12 @@ export const usePostChatMessageMutation = () => {
                         created_at: new Date(),
                         id: fakeId,
                     };
-                    if (!oldData) return [newMessage];
 
-                    return [...oldData, newMessage];
+                    newData?.pages[newData?.pages.length - 1 ?? 0].push(
+                        newMessage
+                    );
+
+                    return newData;
                 }
             );
 

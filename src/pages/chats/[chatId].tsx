@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { pusherClient } from "../../lib/pusher";
-import { useQueryClient } from "@tanstack/react-query";
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { chatMessageSchema } from "../../lib/zSchemas";
 import type { TChatMessage } from "../../lib/zSchemas";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
@@ -25,7 +25,7 @@ import { ChatroomMessages } from "../../components/ChatroomMessages";
 import { randomString } from "../../util/randomString";
 import { useGetChatroomMembersQuery } from "../../hooks/useGetChatroomMembersQuery";
 import Link from "next/link";
-import { useGetChatroomMessagesQuery } from "../../hooks/useGetChatroomMessagesQuery";
+import { useGetChatroomMessagesInfQuery } from "../../hooks/useGetChatroomMessagesInfQuery";
 import { toast } from "react-toastify";
 
 const ChatPage = () => {
@@ -39,7 +39,7 @@ const ChatPage = () => {
 
     const chatroom = useGetChatroomQuery(chatId);
     const chatroomMembers = useGetChatroomMembersQuery(chatId);
-    const chatroomMessages = useGetChatroomMessagesQuery(chatId);
+    const chatroomMessages = useGetChatroomMessagesInfQuery(chatId);
 
     const { register, handleSubmit, setError, reset } = useForm<TChatMessage>({
         resolver: zodResolver(chatMessageSchema),
@@ -55,13 +55,16 @@ const ChatPage = () => {
             if (data.author_id === session.data?.user.id) {
                 queryClient.setQueryData(
                     ["messages", chatId],
-                    (oldData: TChatroomMessage[] | undefined) => {
-                        oldData?.map((msg) => {
-                            if (msg.id === data.fakeId) {
-                                msg.id = data.id;
+                    (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
+                        oldData?.pages[oldData?.pages.length - 1 ?? 0].map(
+                            (msg) => {
+                                if (msg.id === data.fakeId) {
+                                    msg.id = data.id;
+                                }
+                                return msg;
                             }
-                            return msg;
-                        });
+                        );
+
                         return oldData;
                     }
                 );
@@ -69,9 +72,12 @@ const ChatPage = () => {
             } else {
                 queryClient.setQueryData(
                     ["messages", chatId],
-                    (oldData: TChatroomMessage[] | undefined) => {
-                        if (!oldData) return [data];
-                        return [...oldData, data];
+                    (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
+                        oldData?.pages[oldData.pages.length - 1 ?? 0].push(
+                            data
+                        );
+
+                        return oldData;
                     }
                 );
             }
@@ -289,6 +295,7 @@ const ChatPage = () => {
                             />
                         </Link>
                         <span>{chatroom.data.name}</span>
+                        <span>{chatroomMessages.data?.pages.length}</span>
                     </div>
                     <div className="flex items-center gap-4">
                         <button className="group p-2" onClick={handleSettings}>
@@ -317,6 +324,7 @@ const ChatPage = () => {
                         />
                     </Link>
                     <span>{chatroom.data.name}</span>
+                    <span>{chatroomMessages.data?.pages?.length}</span>
                 </div>
                 <ChatroomMessages />
                 <div className="mb-2 flex h-14 items-center gap-3 px-4">

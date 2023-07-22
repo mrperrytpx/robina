@@ -48,9 +48,13 @@ export const useDeleteOwnedChatroomMutation = () => {
         },
         onSuccess: async (data, _vars, context) => {
             if (!data.response.ok) return;
-            toast.success(
-                `You successfully deleted "${context?.previousData?.name}"!`
-            );
+            if (context?.previousData?.name) {
+                toast.success(
+                    `You successfully deleted "${context?.previousData?.name}"!`
+                );
+            } else {
+                toast.success("Chatroom successfully deleted!");
+            }
 
             queryClient.invalidateQueries([
                 "owned_chatroom",
