@@ -247,8 +247,6 @@ const ChatPage = () => {
 
         const splitMessage = data.message.split(" ");
         if (splitMessage[0] === "/invite") {
-            console.log("username posting", splitMessage[1]);
-
             const response = await inviteUser.mutateAsync({
                 chatId,
                 username: splitMessage[1],

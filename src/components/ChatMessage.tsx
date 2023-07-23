@@ -35,7 +35,6 @@ export const ChatMessage = ({
             style={{
                 marginTop: !isSameAuthor ? "0.75rem" : "",
             }}
-            onClick={() => console.log("message", message, isSameAuthor)}
         >
             {!isSameAuthor ? (
                 <div className="aspect-square w-12">
