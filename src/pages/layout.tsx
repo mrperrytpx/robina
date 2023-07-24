@@ -137,24 +137,24 @@ const Layout = ({ children }: ILayoutProps) => {
                         </Link>
                         <div className="flex items-center gap-4">
                             {session.status === "loading" ? (
-                                <LoadingSpinner size={36} />
+                                <LoadingSpinner color="white" size={36} />
                             ) : null}
                             {session?.data?.user && (
                                 <>
                                     {pendingInvites.data?.length ? (
                                         <Link href="/chats">
                                             <VscBellDot
-                                                fill="white"
+                                                className="fill-white group-hover:fill-black group-focus:fill-black"
                                                 size={28}
                                             />
                                         </Link>
                                     ) : (
                                         <Link
-                                            className="px-1 py-2 text-xl font-bold uppercase text-white"
+                                            className="group px-1 py-2 text-xl font-bold uppercase text-white"
                                             href="/chats"
                                         >
                                             <RiChat1Line
-                                                fill="white"
+                                                className="fill-white group-hover:fill-black group-focus:fill-black"
                                                 size={28}
                                             />
                                         </Link>

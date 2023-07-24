@@ -59,7 +59,10 @@ export const ChatroomMessages = () => {
     const isStartIntersecting = useIntersectionObserver(startRef, {});
 
     useEffect(() => {
-        if (chatroomMessages.hasPreviousPage) {
+        if (
+            chatroomMessages.hasPreviousPage &&
+            (chatroomMessages.data?.pages[0]?.length ?? 0) >= 50
+        ) {
             if (isStartIntersecting) {
                 chatroomMessages.fetchPreviousPage();
             }

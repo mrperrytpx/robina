@@ -139,19 +139,9 @@ const ChatPage = () => {
             if (!chatId) return;
 
             if (data.id === session.data?.user.id) {
-                toast.error("You got removed from the chatroom!");
-                queryClient.setQueryData(
-                    ["chatrooms", data.id],
-                    (oldData: Chatroom[] | undefined) => {
-                        if (!oldData) return;
-                        return oldData.filter(
-                            (chatroom) => chatroom.id === data.chatId
-                        );
-                    }
-                );
+                router.push("/chats");
                 queryClient.removeQueries(["members", chatId]);
                 queryClient.removeQueries(["messages", chatId]);
-                router.push("/chats");
             } else {
                 if (session.data?.user.id !== chatroom.data?.owner_id) {
                     const member = (
@@ -338,6 +328,9 @@ const ChatPage = () => {
         setIsMembersActive(!isMembersActive);
         setIsSettingsActive(false);
     };
+
+    if (chatroomMessages.isError || chatroom.isError)
+        return <div>Hmm... Something isn't right. Try reloading the page</div>;
 
     if (chatroom.isLoading || chatroomMessages.isLoading)
         return (
