@@ -10,6 +10,7 @@ interface IMemberCardProps {
     onClick?: () => Promise<void>;
     ownerId: string;
     loading?: boolean;
+    opaque?: boolean;
 }
 
 export const SkeletonLoadingCard = () => {
@@ -26,12 +27,16 @@ export const MemberCard = ({
     onClick,
     ownerId,
     loading,
+    opaque,
 }: IMemberCardProps) => {
     const session = useSession();
 
     return (
         <div className="group relative flex items-center gap-2 rounded-md border-2 border-white bg-white p-2 shadow hover:border-black">
-            <div className="aspect-square w-8">
+            <div
+                className="aspect-square w-8"
+                style={{ opacity: opaque ? "0.6" : "1" }}
+            >
                 <Image
                     src={member.image ?? DefaultPic}
                     alt={`${member.username}'s image`}
@@ -43,6 +48,7 @@ export const MemberCard = ({
             <span
                 style={{
                     fontWeight: member.id === ownerId ? "bold" : "",
+                    opacity: opaque ? "0.6" : "1",
                 }}
                 className="truncate text-sm"
             >

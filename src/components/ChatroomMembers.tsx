@@ -57,7 +57,7 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
             {pendingChatroomInvites.data?.length ? (
                 <>
                     <h2 className="my-2 rounded-md bg-white p-2 text-xs font-bold shadow">
-                        Pending members - {pendingChatroomInvites.data?.length}
+                        Pending invites - {pendingChatroomInvites.data?.length}
                     </h2>
                     <div className="flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">
                         {pendingChatroomInvites.data?.map((member) => (
@@ -65,6 +65,7 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
                                 key={member.id}
                                 member={member}
                                 ownerId={ownerId}
+                                opaque={true}
                                 loading={revokeInvite.isLoading}
                                 onClick={async () => {
                                     await revokeInvite.mutateAsync({

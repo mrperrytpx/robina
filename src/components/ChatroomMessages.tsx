@@ -10,6 +10,7 @@ import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { pusherClient } from "../lib/pusher";
 import { useSession } from "next-auth/react";
 import { useGetChatroomMessagesInfQuery } from "../hooks/useGetChatroomMessagesInfQuery";
+import { shouldBeNewAuthor } from "../util/shouldBeNewAuthor";
 
 type TIntersectionObserverOptions = {
     root?: Element | null;
@@ -109,10 +110,11 @@ export const ChatroomMessages = () => {
                 <Fragment key={i}>
                     {page.map((message, msgIdx) => (
                         <ChatMessage
-                            isSameAuthor={
-                                msgIdx > 0 &&
-                                page[msgIdx - 1].author_id === message.author_id
-                            }
+                            isSameAuthor={shouldBeNewAuthor(
+                                page,
+                                msgIdx,
+                                message
+                            )}
                             message={message}
                             key={message.id}
                             ownerId={chatroom.data?.owner_id}
