@@ -286,6 +286,44 @@ const ChatPage = () => {
         };
     }, [chatId, chatroom.data, queryClient]);
 
+    useEffect(() => {
+        const deleteRoomHandler = (data: {
+            chatId: string;
+            userId: string;
+        }) => {
+            router.push("/chats");
+            if (data.userId !== session.data?.user.id) {
+                toast.error("Owner deleted the chatroom!");
+                queryClient.setQueryData(
+                    ["chatrooms", session.data?.user.id],
+                    (oldData: Chatroom[] | undefined) => {
+                        if (!oldData) return;
+                        return oldData.filter(
+                            (chatroom) => chatroom.id !== data.chatId
+                        );
+                    }
+                );
+            } else {
+                queryClient.setQueryData(
+                    ["owned_chatroom", session.data?.user.id],
+                    null
+                );
+            }
+            queryClient.removeQueries(["messages", chatId]);
+            queryClient.removeQueries(["members", chatId]);
+        };
+
+        if (chatroom.data) {
+            pusherClient.subscribe(`chat__${chatId}__delete-room`);
+            pusherClient.bind("delete-room", deleteRoomHandler);
+        }
+
+        return () => {
+            pusherClient.unsubscribe(`chat__${chatId}__delete-room`);
+            pusherClient.unbind("delete-room", deleteRoomHandler);
+        };
+    }, [chatId, chatroom.data, queryClient, router, session.data?.user.id]);
+
     const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
         if (!chatId) return;
         reset();

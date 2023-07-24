@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { prisma } from "../../../../../prisma/prisma";
 import { authOptions } from "../../auth/[...nextauth]";
+import { pusherServer } from "../../../../lib/pusher";
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,11 +12,11 @@ export default async function handler(
     if (req.method === "DELETE") {
         const chatId = z.string().parse(req.query.chatId);
 
-        if (!chatId) return res.status(400).end("Please provide an ID");
+        if (!chatId) return res.status(400).end("Please provide an ID"!);
 
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session");
+        if (!session) return res.status(401).end("No session!");
 
         const user = await prisma.user.findFirst({
             where: {
@@ -25,14 +26,14 @@ export default async function handler(
                 owned_chatroom: true,
             },
         });
-        if (!user) return res.status(401).end("No user");
+        if (!user) return res.status(401).end("No user!");
 
         if (!user.owned_chatroom) {
-            return res.status(400).end("You do not own a chatroom");
+            return res.status(400).end("You do not own a chatroom!");
         }
 
         if (user.owned_chatroom?.id !== chatId) {
-            return res.status(401).end("You do not own this chatroom");
+            return res.status(401).end("You do not own this chatroom!");
         }
 
         await prisma.chatroom.delete({
@@ -40,6 +41,12 @@ export default async function handler(
                 id: user.owned_chatroom.id,
             },
         });
+
+        await pusherServer.trigger(
+            `chat__${chatId}__delete-room`,
+            "delete-room",
+            { chatId, userId: user.id }
+        );
 
         res.status(204).end("Success");
     } else {

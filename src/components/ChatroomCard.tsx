@@ -5,6 +5,11 @@ import { TChatroomInvite } from "../hooks/useGetUserPendingInvitesQuery";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { useDeclineCharoomInviteMutation } from "../hooks/useDeclineChatroomInviteMutation";
 import { toast } from "react-toastify";
+import { Chatroom } from "@prisma/client";
+import { useEffect } from "react";
+import { pusherClient } from "../lib/pusher";
+import { useSession } from "next-auth/react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface IInviteChatroomCardProps {
     chatroom: TChatroomInvite;
@@ -124,6 +129,38 @@ export const EnterChatroomCard = ({
     name,
     description,
 }: IEnterChatroomCard) => {
+    const session = useSession();
+    const queryClient = useQueryClient();
+
+    useEffect(() => {
+        const deleteRoomHandler = (data: {
+            chatId: string;
+            userId: string;
+        }) => {
+            if (data.userId !== session.data?.user.id) {
+                queryClient.setQueryData(
+                    ["chatrooms", session.data?.user.id],
+                    (oldData: Chatroom[] | undefined) => {
+                        if (!oldData) return;
+                        return oldData.filter(
+                            (chatroom) => chatroom.id !== data.chatId
+                        );
+                    }
+                );
+            }
+            queryClient.removeQueries(["messages", id]);
+            queryClient.removeQueries(["members", id]);
+        };
+
+        pusherClient.subscribe(`chat__${id}__delete-room`);
+        pusherClient.bind("delete-room", deleteRoomHandler);
+
+        return () => {
+            pusherClient.unsubscribe(`chat__${id}__delete-room`);
+            pusherClient.unbind("delete-room", deleteRoomHandler);
+        };
+    }, [id, queryClient, session.data?.user.id]);
+
     return (
         <Link
             href={`/chats/${id}`}

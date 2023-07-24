@@ -31,10 +31,16 @@ export default async function handler(
                         invite_link: true,
                     },
                 },
+                chatrooms: true,
             },
         });
 
         if (!user) return res.status(401).end("No user");
+
+        if (user.chatrooms.length === 5)
+            return res
+                .status(404)
+                .end("You can only be a part of 5 chatrooms!");
 
         const chatroom = await prisma.chatroom.findFirst({
             where: {
