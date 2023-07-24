@@ -23,7 +23,6 @@ import { ChatroomMembers } from "../../components/ChatroomMembers";
 import { ChatroomSettings } from "../../components/ChatroomSettings";
 import { ChatroomMessages } from "../../components/ChatroomMessages";
 import { randomString } from "../../util/randomString";
-import { useGetChatroomMembersQuery } from "../../hooks/useGetChatroomMembersQuery";
 import Link from "next/link";
 import { useGetChatroomMessagesInfQuery } from "../../hooks/useGetChatroomMessagesInfQuery";
 import { toast } from "react-toastify";
@@ -41,7 +40,6 @@ const ChatPage = () => {
     const inviteUser = useInviteUserMutation();
 
     const chatroom = useGetChatroomQuery(chatId);
-    const chatroomMembers = useGetChatroomMembersQuery(chatId);
     const chatroomMessages = useGetChatroomMessagesInfQuery(chatId);
 
     const { register, handleSubmit, reset } = useForm<TChatMessage>({
@@ -88,14 +86,16 @@ const ChatPage = () => {
             }
         };
 
-        pusherClient.subscribe(`chat__${chatId}__new-message`);
-        pusherClient.bind("new-message", newMessageHandler);
+        if (chatroom.data) {
+            pusherClient.subscribe(`chat__${chatId}__new-message`);
+            pusherClient.bind("new-message", newMessageHandler);
+        }
 
         return () => {
             pusherClient.unsubscribe(`chat__${chatId}__new-message`);
             pusherClient.unbind("new-message", newMessageHandler);
         };
-    }, [chatId, queryClient, session.data?.user.id]);
+    }, [chatId, queryClient, session.data?.user.id, chatroom.data]);
 
     useEffect(() => {
         const newUserHandler = async (data: User) => {
@@ -120,21 +120,22 @@ const ChatPage = () => {
             queryClient.invalidateQueries(["chat_invites", chatId]);
         };
 
-        pusherClient.subscribe(`chat__${chatId}__new-member`);
-        pusherClient.bind("new-member", newUserHandler);
+        if (chatroom.data) {
+            pusherClient.subscribe(`chat__${chatId}__new-member`);
+            pusherClient.bind("new-member", newUserHandler);
+        }
 
         return () => {
             pusherClient.unsubscribe(`chat__${chatId}__new-member`);
             pusherClient.unbind("new-member", newUserHandler);
         };
-    }, [chatId, queryClient]);
+    }, [chatId, queryClient, chatroom.data]);
 
     useEffect(() => {
         const removeUserHandler = async (data: {
             id: string;
             chatId: string;
         }) => {
-            if (!chatroom.data) return;
             if (!chatId) return;
 
             if (data.id === session.data?.user.id) {
@@ -186,9 +187,10 @@ const ChatPage = () => {
                 queryClient.invalidateQueries(["members", chatId]);
             }
         };
-
-        pusherClient.subscribe(`chat__${chatId}__remove-member`);
-        pusherClient.bind("remove-member", removeUserHandler);
+        if (chatroom.data) {
+            pusherClient.subscribe(`chat__${chatId}__remove-member`);
+            pusherClient.bind("remove-member", removeUserHandler);
+        }
 
         return () => {
             pusherClient.unsubscribe(`chat__${chatId}__remove-member`);
@@ -234,20 +236,16 @@ const ChatPage = () => {
             }
         };
 
-        pusherClient.subscribe(`chat__${chatId}__member-leave`);
-        pusherClient.bind("member-leave", leaveChatroomHandler);
+        if (chatroom.data) {
+            pusherClient.subscribe(`chat__${chatId}__member-leave`);
+            pusherClient.bind("member-leave", leaveChatroomHandler);
+        }
 
         return () => {
             pusherClient.unsubscribe(`chat__${chatId}__member-leave`);
             pusherClient.unbind("member-leave", leaveChatroomHandler);
         };
-    }, [
-        chatId,
-        queryClient,
-        chatroomMembers.data,
-        router,
-        session.data?.user.id,
-    ]);
+    }, [chatId, queryClient, router, session.data?.user.id, chatroom.data]);
 
     useEffect(() => {
         const declineInvite = async (data: {
@@ -262,15 +260,16 @@ const ChatPage = () => {
                 }
             );
         };
-
-        pusherClient.subscribe(`chat__${chatId}__decline-invite`);
-        pusherClient.bind("decline-invite", declineInvite);
+        if (chatroom.data) {
+            pusherClient.subscribe(`chat__${chatId}__decline-invite`);
+            pusherClient.bind("decline-invite", declineInvite);
+        }
 
         return () => {
             pusherClient.unsubscribe(`chat__${chatId}__decline-invite`);
             pusherClient.unbind("decline-invite", declineInvite);
         };
-    }, [queryClient, session.data?.user.id, chatId]);
+    }, [queryClient, session.data?.user.id, chatId, chatroom.data]);
 
     useEffect(() => {
         const newChatInviteHandler = async (data: User) => {
@@ -286,14 +285,16 @@ const ChatPage = () => {
             queryClient.invalidateQueries(["chat_invites", chatId]);
         };
 
-        pusherClient.subscribe(`chat__${chatId}__chat-invite`);
-        pusherClient.bind("chat-invite", newChatInviteHandler);
+        if (chatroom.data) {
+            pusherClient.subscribe(`chat__${chatId}__chat-invite`);
+            pusherClient.bind("chat-invite", newChatInviteHandler);
+        }
 
         return () => {
             pusherClient.unsubscribe(`chat__${chatId}__chat-invite`);
             pusherClient.unbind("chat-invite", newChatInviteHandler);
         };
-    }, [queryClient, chatId, session.data?.user.id]);
+    }, [queryClient, chatId, session.data?.user.id, chatroom.data]);
 
     const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
         if (!chatId) return;
