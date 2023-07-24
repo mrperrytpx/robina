@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Head from "next/head";
 import { VscMenu, VscChromeClose, VscBellDot } from "react-icons/vsc";
+import { RiChat1Line } from "react-icons/ri";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,6 +18,7 @@ import { Chatroom } from "@prisma/client";
 import { pusherClient } from "../lib/pusher";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
+import NextNProgress from "nextjs-progressbar";
 
 interface ILayoutProps {
     children: React.ReactNode;
@@ -130,7 +132,7 @@ const Layout = ({ children }: ILayoutProps) => {
             <div className="relative flex min-h-[100svh] flex-col">
                 <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center bg-sky-500">
                     <div className="flex w-full items-center justify-between px-4 py-2">
-                        <Link href="/" className="text-3xl text-sky-50">
+                        <Link href="/" className="text-3xl text-white">
                             LOGO
                         </Link>
                         <div className="flex items-center gap-4">
@@ -140,8 +142,23 @@ const Layout = ({ children }: ILayoutProps) => {
                             {session?.data?.user && (
                                 <>
                                     {pendingInvites.data?.length ? (
-                                        <VscBellDot fill="white" size={28} />
-                                    ) : null}
+                                        <Link href="/chats">
+                                            <VscBellDot
+                                                fill="white"
+                                                size={28}
+                                            />
+                                        </Link>
+                                    ) : (
+                                        <Link
+                                            className="px-1 py-2 text-xl font-bold uppercase text-white"
+                                            href="/chats"
+                                        >
+                                            <RiChat1Line
+                                                fill="white"
+                                                size={28}
+                                            />
+                                        </Link>
+                                    )}
                                     <Link
                                         className="rounded-full border-2 border-sky-500 hover:border-white"
                                         href="/profile"
@@ -181,6 +198,15 @@ const Layout = ({ children }: ILayoutProps) => {
                         />
                     )}
                 </header>
+                <NextNProgress
+                    height={2}
+                    options={{
+                        showSpinner: false,
+                        trickle: true,
+                    }}
+                    color="black"
+                    showOnShallow={false}
+                />
                 <ErrorBoundary>
                     <main className="mx-auto flex min-h-[calc(100svh-64px)] w-full flex-1">
                         {children}

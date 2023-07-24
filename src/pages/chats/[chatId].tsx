@@ -371,7 +371,6 @@ const ChatPage = () => {
                             />
                         </Link>
                         <span>{chatroom.data.name}</span>
-                        <span>{chatroomMessages.data?.pages.length}</span>
                     </div>
                     <div className="flex items-center gap-4">
                         <button className="group p-2" onClick={handleSettings}>
@@ -400,7 +399,6 @@ const ChatPage = () => {
                         />
                     </Link>
                     <span>{chatroom.data.name}</span>
-                    <span>{chatroomMessages.data?.pages?.length}</span>
                 </div>
                 <ChatroomMessages />
                 <div className="mb-2 flex h-14 items-center gap-3 px-4">

@@ -22,7 +22,7 @@ const VerifyRequestPage = () => {
                     A sign in link has been sent to your email address.
                 </p>
                 <Link
-                    className="mt-2 w-full max-w-[200px] rounded-md border-2 border-black p-2 text-center   font-medium hover:border-sky-500 hover:bg-sky-500 hover:text-sky-50 hover:shadow-sm focus:border-sky-500 focus:bg-sky-500 focus:text-sky-50 focus:shadow-sm disabled:opacity-50"
+                    className="mt-2 w-full max-w-[200px] rounded-md border-2 border-black p-2 text-center   font-medium hover:border-sky-500 hover:bg-sky-500 hover:text-white hover:shadow-sm focus:border-sky-500 focus:bg-sky-500 focus:text-white focus:shadow-sm disabled:opacity-50"
                     href="/"
                 >
                     Back to Homepage

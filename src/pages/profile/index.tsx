@@ -104,7 +104,7 @@ const ProfilePage = () => {
 
                 <div className="flex w-full flex-col items-center gap-2">
                     <button
-                        className="flex h-10 w-full max-w-md items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-sky-50 enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-sky-50 enabled:focus:shadow-sm disabled:opacity-50"
+                        className="flex h-10 w-full max-w-md items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                         type="submit"
                         disabled={updateUsername.isLoading}
                     >
@@ -161,7 +161,7 @@ const ProfilePage = () => {
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="flex h-10 min-w-[100px] items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-sky-50 enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-sky-50 enabled:focus:shadow-sm disabled:opacity-50"
+                                className="flex h-10 min-w-[100px] items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                             >
                                 NO
                             </button>

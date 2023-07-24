@@ -56,7 +56,7 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
             )}
             {pendingChatroomInvites.data?.length ? (
                 <>
-                    <h2 className="my-2 rounded-md bg-white p-2 text-xs font-bold shadow">
+                    <h2 className="my-2 mt-6 rounded-md bg-white p-2 text-xs font-bold shadow">
                         Pending invites - {pendingChatroomInvites.data?.length}
                     </h2>
                     <div className="flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">

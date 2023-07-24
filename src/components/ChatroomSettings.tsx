@@ -77,7 +77,7 @@ export const ChatroomSettings = ({
     return (
         <div className="flex-1 space-y-8 overflow-y-auto border-t-2 border-black bg-sky-500 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">
             <div className="mt-4 space-y-2">
-                <h3 className="block text-center text-sm font-bold uppercase text-sky-50 sm:text-left">
+                <h3 className="block text-center text-sm font-bold uppercase text-white sm:text-left">
                     Chatroom description:
                 </h3>
                 <p className="rounded-md bg-white p-2 text-center text-sm shadow sm:text-left">
@@ -87,7 +87,7 @@ export const ChatroomSettings = ({
             {ownerId === session.data?.user.id ? (
                 <div className="flex w-full flex-col items-center gap-4 md:items-start">
                     <div className="flex w-full flex-wrap items-center justify-center gap-2 md:justify-normal">
-                        <span className="text-sm font-semibold uppercase text-sky-50">
+                        <span className="text-sm font-semibold uppercase text-white">
                             Invite Link:{" "}
                         </span>
                         <span className="rounded-lg bg-white p-2 font-mono shadow">
@@ -134,7 +134,7 @@ export const ChatroomSettings = ({
                     </div>
 
                     <div className="flex w-full flex-col items-center gap-2 md:max-w-full">
-                        <span className="text-sm font-semibold uppercase text-sky-50 md:self-start">
+                        <span className="text-sm font-semibold uppercase text-white md:self-start">
                             Banned members
                         </span>
                         <div className="grid w-full grid-cols-1 gap-2 rounded-md md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
@@ -197,7 +197,7 @@ export const ChatroomSettings = ({
                                     </button>
                                     <button
                                         onClick={() => setIsModalOpen(false)}
-                                        className="flex h-10 min-w-[100px] items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-sky-50 enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-sky-50 enabled:focus:shadow-sm disabled:opacity-50"
+                                        className="flex h-10 min-w-[100px] items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                                     >
                                         NO
                                     </button>
