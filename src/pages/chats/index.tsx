@@ -4,6 +4,7 @@ import { getSession, useSession } from "next-auth/react";
 import { useGetAllJoinedChatroomsQuery } from "../../hooks/useGetAllJoinedChatroomsQuery";
 import {
     EnterChatroomCard,
+    InviteChatroomCard,
     LoadingChatroomCard,
     NewChatroomCard,
 } from "../../components/ChatroomCard";
@@ -17,10 +18,13 @@ import { toast } from "react-toastify";
 import { pusherClient } from "../../lib/pusher";
 import { useQueryClient } from "@tanstack/react-query";
 import { Chatroom } from "@prisma/client";
+import { useGetChatroomPendingInvitesQuery } from "../../hooks/useGetChatroomPendingInvitesQuery";
 
 const ChatsPage = () => {
     const joinedChatrooms = useGetAllJoinedChatroomsQuery();
     const ownedChatroom = useGetOwnedChatroomtroomsQuery();
+    const pendingInvites = useGetChatroomPendingInvitesQuery();
+
     const session = useSession();
     const queryClient = useQueryClient();
 
@@ -107,6 +111,21 @@ const ChatsPage = () => {
                     )}
                 </div>
             </article>
+            {pendingInvites.data?.length ? (
+                <article className="my-8 space-y-2">
+                    <h2 className="block text-center font-bold uppercase sm:pl-2 sm:text-left">
+                        Invited to
+                    </h2>
+                    <div className="flex flex-col flex-wrap items-center gap-4 sm:flex-row sm:items-start">
+                        {pendingInvites.data?.map((chatroom) => (
+                            <InviteChatroomCard
+                                key={chatroom.id}
+                                chatroom={chatroom}
+                            />
+                        ))}
+                    </div>
+                </article>
+            ) : null}
             {router.query.create && (
                 <Portal shouldRoute={true}>
                     <CreateChatPage />

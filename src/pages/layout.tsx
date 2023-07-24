@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Head from "next/head";
-import { VscMenu, VscChromeClose } from "react-icons/vsc";
+import { VscMenu, VscChromeClose, VscBellDot } from "react-icons/vsc";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,6 +9,11 @@ import { LoadingSpinner } from "../components/LoadingSpinner";
 import { MobileMenu } from "../components/MobileMenu";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import DefaultPic from "../../public/default.png";
+import { useGetChatroomPendingInvitesQuery } from "../hooks/useGetChatroomPendingInvitesQuery";
+import { Chatroom } from "@prisma/client";
+import { pusherClient } from "../lib/pusher";
+import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ILayoutProps {
     children: React.ReactNode;
@@ -19,6 +24,33 @@ const Layout = ({ children }: ILayoutProps) => {
 
     const pathname = usePathname();
     const session = useSession();
+    const queryClient = useQueryClient();
+
+    const pendingInvites = useGetChatroomPendingInvitesQuery();
+
+    useEffect(() => {
+        const newInviteHandler = async (data: Chatroom) => {
+            toast.success(`You are invited to join ${data.name}!`);
+            queryClient.setQueryData(
+                ["invites", session.data?.user.id],
+                (oldData: Chatroom[] | undefined) => {
+                    if (!oldData) return [data];
+                    return [...oldData, data];
+                }
+            );
+            queryClient.invalidateQueries(["invites", session.data?.user.id]);
+        };
+
+        pusherClient.subscribe(`chat__${session.data?.user.id}__new-invite`);
+        pusherClient.bind("new-invite", newInviteHandler);
+
+        return () => {
+            pusherClient.unsubscribe(
+                `chat__${session.data?.user.id}__new-invite`
+            );
+            pusherClient.unbind("new-invite", newInviteHandler);
+        };
+    }, [queryClient, session.data?.user.id]);
 
     useEffect(() => setIsExpanded(false), [pathname]);
 
@@ -47,22 +79,27 @@ const Layout = ({ children }: ILayoutProps) => {
                                 <LoadingSpinner size={36} />
                             ) : null}
                             {session?.data?.user && (
-                                <Link
-                                    className="rounded-full border-2 border-sky-500 hover:border-white"
-                                    href="/profile"
-                                    aria-label="Profile"
-                                >
-                                    <Image
-                                        className="w-9 rounded-full"
-                                        width={100}
-                                        height={100}
-                                        src={
-                                            session?.data.user?.image ||
-                                            DefaultPic
-                                        }
-                                        alt="User's profile"
-                                    />
-                                </Link>
+                                <>
+                                    {pendingInvites.data?.length ? (
+                                        <VscBellDot fill="white" size={28} />
+                                    ) : null}
+                                    <Link
+                                        className="rounded-full border-2 border-sky-500 hover:border-white"
+                                        href="/profile"
+                                        aria-label="Profile"
+                                    >
+                                        <Image
+                                            className="w-9 rounded-full"
+                                            width={100}
+                                            height={100}
+                                            src={
+                                                session?.data.user?.image ||
+                                                DefaultPic
+                                            }
+                                            alt="User's profile"
+                                        />
+                                    </Link>
+                                </>
                             )}
                             <button
                                 aria-label="Menu"

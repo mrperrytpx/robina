@@ -31,5 +31,6 @@ export const useGetChatroomMessagesInfQuery = (chatId: string) => {
         getPreviousPageParam: (firstPage, pages) => {
             return firstPage.length === 50 ? pages.length + 1 : undefined;
         },
+        retry: 1,
     });
 };

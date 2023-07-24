@@ -163,10 +163,16 @@ const ChatPage = () => {
                 );
                 queryClient.setQueryData(
                     ["messages", chatId],
-                    (oldData: TChatroomMessage[] | undefined) => {
-                        return oldData?.filter(
-                            (msg) => msg.author_id !== data.id
-                        );
+                    (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
+                        if (!oldData) return;
+                        return {
+                            pageParams: oldData.pageParams,
+                            pages: oldData?.pages.map((page) =>
+                                page.filter(
+                                    (message) => message.author_id !== data.id
+                                )
+                            ),
+                        };
                     }
                 );
                 queryClient.invalidateQueries(["members", chatId]);

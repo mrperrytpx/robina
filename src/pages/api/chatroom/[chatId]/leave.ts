@@ -42,7 +42,9 @@ export default async function handler(
             },
             data: {
                 chatrooms: {
-                    set: user.chatrooms.filter((chat) => chat.id !== chatId),
+                    disconnect: {
+                        id: chatId,
+                    },
                 },
             },
         });

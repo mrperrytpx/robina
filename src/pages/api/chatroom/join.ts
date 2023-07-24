@@ -25,6 +25,13 @@ export default async function handler(
             where: {
                 id: session.user.id,
             },
+            include: {
+                invited_to_chatroom: {
+                    include: {
+                        invite_link: true,
+                    },
+                },
+            },
         });
 
         if (!user) return res.status(401).end("No user");
@@ -37,6 +44,7 @@ export default async function handler(
             },
             include: {
                 banned_members: true,
+                invited_members: true,
             },
         });
 
@@ -53,6 +61,11 @@ export default async function handler(
             data: {
                 members: {
                     connect: {
+                        id: user.id,
+                    },
+                },
+                invited_members: {
+                    disconnect: {
                         id: user.id,
                     },
                 },

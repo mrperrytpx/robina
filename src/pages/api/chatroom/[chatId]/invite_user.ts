@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { prisma } from "../../../../../prisma/prisma";
 import { authOptions } from "../../auth/[...nextauth]";
+import { pusherServer } from "../../../../lib/pusher";
 
 export default async function handler(
     req: NextApiRequest,
@@ -24,7 +25,11 @@ export default async function handler(
                 id: session.user.id,
             },
             include: {
-                owned_chatroom: true,
+                owned_chatroom: {
+                    include: {
+                        invite_link: true,
+                    },
+                },
             },
         });
         if (!user) return res.status(401).end("No user!");
@@ -36,6 +41,9 @@ export default async function handler(
         if (user.owned_chatroom?.id !== chatId) {
             return res.status(401).end("You do not own this chatroom!");
         }
+
+        if (user.username === username)
+            return res.status(404).end("You cannot invite yourself!");
 
         const member = await prisma.user.findFirst({
             where: {
@@ -54,7 +62,7 @@ export default async function handler(
                 (chatroom) => chatroom.id === chatId
             )
         ) {
-            return res.status(404).end("User is banned from this chatroom!");
+            return res.status(404).end("User is banned from your chatroom!");
         }
 
         if (
@@ -76,6 +84,10 @@ export default async function handler(
                     },
                 },
             },
+        });
+
+        pusherServer.trigger(`chat__${member.id}__new-invite`, "new-invite", {
+            ...user.owned_chatroom,
         });
 
         res.status(204).end("Success");
