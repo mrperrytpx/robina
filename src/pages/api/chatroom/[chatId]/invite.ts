@@ -55,7 +55,7 @@ export default async function handler(
             },
         });
 
-        if (!member) return res.status(404).end("User isn't in this chatroom!");
+        if (!member) return res.status(404).end("User doesn't exist!");
 
         if (
             member.banned_from_chatroom.find(

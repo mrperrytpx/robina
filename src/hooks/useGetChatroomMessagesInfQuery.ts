@@ -5,7 +5,9 @@ async function getChatroomMessages(chatId: string, pageParam: number) {
     const controller = new AbortController();
 
     const response = await fetch(
-        `/api/chatroom/${chatId}/get_messages?offset=${pageParam}`,
+        `/api/chatroom/${chatId}/get_messages?offset=${
+            pageParam ? pageParam : 1
+        }`,
         {
             signal: controller.signal,
         }
@@ -29,7 +31,7 @@ export const useGetChatroomMessagesInfQuery = (chatId: string) => {
         queryFn: ({ pageParam = 1 }) => getChatroomMessages(chatId, pageParam),
         enabled: !!chatId,
         getPreviousPageParam: (firstPage, pages) => {
-            return firstPage.length >= 50 ? pages.length + 1 : 0;
+            return firstPage.length >= 50 ? pages.length + 1 : undefined;
         },
         retry: 1,
     });

@@ -433,7 +433,7 @@ const ChatPage = () => {
                     </Link>
                     <span>{chatroom.data.name}</span>
                 </div>
-                <ChatroomMessages />
+                <ChatroomMessages chatroom={chatroom.data} />
                 <div className="mb-2 flex h-14 items-center gap-3 px-4">
                     <button
                         type="submit"

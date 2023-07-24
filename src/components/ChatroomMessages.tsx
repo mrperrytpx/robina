@@ -1,9 +1,6 @@
 import { Fragment, RefObject, useEffect, useRef, useState } from "react";
 import { ChatMessage } from "./ChatMessage";
-import {
-    TChatroomMessage,
-    useGetChatroomQuery,
-} from "../hooks/useGetChatroomQuery";
+import { TChatroomMessage } from "../hooks/useGetChatroomQuery";
 import { useRouter } from "next/router";
 import { z } from "zod";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
@@ -11,6 +8,7 @@ import { pusherClient } from "../lib/pusher";
 import { useSession } from "next-auth/react";
 import { useGetChatroomMessagesInfQuery } from "../hooks/useGetChatroomMessagesInfQuery";
 import { shouldBeNewAuthor } from "../util/shouldBeNewAuthor";
+import { Chatroom } from "@prisma/client";
 
 type TIntersectionObserverOptions = {
     root?: Element | null;
@@ -45,7 +43,11 @@ export const useIntersectionObserver = (
     return isIntersecting;
 };
 
-export const ChatroomMessages = () => {
+interface IChatroomMessagesProps {
+    chatroom: Chatroom;
+}
+
+export const ChatroomMessages = ({ chatroom }: IChatroomMessagesProps) => {
     const endRef = useRef<HTMLDivElement>(null);
     const startRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
@@ -53,7 +55,6 @@ export const ChatroomMessages = () => {
     const queryClient = useQueryClient();
     const session = useSession();
 
-    const chatroom = useGetChatroomQuery(chatId);
     const chatroomMessages = useGetChatroomMessagesInfQuery(chatId);
 
     const isStartIntersecting = useIntersectionObserver(startRef, {});
@@ -91,7 +92,10 @@ export const ChatroomMessages = () => {
                         page.filter((msg) => msg.id !== data.id)
                     );
 
-                    return { pages: newData, pageParams: oldData.pageParams };
+                    return {
+                        pages: newData,
+                        pageParams: oldData.pageParams || [1],
+                    };
                 }
             );
         };
@@ -123,7 +127,7 @@ export const ChatroomMessages = () => {
                                 isSameAuthor={isSameAuthor}
                                 message={message}
                                 key={message.id}
-                                ownerId={chatroom.data?.owner_id}
+                                ownerId={chatroom.owner_id}
                             />
                         );
                     })}
