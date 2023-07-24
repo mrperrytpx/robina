@@ -73,6 +73,15 @@ export default async function handler(
             }
         );
 
+        pusherServer.trigger(
+            `chat__${chatId}__decline-invite`,
+            "decline-invite",
+            {
+                chatId,
+                userId: member.id,
+            }
+        );
+
         res.status(204).end("Success");
     } else {
         res.setHeader("Allow", "DELETE");

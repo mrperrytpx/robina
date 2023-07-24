@@ -9,7 +9,10 @@ import { LoadingSpinner } from "../components/LoadingSpinner";
 import { MobileMenu } from "../components/MobileMenu";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import DefaultPic from "../../public/default.png";
-import { useGetUserPendingInvitesQuery } from "../hooks/useGetUserPendingInvitesQuery";
+import {
+    TChatroomInvites,
+    useGetUserPendingInvitesQuery,
+} from "../hooks/useGetUserPendingInvitesQuery";
 import { Chatroom } from "@prisma/client";
 import { pusherClient } from "../lib/pusher";
 import { toast } from "react-toastify";
@@ -80,6 +83,31 @@ const Layout = ({ children }: ILayoutProps) => {
         return () => {
             pusherClient.unsubscribe(`chat__${session.data?.user.id}__ban`);
             pusherClient.unbind("ban", banUser);
+        };
+    }, [queryClient, session.data?.user.id]);
+
+    useEffect(() => {
+        const revokeInvite = (data: { chatId: string; userId: string }) => {
+            queryClient.setQueryData(
+                ["invites", session.data?.user.id],
+                (oldData: TChatroomInvites | undefined) => {
+                    if (!oldData) return;
+                    return oldData.filter(
+                        (chatroom) => chatroom.id !== data.chatId
+                    );
+                }
+            );
+            queryClient.invalidateQueries(["invites", session.data?.user.id]);
+        };
+
+        pusherClient.subscribe(`chat__${session.data?.user.id}__revoke-invite`);
+        pusherClient.bind("revoke-invite", revokeInvite);
+
+        return () => {
+            pusherClient.unsubscribe(
+                `chat__${session.data?.user.id}__revoke-invite`
+            );
+            pusherClient.unbind("revoke-invite", revokeInvite);
         };
     }, [queryClient, session.data?.user.id]);
 
