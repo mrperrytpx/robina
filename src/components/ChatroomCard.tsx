@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { VscAdd, VscCheck, VscChromeClose } from "react-icons/vsc";
 import { useJoinChatroomMutation } from "../hooks/useJoinChatroomMutation";
-import { TChatroomInvite } from "../hooks/useGetChatroomPendingInvitesQuery";
+import { TChatroomInvite } from "../hooks/useGetUserPendingInvitesQuery";
 import { LoadingSpinner } from "./LoadingSpinner";
+import { useDeclineCharoomInviteMutation } from "../hooks/useDeclineChatroomInviteMutation";
+import { toast } from "react-toastify";
 
 interface IInviteChatroomCardProps {
     chatroom: TChatroomInvite;
@@ -10,6 +12,7 @@ interface IInviteChatroomCardProps {
 
 export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
     const joinChatroom = useJoinChatroomMutation();
+    const declineInvite = useDeclineCharoomInviteMutation();
 
     const handleAcceptInvite = async () => {
         const response = await joinChatroom.mutateAsync({
@@ -18,7 +21,19 @@ export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
 
         if (!response.ok) {
             const error = await response.text();
-            console.log(error);
+            toast.error(error);
+            return;
+        }
+    };
+
+    const handleDeclineInvite = async () => {
+        const { response } = await declineInvite.mutateAsync({
+            chatId: chatroom.id,
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            toast.error(error);
             return;
         }
     };
@@ -46,7 +61,11 @@ export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
                         />
                     )}
                 </button>
-                <button className="group/button mx-auto rounded-full p-1">
+                <button
+                    onClick={handleDeclineInvite}
+                    disabled={declineInvite.isLoading}
+                    className="group/button mx-auto rounded-full p-1"
+                >
                     <VscChromeClose
                         className="fill-black group-hover/button:fill-red-600 group-focus/button:fill-red-600"
                         size={72}

@@ -9,11 +9,12 @@ import { LoadingSpinner } from "../components/LoadingSpinner";
 import { MobileMenu } from "../components/MobileMenu";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import DefaultPic from "../../public/default.png";
-import { useGetChatroomPendingInvitesQuery } from "../hooks/useGetChatroomPendingInvitesQuery";
+import { useGetUserPendingInvitesQuery } from "../hooks/useGetUserPendingInvitesQuery";
 import { Chatroom } from "@prisma/client";
 import { pusherClient } from "../lib/pusher";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 
 interface ILayoutProps {
     children: React.ReactNode;
@@ -25,8 +26,9 @@ const Layout = ({ children }: ILayoutProps) => {
     const pathname = usePathname();
     const session = useSession();
     const queryClient = useQueryClient();
+    const router = useRouter();
 
-    const pendingInvites = useGetChatroomPendingInvitesQuery();
+    const pendingInvites = useGetUserPendingInvitesQuery();
 
     useEffect(() => {
         const newInviteHandler = async (data: Chatroom) => {
@@ -51,6 +53,37 @@ const Layout = ({ children }: ILayoutProps) => {
             pusherClient.unbind("new-invite", newInviteHandler);
         };
     }, [queryClient, session.data?.user.id]);
+
+    useEffect(() => {
+        const banUser = async (data: {
+            id: string;
+            chatId: string;
+            chatroomName: string;
+        }) => {
+            if (data.id === session.data?.user.id) {
+                toast.error(`You got removed from "${data.chatroomName}"!`);
+                queryClient.setQueryData(
+                    ["chatrooms", session.data?.user.id],
+                    (oldData: Chatroom[] | undefined) => {
+                        if (!oldData) return;
+                        return oldData.filter(
+                            (chatroom) => chatroom.id !== data.chatId
+                        );
+                    }
+                );
+                queryClient.removeQueries(["members", data.chatId]);
+                queryClient.removeQueries(["messages", data.chatId]);
+            }
+        };
+
+        pusherClient.subscribe(`chat__${session.data?.user.id}__ban`);
+        pusherClient.bind("ban", banUser);
+
+        return () => {
+            pusherClient.unsubscribe(`chat__${session.data?.user.id}__ban`);
+            pusherClient.unbind("ban", banUser);
+        };
+    }, [queryClient, router, session.data?.user.id]);
 
     useEffect(() => setIsExpanded(false), [pathname]);
 

@@ -10,7 +10,7 @@ export const useInviteUserMutation = () => {
     const inviteUser = async ({ chatId, username }: IInviteUser) => {
         const controller = new AbortController();
 
-        const response = await fetch(`/api/chatroom/${chatId}/invite_user`, {
+        const response = await fetch(`/api/chatroom/${chatId}/invite`, {
             method: "POST",
             signal: controller.signal,
             headers: {

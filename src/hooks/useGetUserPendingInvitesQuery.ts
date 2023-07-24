@@ -25,7 +25,7 @@ async function getPendingInvites() {
     return data.reverse();
 }
 
-export const useGetChatroomPendingInvitesQuery = () => {
+export const useGetUserPendingInvitesQuery = () => {
     const session = useSession();
 
     return useQuery({

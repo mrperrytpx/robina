@@ -44,7 +44,7 @@ const ChatPage = () => {
     const chatroomMembers = useGetChatroomMembersQuery(chatId);
     const chatroomMessages = useGetChatroomMessagesInfQuery(chatId);
 
-    const { register, handleSubmit, setError, reset } = useForm<TChatMessage>({
+    const { register, handleSubmit, reset } = useForm<TChatMessage>({
         resolver: zodResolver(chatMessageSchema),
     });
 
@@ -260,7 +260,7 @@ const ChatPage = () => {
 
             if (!response?.ok) {
                 const error = await response?.text();
-                setError("root", { message: error || "Server Error" });
+                toast.error(error);
                 return;
             }
 
@@ -275,7 +275,7 @@ const ChatPage = () => {
 
         if (!response?.ok) {
             const error = await response?.text();
-            setError("root", { message: error || "Server Error" });
+            toast.error(error);
             return;
         }
     };

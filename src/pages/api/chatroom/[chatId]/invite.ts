@@ -62,7 +62,9 @@ export default async function handler(
                 (chatroom) => chatroom.id === chatId
             )
         ) {
-            return res.status(404).end("User is banned from your chatroom!");
+            return res
+                .status(404)
+                .end(`"${member.username}" is banned from this chatroom!`);
         }
 
         if (
