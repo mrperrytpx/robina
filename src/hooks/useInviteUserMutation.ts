@@ -24,7 +24,7 @@ export const useInviteUserMutation = () => {
 
     return useMutation(inviteUser, {
         onMutate: (data) => {
-            return { username: data.username };
+            return { ...data };
         },
         onSuccess: (data, _vars, context) => {
             if (!data.ok) return;

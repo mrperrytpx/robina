@@ -3,16 +3,15 @@ import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { prisma } from "../../../../../prisma/prisma";
 import { authOptions } from "../../auth/[...nextauth]";
-import { pusherServer } from "../../../../lib/pusher";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    if (req.method === "DELETE") {
+    if (req.method === "GET") {
         const chatId = z.string().parse(req.query.chatId);
 
-        if (!chatId) return res.status(400).end("Please provide an ID");
+        if (!chatId) return res.status(400).end("Provide a chat iD");
 
         const session = await getServerSession(req, res, authOptions);
 
@@ -23,36 +22,30 @@ export default async function handler(
                 id: session.user.id,
             },
             include: {
-                owned_chatroom: true,
+                chatrooms: true,
             },
         });
+
         if (!user) return res.status(401).end("No user");
 
-        await prisma.chatroom.update({
+        if (!user.chatrooms.find((chat) => chat.id === chatId)) {
+            return res.status(401).end("You're not a member of this chatroom");
+        }
+
+        const chatroom = await prisma.chatroom.findFirst({
             where: {
                 id: chatId,
             },
-            data: {
-                invited_members: {
-                    disconnect: {
-                        id: user.id,
-                    },
-                },
+            include: {
+                invited_members: true,
             },
         });
 
-        pusherServer.trigger(
-            `chat__${chatId}__decline-invite`,
-            "decline-invite",
-            {
-                chatId,
-                userId: user.id,
-            }
-        );
+        if (!chatroom) return res.status(404).end("No chatroom");
 
-        res.status(204).end("Success");
+        res.status(201).json(chatroom.invited_members);
     } else {
-        res.setHeader("Allow", "DELETE");
+        res.setHeader("Allow", "GET");
         res.status(405).end("Method Not Allowed");
     }
 }

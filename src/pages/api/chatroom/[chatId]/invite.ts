@@ -42,12 +42,12 @@ export default async function handler(
             return res.status(401).end("You do not own this chatroom!");
         }
 
-        if (user.username === username)
+        if (user.username === username.toLowerCase())
             return res.status(404).end("You cannot invite yourself!");
 
         const member = await prisma.user.findFirst({
             where: {
-                username,
+                username: username.toLowerCase(),
             },
             include: {
                 banned_from_chatroom: true,
@@ -82,7 +82,7 @@ export default async function handler(
             data: {
                 invited_to_chatroom: {
                     connect: {
-                        id: chatId,
+                        id: chatId.toString(),
                     },
                 },
             },
@@ -92,7 +92,11 @@ export default async function handler(
             ...user.owned_chatroom,
         });
 
-        res.status(204).end("Success");
+        pusherServer.trigger(`chat__${chatId}__chat-invite`, "chat-invite", {
+            ...member,
+        });
+
+        res.status(201).end("Success");
     } else {
         res.setHeader("Allow", "POST");
         res.status(405).end("Method Not Allowed");

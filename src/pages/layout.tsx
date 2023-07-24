@@ -14,7 +14,6 @@ import { Chatroom } from "@prisma/client";
 import { pusherClient } from "../lib/pusher";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/router";
 
 interface ILayoutProps {
     children: React.ReactNode;
@@ -26,7 +25,6 @@ const Layout = ({ children }: ILayoutProps) => {
     const pathname = usePathname();
     const session = useSession();
     const queryClient = useQueryClient();
-    const router = useRouter();
 
     const pendingInvites = useGetUserPendingInvitesQuery();
 
@@ -83,7 +81,7 @@ const Layout = ({ children }: ILayoutProps) => {
             pusherClient.unsubscribe(`chat__${session.data?.user.id}__ban`);
             pusherClient.unbind("ban", banUser);
         };
-    }, [queryClient, router, session.data?.user.id]);
+    }, [queryClient, session.data?.user.id]);
 
     useEffect(() => setIsExpanded(false), [pathname]);
 

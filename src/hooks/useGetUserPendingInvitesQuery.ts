@@ -22,7 +22,7 @@ async function getPendingInvites() {
     const data: (Chatroom & { invite_link: InviteLink })[] =
         await response.json();
 
-    return data.reverse();
+    return data;
 }
 
 export const useGetUserPendingInvitesQuery = () => {

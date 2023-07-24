@@ -105,12 +105,19 @@ const ChatPage = () => {
             queryClient.setQueryData(
                 ["members", chatId],
                 (oldData: User[] | undefined) => {
-                    const newData: User[] = JSON.parse(JSON.stringify(oldData));
-                    newData.push(data);
-                    return newData;
+                    if (!oldData) return [data];
+                    return [...oldData, data];
+                }
+            );
+            queryClient.setQueryData(
+                ["chat_invites", chatId],
+                (oldData: User[] | undefined) => {
+                    if (!oldData) return;
+                    return oldData.filter((member) => member.id !== data.id);
                 }
             );
             queryClient.invalidateQueries(["members", chatId]);
+            queryClient.invalidateQueries(["chat_invites", chatId]);
         };
 
         pusherClient.subscribe(`chat__${chatId}__new-member`);
@@ -127,6 +134,7 @@ const ChatPage = () => {
             id: string;
             chatId: string;
         }) => {
+            if (!chatroom.data) return;
             if (!chatId) return;
 
             if (data.id === session.data?.user.id) {
@@ -186,13 +194,7 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__remove-member`);
             pusherClient.unbind("remove-member", removeUserHandler);
         };
-    }, [
-        chatId,
-        queryClient,
-        router,
-        session.data?.user.id,
-        chatroom.data?.owner_id,
-    ]);
+    }, [chatId, queryClient, router, session.data?.user.id, chatroom.data]);
 
     useEffect(() => {
         const leaveChatroomHandler = async (data: {
@@ -246,6 +248,52 @@ const ChatPage = () => {
         router,
         session.data?.user.id,
     ]);
+
+    useEffect(() => {
+        const declineInvite = async (data: {
+            chatId: string;
+            userId: string;
+        }) => {
+            queryClient.setQueryData(
+                ["chat_invites", data.chatId],
+                (oldData: User[] | undefined) => {
+                    if (!oldData) return;
+                    return oldData.filter((user) => user.id !== data.userId);
+                }
+            );
+        };
+
+        pusherClient.subscribe(`chat__${chatId}__decline-invite`);
+        pusherClient.bind("decline-invite", declineInvite);
+
+        return () => {
+            pusherClient.unsubscribe(`chat__${chatId}__decline-invite`);
+            pusherClient.unbind("decline-invite", declineInvite);
+        };
+    }, [queryClient, session.data?.user.id, chatId]);
+
+    useEffect(() => {
+        const newChatInviteHandler = async (data: User) => {
+            if (!chatId) return;
+
+            queryClient.setQueryData(
+                ["chat_invites", chatId],
+                (oldData: User[] | undefined) => {
+                    if (!oldData) return [data];
+                    return [...oldData, data];
+                }
+            );
+            queryClient.invalidateQueries(["chat_invites", chatId]);
+        };
+
+        pusherClient.subscribe(`chat__${chatId}__chat-invite`);
+        pusherClient.bind("chat-invite", newChatInviteHandler);
+
+        return () => {
+            pusherClient.unsubscribe(`chat__${chatId}__chat-invite`);
+            pusherClient.unbind("chat-invite", newChatInviteHandler);
+        };
+    }, [queryClient, chatId, session.data?.user.id]);
 
     const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
         if (!chatId) return;

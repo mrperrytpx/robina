@@ -4,7 +4,8 @@ import { z } from "zod";
 import { useRouter } from "next/router";
 import { MemberCard, SkeletonLoadingCard } from "./MemberCard";
 import { useGetChatroomMembersQuery } from "../hooks/useGetChatroomMembersQuery";
-import { LoadingSpinner } from "./LoadingSpinner";
+import { useGetChatroomPendingInvites } from "../hooks/useGetChatroomPendingInvites";
+import { useRevokeChatroomInviteMutation } from "../hooks/useRevokeChatroomInviteMutation";
 
 interface IChatroomMembersProps {
     ownerId: string;
@@ -15,7 +16,9 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
     const chatId = z.string().parse(router.query.chatId);
 
     const banChatroomMember = useBanChatroomMemberMutation();
+    const revokeInvite = useRevokeChatroomInviteMutation();
     const chatroomMembers = useGetChatroomMembersQuery(chatId);
+    const pendingChatroomInvites = useGetChatroomPendingInvites(chatId);
 
     return (
         <div className="flex-1 overflow-y-auto border-t-2 border-black bg-sky-500 px-3 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100 sm:h-full sm:w-60 sm:border-t-0 sm:border-black">
@@ -51,6 +54,29 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
                     </div>
                 </>
             )}
+            {pendingChatroomInvites.data?.length ? (
+                <>
+                    <h2 className="my-2 rounded-md bg-white p-2 text-xs font-bold shadow">
+                        Pending members - {pendingChatroomInvites.data?.length}
+                    </h2>
+                    <div className="flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">
+                        {pendingChatroomInvites.data?.map((member) => (
+                            <MemberCard
+                                key={member.id}
+                                member={member}
+                                ownerId={ownerId}
+                                loading={revokeInvite.isLoading}
+                                onClick={async () => {
+                                    await revokeInvite.mutateAsync({
+                                        chatId,
+                                        memberId: member.id,
+                                    });
+                                }}
+                            />
+                        ))}
+                    </div>
+                </>
+            ) : null}
         </div>
     );
 };
