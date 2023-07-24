@@ -11,14 +11,17 @@ import { usePatchChatroomInviteMutation } from "../hooks/usePatchChatroomInviteM
 import { useGetBannedChatroomMembersQuery } from "../hooks/useGetBannedChatroomMembersQuery";
 import { useUnbanChatroomMemberMutation } from "../hooks/useUnbanChatroomMemberMutation";
 import { MemberCard } from "./MemberCard";
-import { useGetChatroomQuery } from "../hooks/useGetChatroomQuery";
 import { Portal } from "./Portal";
 
 interface IChatroomSettingsProps {
     ownerId: string;
+    description: string;
 }
 
-export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
+export const ChatroomSettings = ({
+    ownerId,
+    description,
+}: IChatroomSettingsProps) => {
     const router = useRouter();
     const chatId = z.string().parse(router.query.chatId);
     const session = useSession();
@@ -28,10 +31,9 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
     const getInvite = useGetChatroomInviteQuery(chatId);
     const patchInvite = usePatchChatroomInviteMutation();
 
-    const chatroom = useGetChatroomQuery(chatId);
     const bannedMembers = useGetBannedChatroomMembersQuery(
         chatId,
-        chatroom.data?.owner_id === session.data?.user.id
+        ownerId === session.data?.user.id
     );
     const unbanMember = useUnbanChatroomMemberMutation();
 
@@ -79,7 +81,7 @@ export const ChatroomSettings = ({ ownerId }: IChatroomSettingsProps) => {
                     Chatroom description:
                 </h3>
                 <p className="rounded-md bg-white p-2 text-center text-sm shadow sm:text-left">
-                    {chatroom.data?.description}
+                    {description}
                 </p>
             </div>
             {ownerId === session.data?.user.id ? (

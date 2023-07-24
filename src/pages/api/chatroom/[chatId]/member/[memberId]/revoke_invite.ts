@@ -64,7 +64,7 @@ export default async function handler(
             },
         });
 
-        pusherServer.trigger(
+        await pusherServer.trigger(
             `chat__${member.id}__revoke-invite`,
             "revoke-invite",
             {
@@ -73,7 +73,7 @@ export default async function handler(
             }
         );
 
-        pusherServer.trigger(
+        await pusherServer.trigger(
             `chat__${chatId}__decline-invite`,
             "decline-invite",
             {

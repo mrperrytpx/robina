@@ -269,7 +269,7 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__decline-invite`);
             pusherClient.unbind("decline-invite", declineInvite);
         };
-    }, [queryClient, session.data?.user.id, chatId, chatroom.data]);
+    }, [chatId, chatroom.data, queryClient]);
 
     useEffect(() => {
         const newChatInviteHandler = async (data: User) => {
@@ -294,7 +294,7 @@ const ChatPage = () => {
             pusherClient.unsubscribe(`chat__${chatId}__chat-invite`);
             pusherClient.unbind("chat-invite", newChatInviteHandler);
         };
-    }, [queryClient, chatId, session.data?.user.id, chatroom.data]);
+    }, [chatId, chatroom.data, queryClient]);
 
     const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
         if (!chatId) return;
@@ -449,7 +449,10 @@ const ChatPage = () => {
                     </form>
                 </div>
                 {isSettingsActive && (
-                    <ChatroomSettings ownerId={chatroom.data.owner_id} />
+                    <ChatroomSettings
+                        description={chatroom.data.description}
+                        ownerId={chatroom.data.owner_id}
+                    />
                 )}
                 {isMembersActive && (
                     <ChatroomMembers ownerId={chatroom.data.owner_id} />

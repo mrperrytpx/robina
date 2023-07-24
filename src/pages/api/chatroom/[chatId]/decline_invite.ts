@@ -41,7 +41,7 @@ export default async function handler(
             },
         });
 
-        pusherServer.trigger(
+        await pusherServer.trigger(
             `chat__${chatId}__decline-invite`,
             "decline-invite",
             {

@@ -82,19 +82,27 @@ export default async function handler(
             data: {
                 invited_to_chatroom: {
                     connect: {
-                        id: chatId.toString(),
+                        id: chatId,
                     },
                 },
             },
         });
 
-        pusherServer.trigger(`chat__${member.id}__new-invite`, "new-invite", {
-            ...user.owned_chatroom,
-        });
+        await pusherServer.trigger(
+            `chat__${member.id}__new-invite`,
+            "new-invite",
+            {
+                ...user.owned_chatroom,
+            }
+        );
 
-        pusherServer.trigger(`chat__${chatId}__chat-invite`, "chat-invite", {
-            ...member,
-        });
+        await pusherServer.trigger(
+            `chat__${chatId}__chat-invite`,
+            "chat-invite",
+            {
+                ...member,
+            }
+        );
 
         res.status(201).end("Success");
     } else {
