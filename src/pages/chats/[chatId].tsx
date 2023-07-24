@@ -330,7 +330,9 @@ const ChatPage = () => {
     };
 
     if (chatroomMessages.isError || chatroom.isError)
-        return <div>Hmm... Something isn't right. Try reloading the page</div>;
+        return (
+            <div>Hmm... Something isn&apos;t right. Try reloading the page</div>
+        );
 
     if (chatroom.isLoading || chatroomMessages.isLoading)
         return (
