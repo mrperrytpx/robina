@@ -108,18 +108,22 @@ export const ChatroomMessages = () => {
 
             {chatroomMessages.data?.pages.map((page, i) => (
                 <Fragment key={i}>
-                    {page.map((message, msgIdx) => (
-                        <ChatMessage
-                            isSameAuthor={shouldBeNewAuthor(
-                                page,
-                                msgIdx,
-                                message
-                            )}
-                            message={message}
-                            key={message.id}
-                            ownerId={chatroom.data?.owner_id}
-                        />
-                    ))}
+                    {page.map((message, msgIdx) => {
+                        const isSameAuthor = shouldBeNewAuthor(
+                            page,
+                            msgIdx,
+                            message
+                        );
+
+                        return (
+                            <ChatMessage
+                                isSameAuthor={isSameAuthor}
+                                message={message}
+                                key={message.id}
+                                ownerId={chatroom.data?.owner_id}
+                            />
+                        );
+                    })}
                 </Fragment>
             ))}
             <div ref={endRef} />

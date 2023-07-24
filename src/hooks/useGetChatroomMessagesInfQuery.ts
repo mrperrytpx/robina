@@ -29,7 +29,7 @@ export const useGetChatroomMessagesInfQuery = (chatId: string) => {
         queryFn: ({ pageParam = 1 }) => getChatroomMessages(chatId, pageParam),
         enabled: !!chatId,
         getPreviousPageParam: (firstPage, pages) => {
-            return firstPage.length === 50 ? pages.length + 1 : undefined;
+            return firstPage.length >= 50 ? pages.length + 1 : undefined;
         },
         retry: 1,
     });
