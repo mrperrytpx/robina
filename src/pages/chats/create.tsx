@@ -121,7 +121,7 @@ const CreateChatPage = () => {
                             : "Create!"}
                     </button>
                     {errors.root && (
-                        <span className="text-xs font-semibold text-red-500">
+                        <span className="text-center text-xs font-semibold text-red-500">
                             {errors.root.message}
                         </span>
                     )}

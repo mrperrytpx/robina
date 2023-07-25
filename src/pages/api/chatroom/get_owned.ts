@@ -2,6 +2,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { prisma } from "../../../../prisma/prisma";
 import { authOptions } from "../auth/[...nextauth]";
+import { Chatroom, User } from "@prisma/client";
+
+export type TChatroomWIthOwner = Chatroom & { owner: User };
 
 export default async function handler(
     req: NextApiRequest,
@@ -17,19 +20,17 @@ export default async function handler(
                 id: session.user.id,
             },
             include: {
-                owned_chatroom: true,
+                owned_chatroom: {
+                    include: {
+                        owner: true,
+                    },
+                },
             },
         });
 
         if (!user) return res.status(401).end("No user");
 
-        const ownedChatroom = await prisma.chatroom.findFirst({
-            where: {
-                owner_id: user.id,
-            },
-        });
-
-        res.status(200).json(ownedChatroom);
+        res.status(200).json(user.owned_chatroom);
     } else {
         res.setHeader("Allow", "GET");
         res.status(405).end("Method Not Allowed");

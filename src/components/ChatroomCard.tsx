@@ -5,11 +5,11 @@ import { TChatroomInvite } from "../hooks/useGetUserPendingInvitesQuery";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { useDeclineCharoomInviteMutation } from "../hooks/useDeclineChatroomInviteMutation";
 import { toast } from "react-toastify";
-import { Chatroom } from "@prisma/client";
 import { useEffect } from "react";
 import { pusherClient } from "../lib/pusher";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { TChatroomWIthOwner } from "../pages/api/chatroom/get_owned";
 
 interface IInviteChatroomCardProps {
     chatroom: TChatroomInvite;
@@ -119,16 +119,10 @@ export const NewChatroomCard = ({
 };
 
 interface IEnterChatroomCard {
-    id: string;
-    name: string;
-    description: string;
+    chatroom: TChatroomWIthOwner;
 }
 
-export const EnterChatroomCard = ({
-    id,
-    name,
-    description,
-}: IEnterChatroomCard) => {
+export const EnterChatroomCard = ({ chatroom }: IEnterChatroomCard) => {
     const session = useSession();
     const queryClient = useQueryClient();
 
@@ -140,38 +134,48 @@ export const EnterChatroomCard = ({
             if (data.userId !== session.data?.user.id) {
                 queryClient.setQueryData(
                     ["chatrooms", session.data?.user.id],
-                    (oldData: Chatroom[] | undefined) => {
+                    (oldData: TChatroomWIthOwner[] | undefined) => {
                         if (!oldData) return;
                         return oldData.filter(
-                            (chatroom) => chatroom.id !== data.chatId
+                            (room) => room.id !== data.chatId
                         );
                     }
                 );
             }
-            queryClient.removeQueries(["messages", id]);
-            queryClient.removeQueries(["members", id]);
+
+            [
+                "chatroom",
+                "invite",
+                "banned_members",
+                "chat_invites",
+                "members",
+                "messages",
+            ].forEach((query) =>
+                queryClient.removeQueries([query, data.chatId])
+            );
         };
 
-        pusherClient.subscribe(`chat__${id}__delete-room`);
+        pusherClient.subscribe(`chat__${chatroom.id}__delete-room`);
         pusherClient.bind("delete-room", deleteRoomHandler);
 
         return () => {
-            pusherClient.unsubscribe(`chat__${id}__delete-room`);
+            pusherClient.unsubscribe(`chat__${chatroom.id}__delete-room`);
             pusherClient.unbind("delete-room", deleteRoomHandler);
         };
-    }, [id, queryClient, session.data?.user.id]);
+    }, [chatroom.id, queryClient, session.data?.user.id]);
 
     return (
         <Link
-            href={`/chats/${id}`}
+            href={`/chats/${chatroom.id}`}
             aria-label={`Visit a chatroom named ${name}`}
             className="group relative flex aspect-video w-[min(100%,280px)] flex-col items-center justify-center gap-4 rounded-xl p-4 shadow-md outline outline-2 hover:shadow-sky-500  hover:outline-sky-500 focus:shadow-sky-500 focus:outline-sky-500"
         >
             <span className="line-clamp-2 w-full break-words text-center text-xl group-hover:line-clamp-none group-focus:line-clamp-none">
-                {name}
+                <strong>{chatroom.owner.username}&apos;s </strong>
+                {chatroom.name}
             </span>
             <span className="line-clamp-3 w-full break-words text-center text-xs group-hover:line-clamp-none group-focus:line-clamp-none">
-                {description}
+                {chatroom.description}
             </span>
         </Link>
     );

@@ -49,16 +49,6 @@ export default async function handler(
             },
         });
 
-        await prisma.message.deleteMany({
-            where: {
-                id: {
-                    in: user.messages
-                        .filter((msg) => msg.chatroom_id === chatId)
-                        .map((msg) => msg.id),
-                },
-            },
-        });
-
         await pusherServer.trigger(
             `chat__${chatId}__member-leave`,
             "member-leave",

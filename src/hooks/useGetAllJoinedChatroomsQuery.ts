@@ -1,8 +1,8 @@
-import { Chatroom } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import { TChatroomWIthOwner } from "../pages/api/chatroom/get_owned";
 
-async function getJoinedChatrooms(): Promise<Chatroom[]> {
+async function getJoinedChatrooms(): Promise<TChatroomWIthOwner[]> {
     const controller = new AbortController();
 
     const response = await fetch("/api/chatroom/get_joined", {
@@ -16,7 +16,7 @@ async function getJoinedChatrooms(): Promise<Chatroom[]> {
         throw new Error("Failed to get joined chatrooms");
     }
 
-    const data: Chatroom[] = await response.json();
+    const data: TChatroomWIthOwner[] = await response.json();
 
     return data;
 }

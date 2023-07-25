@@ -32,11 +32,7 @@ const ChatsPage = () => {
                     {ownedChatroom.isLoading ? (
                         <LoadingChatroomCard />
                     ) : ownedChatroom.data?.id ? (
-                        <EnterChatroomCard
-                            id={ownedChatroom.data.id}
-                            name={ownedChatroom.data.name}
-                            description={ownedChatroom.data.description}
-                        />
+                        <EnterChatroomCard chatroom={ownedChatroom.data} />
                     ) : (
                         <NewChatroomCard
                             title="Create New Chatroom"
@@ -57,9 +53,7 @@ const ChatsPage = () => {
                         joinedChatrooms.data?.map((chatroom) => (
                             <EnterChatroomCard
                                 key={chatroom.id}
-                                id={chatroom.id}
-                                name={chatroom.name}
-                                description={chatroom.description}
+                                chatroom={chatroom}
                             />
                         ))
                     )}

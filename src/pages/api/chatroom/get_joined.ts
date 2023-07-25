@@ -17,7 +17,11 @@ export default async function handler(
                 id: session.user.id,
             },
             include: {
-                chatrooms: true,
+                chatrooms: {
+                    include: {
+                        owner: true,
+                    },
+                },
             },
         });
 

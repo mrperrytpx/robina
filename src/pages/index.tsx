@@ -1,5 +1,6 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { Footer } from "../components/Footer";
 
 export default function Home() {
     const session = useSession();
@@ -34,9 +35,7 @@ export default function Home() {
                     </Link>
                 </div>
 
-                <footer className="grid min-h-[128px] w-full place-items-center items-center bg-sky-500 text-white">
-                    Footer
-                </footer>
+                <Footer />
             </div>
         );
     }
@@ -67,9 +66,7 @@ export default function Home() {
                 </Link>
             </div>
 
-            <footer className="grid min-h-[128px] w-full place-items-center items-center bg-sky-500 text-white">
-                Footer
-            </footer>
+            <Footer />
         </div>
     );
 }

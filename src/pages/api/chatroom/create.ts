@@ -14,7 +14,7 @@ export default async function handler(
 
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session");
+        if (!session) return res.status(401).end("No session!");
 
         const user = await prisma.user.findFirst({
             where: {
@@ -25,10 +25,10 @@ export default async function handler(
             },
         });
 
-        if (!user) return res.status(401).end("No user");
+        if (!user) return res.status(401).end("No user!");
 
         if (user.owned_chatroom)
-            return res.status(400).end("You already own a chatroom");
+            return res.status(400).end("You already own a chatroom!");
 
         const chatroom = await prisma.chatroom.create({
             data: {
@@ -49,7 +49,7 @@ export default async function handler(
 
         const inviteString = randomString(10);
 
-        if (!chatroom) return res.status(500).end("Server issues");
+        if (!chatroom) return res.status(500).end("Server issues!");
 
         await prisma.inviteLink.create({
             data: {
