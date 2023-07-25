@@ -6,7 +6,7 @@ async function getChatroomMessages(chatId: string, pageParam: number) {
 
     const response = await fetch(
         `/api/chatroom/${chatId}/get_messages?offset=${
-            pageParam ? pageParam : 1
+            pageParam ? pageParam : 0
         }`,
         {
             signal: controller.signal,
@@ -28,10 +28,10 @@ async function getChatroomMessages(chatId: string, pageParam: number) {
 export const useGetChatroomMessagesInfQuery = (chatId: string) => {
     return useInfiniteQuery({
         queryKey: ["messages", chatId],
-        queryFn: ({ pageParam = 1 }) => getChatroomMessages(chatId, pageParam),
+        queryFn: ({ pageParam = 0 }) => getChatroomMessages(chatId, pageParam),
         enabled: !!chatId,
         getPreviousPageParam: (firstPage, pages) => {
-            return firstPage.length >= 50 ? pages.length + 1 : undefined;
+            return firstPage.length >= 50 ? pages.flat().length : undefined;
         },
         retry: 1,
     });

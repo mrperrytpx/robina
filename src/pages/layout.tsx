@@ -74,8 +74,17 @@ const Layout = ({ children }: ILayoutProps) => {
                         );
                     }
                 );
-                queryClient.removeQueries(["members", data.chatId]);
-                queryClient.removeQueries(["messages", data.chatId]);
+
+                [
+                    "chatroom",
+                    "invite",
+                    "banned_members",
+                    "chat_invites",
+                    "members",
+                    "messages",
+                ].forEach((query) =>
+                    queryClient.removeQueries([query, data.chatId])
+                );
             }
         };
 

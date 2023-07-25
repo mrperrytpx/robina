@@ -23,11 +23,11 @@ const getInviteLink = async (chatId: string) => {
     return data;
 };
 
-export const useGetChatroomInviteQuery = (chatId: string) => {
+export const useGetChatroomInviteQuery = (chatId: string, isOwner: boolean) => {
     return useQuery({
         queryKey: ["invite", chatId],
         queryFn: () => getInviteLink(chatId),
-        enabled: !!chatId,
+        enabled: !!chatId && isOwner,
         staleTime: Infinity,
     });
 };

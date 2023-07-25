@@ -24,7 +24,6 @@ import { ChatroomSettings } from "../../components/ChatroomSettings";
 import { ChatroomMessages } from "../../components/ChatroomMessages";
 import { randomString } from "../../util/randomString";
 import Link from "next/link";
-import { useGetChatroomMessagesInfQuery } from "../../hooks/useGetChatroomMessagesInfQuery";
 import { toast } from "react-toastify";
 import { useInviteUserMutation } from "../../hooks/useInviteUserMutation";
 
@@ -40,7 +39,6 @@ const ChatPage = () => {
     const inviteUser = useInviteUserMutation();
 
     const chatroom = useGetChatroomQuery(chatId);
-    const chatroomMessages = useGetChatroomMessagesInfQuery(chatId);
 
     const { register, handleSubmit, reset } = useForm<TChatMessage>({
         resolver: zodResolver(chatMessageSchema),
@@ -139,9 +137,7 @@ const ChatPage = () => {
             if (!chatId) return;
 
             if (data.id === session.data?.user.id) {
-                router.push("/chats");
-                queryClient.removeQueries(["members", chatId]);
-                queryClient.removeQueries(["messages", chatId]);
+                await router.push("/chats");
             } else {
                 if (session.data?.user.id !== chatroom.data?.owner_id) {
                     const member = (
@@ -196,7 +192,7 @@ const ChatPage = () => {
             if (!chatId) return;
 
             if (data.id === session.data?.user.id) {
-                router.push("/chats");
+                await router.push("/chats");
                 queryClient.setQueryData(
                     ["chatrooms", session.data.user.id],
                     (oldData: Chatroom[] | undefined) => {
@@ -205,6 +201,17 @@ const ChatPage = () => {
                             (chatroom) => chatroom.id !== data.chatId
                         );
                     }
+                );
+
+                [
+                    "chatroom",
+                    "invite",
+                    "banned_members",
+                    "chat_invites",
+                    "members",
+                    "messages",
+                ].forEach((query) =>
+                    queryClient.removeQueries([query, data.chatId])
                 );
             } else {
                 const member = (
@@ -287,11 +294,11 @@ const ChatPage = () => {
     }, [chatId, chatroom.data, queryClient]);
 
     useEffect(() => {
-        const deleteRoomHandler = (data: {
+        const deleteRoomHandler = async (data: {
             chatId: string;
             userId: string;
         }) => {
-            router.push("/chats");
+            await router.push("/chats");
             if (data.userId !== session.data?.user.id) {
                 toast.error("Owner deleted the chatroom!");
                 queryClient.setQueryData(
@@ -309,8 +316,17 @@ const ChatPage = () => {
                     null
                 );
             }
-            queryClient.removeQueries(["messages", chatId]);
-            queryClient.removeQueries(["members", chatId]);
+
+            [
+                "chatroom",
+                "invite",
+                "banned_members",
+                "chat_invites",
+                "members",
+                "messages",
+            ].forEach((query) =>
+                queryClient.removeQueries([query, data.chatId])
+            );
         };
 
         if (chatroom.data) {
@@ -367,12 +383,12 @@ const ChatPage = () => {
         setIsSettingsActive(false);
     };
 
-    if (chatroomMessages.isError || chatroom.isError)
+    if (chatroom.isError)
         return (
             <div>Hmm... Something isn&apos;t right. Try reloading the page</div>
         );
 
-    if (chatroom.isLoading || chatroomMessages.isLoading)
+    if (chatroom.isLoading)
         return (
             <div className="flex w-full flex-1 items-center justify-center">
                 <div className="flex flex-col gap-4">
@@ -420,7 +436,7 @@ const ChatPage = () => {
                         </button>
                     </div>
                 </div>
-                <div className="line-clamp-2 hidden border-b-2 border-black px-4 py-1 text-sm font-semibold shadow sm:flex sm:items-center sm:gap-4">
+                <div className="line-clamp-2 hidden  px-4 py-1 text-sm font-semibold shadow sm:flex sm:items-center sm:gap-4">
                     <Link
                         href="/chats"
                         className="group px-2 py-1"
@@ -434,10 +450,10 @@ const ChatPage = () => {
                     <span>{chatroom.data.name}</span>
                 </div>
                 <ChatroomMessages chatroom={chatroom.data} />
-                <div className="mb-2 flex h-14 items-center gap-3 px-4">
+                <div className="flex h-14 items-center gap-3 px-4">
                     <button
                         type="submit"
-                        className="group hidden rounded-full border-2 border-black p-2 sm:inline-block"
+                        className="group hidden rounded-full border-2 border-black p-2 hover:border-sky-500 focus:border-sky-500 sm:inline-block"
                         aria-label="Send message"
                         onClick={handleSettings}
                     >
@@ -469,7 +485,7 @@ const ChatPage = () => {
                         />
                         <button
                             type="submit"
-                            className="group rounded-full border-2 border-black p-2"
+                            className="group rounded-full border-2 border-black p-2 hover:border-sky-500 focus:border-sky-500"
                             aria-label="Send message"
                         >
                             <VscSend

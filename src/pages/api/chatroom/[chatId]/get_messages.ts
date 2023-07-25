@@ -54,7 +54,7 @@ export default async function handler(
                     orderBy: {
                         created_at: "desc",
                     },
-                    skip: (offset - 1) * 50,
+                    skip: offset,
                 },
             },
         });

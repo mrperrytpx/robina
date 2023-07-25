@@ -63,7 +63,7 @@ export const Portal = ({ shouldRoute, children, setState }: PortalProps) => {
         };
     }, []);
 
-    const handleClosePortal = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleClosePortal = async (e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
         if (target.id === "bg" && bgRef.current && mounted) {
             if (shouldRoute) {

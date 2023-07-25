@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import { useGetChatroomMessagesInfQuery } from "../hooks/useGetChatroomMessagesInfQuery";
 import { shouldBeNewAuthor } from "../util/shouldBeNewAuthor";
 import { Chatroom } from "@prisma/client";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 type TIntersectionObserverOptions = {
     root?: Element | null;
@@ -36,6 +37,7 @@ export const useIntersectionObserver = (
         observer.observe(current);
 
         return () => {
+            setIsIntersecting(false);
             observer.disconnect();
         };
     }, [ref, options]);
@@ -60,10 +62,7 @@ export const ChatroomMessages = ({ chatroom }: IChatroomMessagesProps) => {
     const isStartIntersecting = useIntersectionObserver(startRef, {});
 
     useEffect(() => {
-        if (
-            chatroomMessages.hasPreviousPage &&
-            (chatroomMessages.data?.pages[0]?.length ?? 0) >= 50
-        ) {
+        if (chatroomMessages.hasPreviousPage) {
             if (isStartIntersecting) {
                 chatroomMessages.fetchPreviousPage();
             }
@@ -111,7 +110,15 @@ export const ChatroomMessages = ({ chatroom }: IChatroomMessagesProps) => {
 
     return (
         <div className="flex flex-1 flex-col overflow-y-auto p-2 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">
-            <div className="mt-auto w-full" ref={startRef} />
+            {chatroomMessages.isLoading ? (
+                <div className="mt-auto flex w-full items-center justify-center">
+                    <LoadingSpinner size={32} color="rgb(14 165 233)" />
+                </div>
+            ) : chatroomMessages.isFetchingPreviousPage ? (
+                <LoadingSpinner size={32} color="rgb(14 165 233)" />
+            ) : (
+                <div className="mt-auto w-full" ref={startRef} />
+            )}
 
             {chatroomMessages.data?.pages.map((page, i) => (
                 <Fragment key={i}>
