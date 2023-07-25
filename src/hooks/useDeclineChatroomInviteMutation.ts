@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { TChatroomInvites } from "./useGetUserPendingInvitesQuery";
 import { toast } from "react-toastify";
+import { TChatroomInvite } from "./useGetUserPendingInvitesQuery";
 
 interface IDeclineInvite {
     chatId: string;
@@ -15,7 +15,7 @@ export const useDeclineCharoomInviteMutation = () => {
         const controller = new AbortController();
 
         const response = await fetch(`/api/chatroom/${chatId}/decline_invite`, {
-            method: "DELETE",
+            method: "PATCH",
             signal: controller.signal,
             headers: {
                 "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export const useDeclineCharoomInviteMutation = () => {
     return useMutation(declineInvite, {
         onMutate: async (data) => {
             await queryClient.cancelQueries(["invites", session.data?.user.id]);
-            const previousData: TChatroomInvites | undefined =
+            const previousData: TChatroomInvite[] | undefined =
                 queryClient.getQueryData(["invites", session.data?.user.id]);
 
             queryClient.setQueryData(

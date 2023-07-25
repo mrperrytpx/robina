@@ -16,7 +16,7 @@ export const useLeaveChatroomMutation = () => {
         const controller = new AbortController();
 
         const response = await fetch(`/api/chatroom/${chatId}/leave`, {
-            method: "DELETE",
+            method: "PATCH",
             signal: controller.signal,
             headers: {
                 "Content-Type": "application/json",

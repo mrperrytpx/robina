@@ -9,7 +9,7 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    if (req.method === "DELETE") {
+    if (req.method === "PATCH") {
         const chatId = z.string().parse(req.query.chatId);
 
         if (!chatId) return res.status(400).end("Please provide an ID");
@@ -52,7 +52,7 @@ export default async function handler(
 
         res.status(204).end("Success");
     } else {
-        res.setHeader("Allow", "DELETE");
+        res.setHeader("Allow", "PATCH");
         res.status(405).end("Method Not Allowed");
     }
 }

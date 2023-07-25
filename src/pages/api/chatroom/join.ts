@@ -4,7 +4,7 @@ import { z } from "zod";
 import { prisma } from "../../../../prisma/prisma";
 import { pusherServer } from "../../../lib/pusher";
 import { authOptions } from "../auth/[...nextauth]";
-import { Chatroom, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { TChatroomInvite } from "../../../hooks/useGetUserPendingInvitesQuery";
 
 export default async function handler(

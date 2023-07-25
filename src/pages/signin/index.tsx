@@ -8,7 +8,6 @@ import { useRouter } from "next/router";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Head from "next/head";
 
 type ValidatedLoginForm = z.infer<typeof loginValidationSchema>;
 

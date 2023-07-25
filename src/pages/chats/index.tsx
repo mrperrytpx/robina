@@ -8,7 +8,7 @@ import {
     LoadingChatroomCard,
     NewChatroomCard,
 } from "../../components/ChatroomCard";
-import { useGetOwnedChatroomtroomsQuery } from "../../hooks/useGetOwnedChatroomtroomsQuery";
+import { useGetOwnedChatroomsQuery } from "../../hooks/useGetOwnedChatroomsQuery";
 import { useRouter } from "next/router";
 import { Portal } from "../../components/Portal";
 import CreateChatPage from "./create";
@@ -17,7 +17,7 @@ import { useGetUserPendingInvitesQuery } from "../../hooks/useGetUserPendingInvi
 
 const ChatsPage = () => {
     const joinedChatrooms = useGetAllJoinedChatroomsQuery();
-    const ownedChatroom = useGetOwnedChatroomtroomsQuery();
+    const ownedChatroom = useGetOwnedChatroomsQuery();
     const pendingInvites = useGetUserPendingInvitesQuery();
 
     const router = useRouter();

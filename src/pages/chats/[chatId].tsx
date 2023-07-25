@@ -18,7 +18,7 @@ import {
     TChatroomMessage,
     useGetChatroomQuery,
 } from "../../hooks/useGetChatroomQuery";
-import { Chatroom, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { ChatroomMembers } from "../../components/ChatroomMembers";
 import { ChatroomSettings } from "../../components/ChatroomSettings";
 import { ChatroomMessages } from "../../components/ChatroomMessages";

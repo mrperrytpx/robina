@@ -21,7 +21,7 @@ async function getOwnedChatroom(): Promise<TChatroomWIthOwner> {
     return data;
 }
 
-export const useGetOwnedChatroomtroomsQuery = () => {
+export const useGetOwnedChatroomsQuery = () => {
     const session = useSession();
 
     return useQuery({

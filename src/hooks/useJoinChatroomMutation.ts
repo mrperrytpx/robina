@@ -1,4 +1,3 @@
-import { Chatroom } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
@@ -32,11 +31,14 @@ export const useJoinChatroomMutation = () => {
         onSuccess: async (data) => {
             if (!data.ok) return;
             const chatroom: TChatroomInvite = await data.json();
+
+            const { invite_link, ...strippedInvite } = chatroom;
+
             queryClient.setQueryData(
                 ["chatrooms", session.data?.user.id],
                 (oldData: TChatroomWIthOwner[] | undefined) => {
-                    if (!oldData) return [chatroom];
-                    return [chatroom, ...oldData];
+                    if (!oldData) return [strippedInvite];
+                    return [strippedInvite, ...oldData];
                 }
             );
             queryClient.setQueryData(

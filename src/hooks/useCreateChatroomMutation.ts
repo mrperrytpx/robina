@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TCreateChatroomFormValues } from "../pages/chats/create";
-import { Chatroom } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { TChatroomWIthOwner } from "../pages/api/chatroom/get_owned";
 
 export const useCreateChatroomMutation = () => {
     const queryClient = useQueryClient();
@@ -33,7 +33,7 @@ export const useCreateChatroomMutation = () => {
     return useMutation(createChatroom, {
         onSuccess: async (data) => {
             if (!data.ok) return;
-            const chatroom: Chatroom = await data.json();
+            const chatroom: TChatroomWIthOwner = await data.json();
             queryClient.setQueryData(
                 ["owned_chatroom", session.data?.user.id],
                 chatroom

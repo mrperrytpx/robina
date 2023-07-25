@@ -4,6 +4,7 @@ import { prisma } from "../../../../prisma/prisma";
 import { randomString } from "../../../util/randomString";
 import { createChatroomSchema } from "../../chats/create";
 import { authOptions } from "../auth/[...nextauth]";
+import { TChatroomWIthOwner } from "./get_owned";
 
 export default async function handler(
     req: NextApiRequest,
@@ -58,7 +59,16 @@ export default async function handler(
             },
         });
 
-        res.status(201).json(chatroom);
+        const returnChatroom: TChatroomWIthOwner = {
+            created_at: chatroom.created_at,
+            description: chatroom.description,
+            id: chatroom.id,
+            name: chatroom.name,
+            owner: user,
+            owner_id: chatroom.owner_id,
+        };
+
+        res.status(201).json(returnChatroom);
     } else {
         res.setHeader("Allow", "POST");
         res.status(405).end("Method Not Allowed");

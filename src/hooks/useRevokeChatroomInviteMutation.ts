@@ -15,7 +15,7 @@ export const useRevokeChatroomInviteMutation = () => {
         const response = await fetch(
             `/api/chatroom/${chatId}/member/${memberId}/revoke_invite`,
             {
-                method: "DELETE",
+                method: "PATCH",
                 signal: controller.signal,
                 headers: {
                     "Content-Type": "application/json",
