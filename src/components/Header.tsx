@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useGetUserPendingInvitesQuery } from "../hooks/useGetUserPendingInvitesQuery";
 import DefaultPic from "../../public/default.png";
+import Logo from "../../public/logo.png";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
@@ -22,9 +23,14 @@ export const Header = () => {
 
     return (
         <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center bg-sky-500">
-            <div className="flex w-full items-center justify-between px-4 py-2">
+            <div className="flex w-full max-w-screen-2xl items-center justify-between px-4 py-2">
                 <Link href="/" className="text-3xl text-white">
-                    LOGO
+                    <Image
+                        width={100}
+                        height={50}
+                        src={Logo}
+                        alt="Website logo"
+                    />
                 </Link>
                 <div className="flex items-center gap-4">
                     {session.status === "loading" ? (

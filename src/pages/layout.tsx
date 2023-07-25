@@ -133,7 +133,7 @@ const Layout = ({ children }: ILayoutProps) => {
                     showOnShallow={false}
                 />
                 <ErrorBoundary>
-                    <main className="mx-auto flex min-h-[calc(100svh-64px)] w-full flex-1">
+                    <main className="mx-auto flex min-h-[calc(100svh-66px)] w-full flex-1">
                         {children}
                     </main>
                 </ErrorBoundary>
