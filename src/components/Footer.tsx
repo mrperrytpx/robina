@@ -5,7 +5,7 @@ export const Footer = () => {
     return (
         <footer className="w-full bg-sky-500">
             <div className="mx-auto flex max-w-screen-2xl flex-col items-center justify-center gap-4 px-4 py-8">
-                <div className="flex w-full flex-col gap-4 md:flex-row md:justify-between">
+                <div className="flex w-full flex-col items-center gap-4 md:flex-row md:justify-between">
                     <div className="flex flex-col items-center justify-center gap-4 p-2 text-white md:flex-row md:gap-6">
                         <Link
                             className="font-medium hover:text-black hover:underline focus:text-black focus:underline"
@@ -39,7 +39,7 @@ export const Footer = () => {
                         />
                     </a>
                 </div>
-                <div className="w-full pl-2 text-sm text-white md:text-left">
+                <div className="w-full pl-2 text-center text-sm text-white md:text-left">
                     <strong>©</strong> {new Date().getFullYear()}{" "}
                     YetAnotherMessagingApp
                 </div>

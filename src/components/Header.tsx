@@ -30,16 +30,20 @@ export const Header = () => {
                         height={50}
                         src={Logo}
                         alt="Website logo"
+                        priority
                     />
                 </Link>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                     {session.status === "loading" ? (
                         <LoadingSpinner color="white" size={36} />
                     ) : null}
                     {session?.data?.user && (
                         <>
                             {pendingInvites.data?.length ? (
-                                <Link href="/chats">
+                                <Link
+                                    className="group px-1 py-2 text-xl font-bold uppercase text-white"
+                                    href="/chats"
+                                >
                                     <VscBellDot
                                         className="fill-white group-hover:fill-black group-focus:fill-black"
                                         size={28}

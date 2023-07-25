@@ -11,17 +11,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useUpdateUsernameMutation } from "../../hooks/useUpdateUsernameMutation";
 import { useGetUserPendingInvitesQuery } from "../../hooks/useGetUserPendingInvitesQuery";
-import { useJoinChatroomMutation } from "../../hooks/useJoinChatroomMutation";
-import { toast } from "react-toastify";
-import { useDeclineCharoomInviteMutation } from "../../hooks/useDeclineChatroomInviteMutation";
-import { VscCheck, VscChromeClose } from "react-icons/vsc";
+import { PendingInviteCard } from "../../components/PendingInviteCard";
 
 const ProfilePage = () => {
     const deleteProfile = useDeleteProfileMutation();
     const updateUsername = useUpdateUsernameMutation();
     const pendingInvites = useGetUserPendingInvitesQuery();
-    const joinChatroom = useJoinChatroomMutation();
-    const declineInvite = useDeclineCharoomInviteMutation();
 
     const router = useRouter();
     const session = useSession();
@@ -51,30 +46,6 @@ const ProfilePage = () => {
             return;
         } else {
             router.reload();
-        }
-    };
-
-    const handleAcceptInvite = async (invite: string) => {
-        const response = await joinChatroom.mutateAsync({
-            invite,
-        });
-
-        if (!response.ok) {
-            const error = await response.text();
-            toast.error(error);
-            return;
-        }
-    };
-
-    const handleDeclineInvite = async (id: string) => {
-        const { response } = await declineInvite.mutateAsync({
-            chatId: id,
-        });
-
-        if (!response.ok) {
-            const error = await response.text();
-            toast.error(error);
-            return;
         }
     };
 
@@ -158,57 +129,16 @@ const ProfilePage = () => {
                 <h2 className="text-sm font-bold uppercase">
                     Pending invites:
                 </h2>
-                {pendingInvites.data?.length ? (
+                {pendingInvites.isLoading ? (
+                    <div className="my-1">
+                        <LoadingSpinner color="rgb(14 165 233)" size={28} />
+                    </div>
+                ) : pendingInvites.data?.length ? (
                     pendingInvites.data.map((invitedToChatroom) => (
-                        <div
+                        <PendingInviteCard
+                            chatroom={invitedToChatroom}
                             key={invitedToChatroom.id}
-                            className="my-1 flex w-full max-w-md items-center justify-between rounded-md border-2 border-black p-2 text-sm font-medium hover:border-sky-500"
-                        >
-                            <span className="truncate">
-                                <strong>
-                                    {invitedToChatroom.owner.username}
-                                    &apos;s
-                                </strong>{" "}
-                                {invitedToChatroom.name}
-                            </span>
-                            <div className="flex items-center gap-4">
-                                <button
-                                    onClick={() =>
-                                        handleAcceptInvite(
-                                            invitedToChatroom.invite_link.value
-                                        )
-                                    }
-                                    disabled={joinChatroom.isLoading}
-                                    className="group/button rounded-full"
-                                >
-                                    {joinChatroom.isLoading ? (
-                                        <LoadingSpinner
-                                            size={20}
-                                            color="#0ea5e9"
-                                        />
-                                    ) : (
-                                        <VscCheck
-                                            className="fill-black group-hover/button:fill-sky-500 group-focus/button:fill-sky-500"
-                                            size={20}
-                                        />
-                                    )}
-                                </button>
-                                <button
-                                    onClick={() =>
-                                        handleDeclineInvite(
-                                            invitedToChatroom.id
-                                        )
-                                    }
-                                    disabled={declineInvite.isLoading}
-                                    className="group/button rounded-full"
-                                >
-                                    <VscChromeClose
-                                        className="fill-black group-hover/button:fill-red-600 group-focus/button:fill-red-600"
-                                        size={20}
-                                    />
-                                </button>
-                            </div>
-                        </div>
+                        />
                     ))
                 ) : (
                     <div className="w-full max-w-md rounded-md p-2 text-center text-sm font-medium">
