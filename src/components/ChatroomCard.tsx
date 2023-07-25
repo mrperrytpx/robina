@@ -46,6 +46,7 @@ export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
     return (
         <div className="group relative flex aspect-video w-[min(100%,280px)] flex-col items-center justify-center gap-4 rounded-xl p-4 shadow-md outline outline-2 hover:shadow-sky-500  hover:outline-sky-500 focus:shadow-sky-500 focus:outline-sky-500">
             <span className="line-clamp-2 w-full break-words text-center text-xl group-hover:line-clamp-none group-hover:hidden group-focus:line-clamp-none">
+                <strong>{chatroom.owner.username}&apos;s</strong>{" "}
                 {chatroom.name}
             </span>
             <span className="line-clamp-3 w-full break-words text-center text-xs group-hover:line-clamp-none group-hover:hidden group-focus:line-clamp-none">
@@ -167,7 +168,7 @@ export const EnterChatroomCard = ({ chatroom }: IEnterChatroomCard) => {
     return (
         <Link
             href={`/chats/${chatroom.id}`}
-            aria-label={`Visit a chatroom named ${name}`}
+            aria-label={`Visit a chatroom named ${chatroom.name}`}
             className="group relative flex aspect-video w-[min(100%,280px)] flex-col items-center justify-center gap-4 rounded-xl p-4 shadow-md outline outline-2 hover:shadow-sky-500  hover:outline-sky-500 focus:shadow-sky-500 focus:outline-sky-500"
         >
             <span className="line-clamp-2 w-full break-words text-center text-xl group-hover:line-clamp-none group-focus:line-clamp-none">

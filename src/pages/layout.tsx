@@ -2,13 +2,14 @@ import React, { useEffect } from "react";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { ErrorBoundary } from "../components/ErrorBoundary";
-import { TChatroomInvites } from "../hooks/useGetUserPendingInvitesQuery";
 import { Chatroom } from "@prisma/client";
 import { pusherClient } from "../lib/pusher";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import NextNProgress from "nextjs-progressbar";
 import { Header } from "../components/Header";
+import { TChatroomInvite } from "../hooks/useGetUserPendingInvitesQuery";
+import { TChatroomWIthOwner } from "./api/chatroom/get_owned";
 
 interface ILayoutProps {
     children: React.ReactNode;
@@ -19,11 +20,11 @@ const Layout = ({ children }: ILayoutProps) => {
     const queryClient = useQueryClient();
 
     useEffect(() => {
-        const newInviteHandler = async (data: Chatroom) => {
+        const newInviteHandler = async (data: TChatroomInvite) => {
             toast.success(`You are invited to join ${data.name}!`);
             queryClient.setQueryData(
                 ["invites", session.data?.user.id],
-                (oldData: Chatroom[] | undefined) => {
+                (oldData: TChatroomInvite[] | undefined) => {
                     if (!oldData) return [data];
                     return [...oldData, data];
                 }
@@ -52,7 +53,7 @@ const Layout = ({ children }: ILayoutProps) => {
                 toast.error(`You got removed from "${data.chatroomName}"!`);
                 queryClient.setQueryData(
                     ["chatrooms", session.data?.user.id],
-                    (oldData: Chatroom[] | undefined) => {
+                    (oldData: TChatroomWIthOwner[] | undefined) => {
                         if (!oldData) return;
                         return oldData.filter(
                             (chatroom) => chatroom.id !== data.chatId
@@ -86,7 +87,7 @@ const Layout = ({ children }: ILayoutProps) => {
         const revokeInvite = (data: { chatId: string; userId: string }) => {
             queryClient.setQueryData(
                 ["invites", session.data?.user.id],
-                (oldData: TChatroomInvites | undefined) => {
+                (oldData: TChatroomInvite[] | undefined) => {
                     if (!oldData) return;
                     return oldData.filter(
                         (chatroom) => chatroom.id !== data.chatId

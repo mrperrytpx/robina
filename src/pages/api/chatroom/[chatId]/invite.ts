@@ -28,6 +28,7 @@ export default async function handler(
                 owned_chatroom: {
                     include: {
                         invite_link: true,
+                        owner: true,
                     },
                 },
             },

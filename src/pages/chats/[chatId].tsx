@@ -26,6 +26,7 @@ import { randomString } from "../../util/randomString";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { useInviteUserMutation } from "../../hooks/useInviteUserMutation";
+import { TChatroomWIthOwner } from "../api/chatroom/get_owned";
 
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
@@ -195,7 +196,7 @@ const ChatPage = () => {
                 await router.push("/chats");
                 queryClient.setQueryData(
                     ["chatrooms", session.data.user.id],
-                    (oldData: Chatroom[] | undefined) => {
+                    (oldData: TChatroomWIthOwner[] | undefined) => {
                         if (!oldData) return;
                         return oldData.filter(
                             (chatroom) => chatroom.id !== data.chatId
@@ -303,7 +304,7 @@ const ChatPage = () => {
                 toast.error("Owner deleted the chatroom!");
                 queryClient.setQueryData(
                     ["chatrooms", session.data?.user.id],
-                    (oldData: Chatroom[] | undefined) => {
+                    (oldData: TChatroomWIthOwner[] | undefined) => {
                         if (!oldData) return;
                         return oldData.filter(
                             (chatroom) => chatroom.id !== data.chatId

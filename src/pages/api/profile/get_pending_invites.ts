@@ -20,6 +20,7 @@ export default async function handler(
                 invited_to_chatroom: {
                     include: {
                         invite_link: true,
+                        owner: true,
                     },
                 },
             },

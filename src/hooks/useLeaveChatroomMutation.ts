@@ -2,6 +2,7 @@ import { Chatroom } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
+import { TChatroomWIthOwner } from "../pages/api/chatroom/get_owned";
 
 interface ILeaveChatroom {
     chatId: string;
@@ -31,7 +32,7 @@ export const useLeaveChatroomMutation = () => {
                 "chatrooms",
                 session.data?.user.id,
             ]);
-            const previousData: Chatroom[] | undefined =
+            const previousData: TChatroomWIthOwner[] | undefined =
                 queryClient.getQueryData(["chatrooms", session.data?.user.id]);
 
             const chatroom: Chatroom | undefined = queryClient.getQueryData([
@@ -41,7 +42,7 @@ export const useLeaveChatroomMutation = () => {
 
             queryClient.setQueryData(
                 ["chatrooms", session.data?.user.id],
-                (oldData: Chatroom[] | undefined) => {
+                (oldData: TChatroomWIthOwner[] | undefined) => {
                     if (!oldData) return;
                     return oldData.filter(
                         (chatroom) => chatroom.id !== data.chatId

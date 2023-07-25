@@ -1,9 +1,11 @@
-import { Chatroom, InviteLink } from "@prisma/client";
+import { Chatroom, InviteLink, User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
-export type TChatroomInvite = Chatroom & { invite_link: InviteLink };
-export type TChatroomInvites = TChatroomInvite[];
+export type TChatroomInvite = Chatroom & {
+    invite_link: InviteLink;
+    owner: User;
+};
 
 async function getPendingInvites() {
     const controller = new AbortController();
@@ -19,8 +21,7 @@ async function getPendingInvites() {
         throw new Error("Failed to get chatroom messages");
     }
 
-    const data: (Chatroom & { invite_link: InviteLink })[] =
-        await response.json();
+    const data: TChatroomInvite[] = await response.json();
 
     return data;
 }

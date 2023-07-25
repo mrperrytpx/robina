@@ -10,10 +10,18 @@ import { TUsernameFormValues, usernameSchema } from "../force-username";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useUpdateUsernameMutation } from "../../hooks/useUpdateUsernameMutation";
+import { useGetUserPendingInvitesQuery } from "../../hooks/useGetUserPendingInvitesQuery";
+import { useJoinChatroomMutation } from "../../hooks/useJoinChatroomMutation";
+import { toast } from "react-toastify";
+import { useDeclineCharoomInviteMutation } from "../../hooks/useDeclineChatroomInviteMutation";
+import { VscCheck, VscChromeClose } from "react-icons/vsc";
 
 const ProfilePage = () => {
     const deleteProfile = useDeleteProfileMutation();
     const updateUsername = useUpdateUsernameMutation();
+    const pendingInvites = useGetUserPendingInvitesQuery();
+    const joinChatroom = useJoinChatroomMutation();
+    const declineInvite = useDeclineCharoomInviteMutation();
 
     const router = useRouter();
     const session = useSession();
@@ -46,6 +54,30 @@ const ProfilePage = () => {
         }
     };
 
+    const handleAcceptInvite = async (invite: string) => {
+        const response = await joinChatroom.mutateAsync({
+            invite,
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            toast.error(error);
+            return;
+        }
+    };
+
+    const handleDeclineInvite = async (id: string) => {
+        const { response } = await declineInvite.mutateAsync({
+            chatId: id,
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            toast.error(error);
+            return;
+        }
+    };
+
     const onSubmit: SubmitHandler<TUsernameFormValues> = async (data) => {
         const response = await updateUsername.mutateAsync({ ...data });
 
@@ -65,7 +97,7 @@ const ProfilePage = () => {
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <div className="flex w-full flex-col items-center gap-2">
-                    <div className="flex w-full flex-col items-center gap-1">
+                    <fieldset className="flex w-full flex-col items-center gap-1">
                         <label
                             className="block w-full text-center text-sm sm:w-auto"
                             htmlFor="username"
@@ -91,7 +123,7 @@ const ProfilePage = () => {
                             maxLength={20}
                             minLength={1}
                         />
-                    </div>
+                    </fieldset>
                     {errors.username && (
                         <span className="text-xs font-semibold text-red-500">
                             {errors.username.message}
@@ -121,6 +153,70 @@ const ProfilePage = () => {
                     )}
                 </div>
             </form>
+
+            <article className="my-4 flex w-full flex-col items-center gap-1 sm:mt-8">
+                <h2 className="text-sm font-bold uppercase">
+                    Pending invites:
+                </h2>
+                {pendingInvites.data?.length ? (
+                    pendingInvites.data.map((invitedToChatroom) => (
+                        <div
+                            key={invitedToChatroom.id}
+                            className="my-1 flex w-full max-w-md items-center justify-between rounded-md border-2 border-black p-2 text-sm font-medium hover:border-sky-500"
+                        >
+                            <span className="truncate">
+                                <strong>
+                                    {invitedToChatroom.owner.username}
+                                    &apos;s
+                                </strong>{" "}
+                                {invitedToChatroom.name}
+                            </span>
+                            <div className="flex items-center gap-4">
+                                <button
+                                    onClick={() =>
+                                        handleAcceptInvite(
+                                            invitedToChatroom.invite_link.value
+                                        )
+                                    }
+                                    disabled={joinChatroom.isLoading}
+                                    className="group/button rounded-full"
+                                >
+                                    {joinChatroom.isLoading ? (
+                                        <LoadingSpinner
+                                            size={20}
+                                            color="#0ea5e9"
+                                        />
+                                    ) : (
+                                        <VscCheck
+                                            className="fill-black group-hover/button:fill-sky-500 group-focus/button:fill-sky-500"
+                                            size={20}
+                                        />
+                                    )}
+                                </button>
+                                <button
+                                    onClick={() =>
+                                        handleDeclineInvite(
+                                            invitedToChatroom.id
+                                        )
+                                    }
+                                    disabled={declineInvite.isLoading}
+                                    className="group/button rounded-full"
+                                >
+                                    <VscChromeClose
+                                        className="fill-black group-hover/button:fill-red-600 group-focus/button:fill-red-600"
+                                        size={20}
+                                    />
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="w-full max-w-md rounded-md p-2 text-center text-sm font-medium">
+                        No pending invites 😪
+                    </div>
+                )}
+            </article>
+
             <article className="mb-4 mt-auto flex w-full flex-col items-center gap-1 sm:mt-8">
                 <h2 className="text-sm font-bold uppercase">Account:</h2>
 

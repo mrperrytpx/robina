@@ -4,6 +4,8 @@ import { z } from "zod";
 import { prisma } from "../../../../prisma/prisma";
 import { pusherServer } from "../../../lib/pusher";
 import { authOptions } from "../auth/[...nextauth]";
+import { Chatroom, User } from "@prisma/client";
+import { TChatroomInvite } from "../../../hooks/useGetUserPendingInvitesQuery";
 
 export default async function handler(
     req: NextApiRequest,
@@ -51,6 +53,8 @@ export default async function handler(
             include: {
                 banned_members: true,
                 invited_members: true,
+                owner: true,
+                invite_link: true,
             },
         });
 
@@ -78,15 +82,35 @@ export default async function handler(
             },
         });
 
+        const returnUser: User = {
+            created_at: user.created_at,
+            email: user.email,
+            emailVerified: user.emailVerified,
+            id: user.id,
+            image: user.image,
+            name: user.name,
+            username: user.username,
+        };
+
         await pusherServer.trigger(
             `chat__${chatroom.id}__new-member`,
             "new-member",
             {
-                ...user,
+                ...returnUser,
             }
         );
 
-        res.status(201).json(chatroom);
+        const returnChatroom: TChatroomInvite = {
+            id: chatroom.id,
+            created_at: chatroom.created_at,
+            description: chatroom.description,
+            name: chatroom.name,
+            owner_id: chatroom.owner_id,
+            owner: chatroom.owner,
+            invite_link: chatroom.invite_link!,
+        };
+
+        res.status(201).json(returnChatroom);
     } else {
         res.setHeader("Allow", "POST");
         res.status(405).end("Method Not Allowed");
