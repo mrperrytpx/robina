@@ -5,7 +5,10 @@ import { useRouter } from "next/router";
 import { VscArrowLeft, VscSend } from "react-icons/vsc";
 import { FiSettings, FiUsers } from "react-icons/fi";
 import { z } from "zod";
-import { usePostChatMessageMutation } from "../../hooks/usePostChatMessageMutation";
+import {
+    IPostMessage,
+    usePostChatMessageMutation,
+} from "../../hooks/usePostChatMessageMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
@@ -47,6 +50,8 @@ const ChatPage = () => {
 
     const queryClient = useQueryClient();
 
+    const queue: IPostMessage[] = [];
+
     useEffect(() => {
         const newMessageHandler = async (
             data: TChatroomMessage & { fakeId: string }
@@ -56,14 +61,18 @@ const ChatPage = () => {
                 queryClient.setQueryData(
                     ["messages", chatId],
                     (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
-                        oldData?.pages[oldData?.pages.length - 1 ?? 0].map(
-                            (msg) => {
+                        oldData?.pages[oldData?.pages.length - 1 ?? 0]
+                            .sort((a, b) => {
+                                if (a.id.length === b.id.length) return 0;
+                                if (a.id.length > b.id.length) return -1;
+                                return 1;
+                            })
+                            .map((msg) => {
                                 if (msg.id === data.fakeId) {
                                     msg.id = data.id;
                                 }
                                 return msg;
-                            }
-                        );
+                            });
 
                         return oldData;
                     }
@@ -361,16 +370,27 @@ const ChatPage = () => {
             return;
         }
 
-        const response = await postMessage.mutateAsync({
+        const messageData = {
             ...data,
             chatId,
             fakeId: randomString(10),
-        });
+        };
 
-        if (!response?.ok) {
-            const error = await response?.text();
-            toast.error(error);
-            return;
+        queue.unshift(messageData);
+
+        while (queue.length > 0) {
+            const message = queue.pop();
+            console.log("Emptying queue with", message);
+            if (!message) return;
+            const response = await postMessage.mutateAsync({
+                ...message,
+            });
+
+            if (!response?.ok) {
+                const error = await response?.text();
+                toast.error(error);
+                return;
+            }
         }
     };
 

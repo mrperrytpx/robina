@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { TChatroomMessage } from "./useGetChatroomQuery";
 import { TChatMessage } from "../lib/zSchemas";
 
-interface IPostMessage extends TChatMessage {
+export interface IPostMessage extends TChatMessage {
     chatId: string;
     fakeId: string;
 }
