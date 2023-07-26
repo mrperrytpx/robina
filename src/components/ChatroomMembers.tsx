@@ -21,7 +21,7 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
     const pendingChatroomInvites = useGetChatroomPendingInvites(chatId);
 
     return (
-        <div className="flex-1 overflow-y-auto border-t-2 border-black bg-sky-500 px-3 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100 sm:h-full sm:w-60 sm:border-t-0 sm:border-black">
+        <div className="flex-1 overflow-y-auto bg-sky-500 p-3 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100 sm:h-full sm:w-60 sm:py-0">
             {chatroomMembers.isLoading ? (
                 <div className="h4 flex w-full flex-col gap-2">
                     <div className="mt-2 h-4 w-full animate-pulse rounded-md bg-gray-300 p-4 shadow" />
@@ -33,7 +33,7 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
                 </div>
             ) : (
                 <>
-                    <h2 className="my-2 rounded-md bg-white p-2 text-xs font-bold shadow">
+                    <h2 className="mb-2 rounded-md bg-white p-2 text-xs font-bold shadow">
                         Members - {chatroomMembers.data?.length}
                     </h2>
                     <div className="flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">

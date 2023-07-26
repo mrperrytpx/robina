@@ -162,7 +162,7 @@ const ProfilePage = () => {
                     )}
                 </button>
                 {err && (
-                    <span className="text-xs font-semibold text-red-500">
+                    <span className="mt-1 text-xs font-semibold text-red-500">
                         {err}
                     </span>
                 )}

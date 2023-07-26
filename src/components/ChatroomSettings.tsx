@@ -81,7 +81,7 @@ export const ChatroomSettings = ({
     };
 
     return (
-        <div className="max-w-md flex-1 overflow-y-auto bg-sky-500 bg-opacity-70 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100 sm:mx-auto sm:my-20 sm:max-h-[50svh] sm:rounded-xl sm:bg-opacity-100">
+        <div className="w-full flex-1 overflow-y-auto bg-sky-500 bg-opacity-70 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100 sm:mx-auto sm:my-20 sm:max-h-[50svh] sm:max-w-lg sm:rounded-xl sm:bg-opacity-100">
             {isModalOpen ? (
                 <Portal
                     isInModal={true}
@@ -124,7 +124,7 @@ export const ChatroomSettings = ({
                 </Portal>
             ) : (
                 <div className="w-full p-4">
-                    <div className="mx-auto my-4 flex w-full max-w-sm flex-col items-center gap-4">
+                    <div className="mx-auto flex w-full max-w-md flex-col items-center gap-4 py-4">
                         <button
                             onClick={() => setIsSettingsActive(false)}
                             className="group flex items-center gap-1 self-start rounded-md border-2 border-white bg-white p-1 text-sm font-semibold uppercase antialiased shadow  hover:border-black hover:shadow-sky-500 focus:border-black focus:shadow-sky-500"

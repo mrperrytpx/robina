@@ -108,6 +108,70 @@ export const ChatroomMessages = ({ chatroom }: IChatroomMessagesProps) => {
         };
     }, [chatId, queryClient, session.data?.user.id]);
 
+    useEffect(() => {
+        const newMessageHandler = async (
+            data: TChatroomMessage & { fakeId: string }
+        ) => {
+            if (!chatId) return;
+            if (data.author_id === session.data?.user.id) {
+                queryClient.setQueryData(
+                    ["messages", chatId],
+                    (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
+                        oldData?.pages[oldData?.pages.length - 1 ?? 0]
+                            .sort((a, b) => {
+                                if (a.id.length === b.id.length) return 0;
+                                if (a.id.length > b.id.length) return -1;
+                                return 1;
+                            })
+                            .map((msg) => {
+                                if (msg.id === data.fakeId) {
+                                    msg.id = data.id;
+                                }
+                                return msg;
+                            });
+
+                        return oldData;
+                    }
+                );
+                return;
+            } else {
+                queryClient.setQueryData(
+                    ["messages", chatId],
+                    (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
+                        const newData: typeof oldData = JSON.parse(
+                            JSON.stringify(oldData)
+                        );
+                        newData?.pages[newData.pages.length - 1 || 0].push(
+                            data
+                        );
+                        return newData;
+                    }
+                );
+            }
+        };
+
+        pusherClient.subscribe(`chat__${chatId}__new-message`);
+        pusherClient.bind("new-message", newMessageHandler);
+
+        return () => {
+            pusherClient.unsubscribe(`chat__${chatId}__new-message`);
+            pusherClient.unbind("new-message", newMessageHandler);
+        };
+    }, [chatId, queryClient, session.data?.user.id]);
+
+    if (chatroomMessages.isError && chatroomMessages.error instanceof Error) {
+        return (
+            <div className="mx-auto flex max-h-[calc(100svh-64px)] w-full max-w-screen-lg flex-1 flex-col items-center justify-center px-8 py-4">
+                <div className="flex flex-col items-center gap-4">
+                    <span className="text-4xl">😅</span>
+                    <p className="text-center text-xl font-medium">
+                        {chatroomMessages.error.message}
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="flex flex-1 flex-col overflow-y-auto p-2 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">
             {chatroomMessages.isLoading ? (

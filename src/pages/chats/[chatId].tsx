@@ -54,59 +54,6 @@ const ChatPage = () => {
     const queue: IPostMessage[] = [];
 
     useEffect(() => {
-        const newMessageHandler = async (
-            data: TChatroomMessage & { fakeId: string }
-        ) => {
-            if (!chatId) return;
-            if (data.author_id === session.data?.user.id) {
-                queryClient.setQueryData(
-                    ["messages", chatId],
-                    (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
-                        oldData?.pages[oldData?.pages.length - 1 ?? 0]
-                            .sort((a, b) => {
-                                if (a.id.length === b.id.length) return 0;
-                                if (a.id.length > b.id.length) return -1;
-                                return 1;
-                            })
-                            .map((msg) => {
-                                if (msg.id === data.fakeId) {
-                                    msg.id = data.id;
-                                }
-                                return msg;
-                            });
-
-                        return oldData;
-                    }
-                );
-                return;
-            } else {
-                queryClient.setQueryData(
-                    ["messages", chatId],
-                    (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
-                        const newData: typeof oldData = JSON.parse(
-                            JSON.stringify(oldData)
-                        );
-                        newData?.pages[newData.pages.length - 1 || 0].push(
-                            data
-                        );
-                        return newData;
-                    }
-                );
-            }
-        };
-
-        if (chatroom.data) {
-            pusherClient.subscribe(`chat__${chatId}__new-message`);
-            pusherClient.bind("new-message", newMessageHandler);
-        }
-
-        return () => {
-            pusherClient.unsubscribe(`chat__${chatId}__new-message`);
-            pusherClient.unbind("new-message", newMessageHandler);
-        };
-    }, [chatId, queryClient, session.data?.user.id, chatroom.data]);
-
-    useEffect(() => {
         const newUserHandler = async (data: User) => {
             if (!chatId) return;
 
