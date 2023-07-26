@@ -476,6 +476,7 @@ const ChatPage = () => {
                 {isSettingsActive && (
                     <Portal shouldRoute={false} setState={setIsSettingsActive}>
                         <ChatroomSettings
+                            setIsSettingsActive={setIsSettingsActive}
                             description={chatroom.data.description}
                             ownerId={chatroom.data.owner_id}
                         />

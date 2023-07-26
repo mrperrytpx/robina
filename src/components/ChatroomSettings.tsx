@@ -5,7 +5,7 @@ import { useDeleteOwnedChatroomMutation } from "../hooks/useDeleteOwnedChatroomM
 import { useLeaveChatroomMutation } from "../hooks/useLeaveChatroomMutation";
 import { useGetChatroomInviteQuery } from "../hooks/useGetChatroomInviteQuery";
 import { VscCopy, VscCheck, VscRefresh, VscArrowLeft } from "react-icons/vsc";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { usePatchChatroomInviteMutation } from "../hooks/usePatchChatroomInviteMutation";
 import { useGetBannedChatroomMembersQuery } from "../hooks/useGetBannedChatroomMembersQuery";
@@ -16,11 +16,13 @@ import { Portal } from "./Portal";
 interface IChatroomSettingsProps {
     ownerId: string;
     description: string;
+    setIsSettingsActive: Dispatch<SetStateAction<boolean>>;
 }
 
 export const ChatroomSettings = ({
     ownerId,
     description,
+    setIsSettingsActive,
 }: IChatroomSettingsProps) => {
     const [copied, setCopied] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -124,7 +126,7 @@ export const ChatroomSettings = ({
                 <div className="w-full p-4">
                     <div className="mx-auto mt-4 flex w-full max-w-sm flex-col items-center gap-4">
                         <button
-                            onClick={() => {}}
+                            onClick={() => setIsSettingsActive(false)}
                             className="group flex items-center gap-1 self-start rounded-md border-2 border-white bg-white px-2 py-1 text-sm font-semibold uppercase antialiased shadow  hover:border-black hover:shadow-sky-500 focus:border-black focus:shadow-sky-500"
                         >
                             <VscArrowLeft
