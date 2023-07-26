@@ -12,7 +12,11 @@ async function getBannedMembers(chatId: string): Promise<User[]> {
         throw new Error("Get banned chatroom membners req aborted");
 
     if (!response.ok) {
-        throw new Error("Failed to get banned chatroom members");
+        if (response.status === 404) {
+            throw new Error(response.statusText);
+        }
+        const error = await response.text();
+        throw new Error(error);
     }
 
     const data: User[] = await response.json();

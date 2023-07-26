@@ -11,11 +11,14 @@ export default async function handler(
     if (req.method === "GET") {
         const chatId = z.string().parse(req.query.chatId);
 
-        if (!chatId) return res.status(400).end("Provide a chat iD");
+        if (!chatId) return res.status(400).end("Provide a chat ID!");
+
+        if (chatId.length !== 25)
+            return res.status(401).end("Invalid chatroom URL!");
 
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session");
+        if (!session) return res.status(401).end("No session!");
 
         const user = await prisma.user.findFirst({
             where: {
@@ -26,10 +29,10 @@ export default async function handler(
             },
         });
 
-        if (!user) return res.status(401).end("No user");
+        if (!user) return res.status(401).end("User doesn't exist!");
 
         if (!user.chatrooms.find((chat) => chat.id === chatId)) {
-            return res.status(401).end("You're not a member of this chatroom");
+            return res.status(401).end("You're not a member of this chatroom!");
         }
 
         const chatroom = await prisma.chatroom.findFirst({
@@ -38,7 +41,7 @@ export default async function handler(
             },
         });
 
-        if (!chatroom) return res.status(404).end("No chatroom with that ID");
+        if (!chatroom) return res.status(400).end("No chatroom with that ID!");
 
         res.status(201).json(chatroom);
     } else {

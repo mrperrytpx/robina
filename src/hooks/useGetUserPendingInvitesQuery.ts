@@ -18,7 +18,11 @@ async function getPendingInvites() {
         throw new Error("Get chatroom messages req aborted");
 
     if (!response.ok) {
-        throw new Error("Failed to get chatroom messages");
+        if (response.status === 404) {
+            throw new Error(response.statusText);
+        }
+        const error = await response.text();
+        throw new Error(error);
     }
 
     const data: TChatroomInvite[] = await response.json();

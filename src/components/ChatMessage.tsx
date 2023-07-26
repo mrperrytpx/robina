@@ -85,10 +85,9 @@ export const ChatMessage = ({
                     </div>
                 )}
                 <span
-                    className="select-text break-words py-1 pl-1 text-sm leading-4"
-                    style={{
-                        opacity: message.id.length === 10 ? "0.5" : "1",
-                    }}
+                    className={`select-text break-words py-1 pl-1 text-sm leading-4 ${
+                        message.id.length === 10 && "opacity-50"
+                    }`}
                 >
                     {message.content}
                 </span>

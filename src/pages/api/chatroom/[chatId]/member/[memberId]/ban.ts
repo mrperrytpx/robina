@@ -13,11 +13,11 @@ export default async function handler(
         const chatId = z.string().parse(req.query.chatId);
         const memberId = z.string().parse(req.query.memberId);
 
-        if (!chatId) return res.status(400).end("Please provide an ID");
+        if (!chatId) return res.status(400).end("Provide a valid chat ID!");
 
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session");
+        if (!session) return res.status(401).end("No session!");
 
         const user = await prisma.user.findFirst({
             where: {
@@ -27,14 +27,14 @@ export default async function handler(
                 owned_chatroom: true,
             },
         });
-        if (!user) return res.status(401).end("No user");
+        if (!user) return res.status(401).end("User doesn't exist!");
 
         if (!user.owned_chatroom) {
-            return res.status(400).end("You do not own a chatroom");
+            return res.status(400).end("You do not own a chatroom!");
         }
 
         if (user.owned_chatroom?.id !== chatId) {
-            return res.status(401).end("You do not own this chatroom");
+            return res.status(403).end("You do not own this chatroom!");
         }
 
         const member = await prisma.user.findFirst({
@@ -47,7 +47,8 @@ export default async function handler(
             },
         });
 
-        if (!member) return res.status(404).end("User isn't in this chatroom");
+        if (!member)
+            return res.status(400).end("User isn't a part of this chatroom!");
 
         await prisma.user.update({
             where: {

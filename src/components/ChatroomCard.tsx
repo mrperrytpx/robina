@@ -45,39 +45,41 @@ export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
 
     return (
         <div className="group relative flex aspect-video w-[min(100%,280px)] flex-col items-center justify-center gap-4 rounded-xl p-4 shadow-md outline outline-2 hover:shadow-sky-500  hover:outline-sky-500 focus:shadow-sky-500 focus:outline-sky-500">
-            <span className="line-clamp-2 w-full break-words text-center text-xl group-hover:line-clamp-none group-hover:hidden group-focus:line-clamp-none">
-                <strong>{chatroom.owner.username}&apos;s</strong>{" "}
-                {chatroom.name}
-            </span>
-            <span className="line-clamp-3 w-full break-words text-center text-xs group-hover:line-clamp-none group-hover:hidden group-focus:line-clamp-none">
-                {chatroom.description}
-            </span>
-            <div className="absolute inset-0 hidden h-full w-full items-center justify-between group-hover:flex">
-                <button
-                    onClick={handleAcceptInvite}
-                    disabled={joinChatroom.isLoading}
-                    className="group/button mx-auto rounded-full p-1"
-                >
-                    {joinChatroom.isLoading ? (
-                        <LoadingSpinner size={50} color="#0ea5e9" />
-                    ) : (
-                        <VscCheck
-                            className="fill-black group-hover/button:fill-sky-500 group-focus/button:fill-sky-500"
-                            size={72}
-                        />
-                    )}
-                </button>
-                <button
-                    onClick={handleDeclineInvite}
-                    disabled={declineInvite.isLoading}
-                    className="group/button mx-auto rounded-full p-1"
-                >
-                    <VscChromeClose
-                        className="fill-black group-hover/button:fill-red-600 group-focus/button:fill-red-600"
-                        size={72}
-                    />
-                </button>
-            </div>
+            {joinChatroom.isLoading ? (
+                <LoadingSpinner size={50} color="#0ea5e9" />
+            ) : (
+                <>
+                    <span className="line-clamp-2 w-full break-words text-center text-xl group-hover:line-clamp-none group-hover:hidden group-focus:line-clamp-none">
+                        <strong>{chatroom.owner.username}&apos;s</strong>{" "}
+                        {chatroom.name}
+                    </span>
+                    <span className="line-clamp-3 w-full break-words text-center text-xs group-hover:line-clamp-none group-hover:hidden group-focus:line-clamp-none">
+                        {chatroom.description}
+                    </span>
+                    <div className="absolute inset-0 hidden h-full w-full items-center justify-between group-hover:flex">
+                        <button
+                            onClick={handleAcceptInvite}
+                            disabled={joinChatroom.isLoading}
+                            className="group/button mx-auto rounded-full p-1"
+                        >
+                            <VscCheck
+                                className="fill-black group-hover/button:fill-sky-500 group-focus/button:fill-sky-500"
+                                size={72}
+                            />
+                        </button>
+                        <button
+                            onClick={handleDeclineInvite}
+                            disabled={declineInvite.isLoading}
+                            className="group/button mx-auto rounded-full p-1"
+                        >
+                            <VscChromeClose
+                                className="fill-black group-hover/button:fill-red-600 group-focus/button:fill-red-600"
+                                size={72}
+                            />
+                        </button>
+                    </div>
+                </>
+            )}
         </div>
     );
 };

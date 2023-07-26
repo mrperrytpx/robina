@@ -406,11 +406,6 @@ const ChatPage = () => {
         setIsSettingsActive(false);
     };
 
-    if (chatroom.isError)
-        return (
-            <div>Hmm... Something isn&apos;t right. Try reloading the page</div>
-        );
-
     if (chatroom.isLoading)
         return (
             <div className="flex w-full flex-1 items-center justify-center">
@@ -423,9 +418,20 @@ const ChatPage = () => {
             </div>
         );
 
-    if (!chatroom.data) {
-        return <div>You&apos;re not a part of this chatroom :)</div>;
+    if (chatroom.isError && chatroom.error instanceof Error) {
+        return (
+            <div className="mx-auto flex max-h-[calc(100svh-64px)] w-full max-w-screen-lg flex-col items-center justify-center px-8 py-4">
+                <div className="flex flex-col items-center gap-4">
+                    <span className="text-4xl">😅</span>
+                    <p className="text-center text-xl font-medium">
+                        {chatroom.error.message}
+                    </p>
+                </div>
+            </div>
+        );
     }
+
+    if (!chatroom.data) return null;
 
     return (
         <div className="flex max-h-[calc(100svh-64px)] w-full flex-row">

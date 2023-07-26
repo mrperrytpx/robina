@@ -14,11 +14,11 @@ export default async function handler(
         const { fakeId } = req.body;
         const { chatId } = req.query;
 
-        if (!chatId) return res.status(400).end("Provide a chat iD");
+        if (!chatId) return res.status(400).end("Provide a valid chat ID!");
 
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session");
+        if (!session) return res.status(401).end("No session!");
 
         const user = await prisma.user.findFirst({
             where: {
@@ -29,7 +29,7 @@ export default async function handler(
             },
         });
 
-        if (!user) return res.status(401).end("No user");
+        if (!user) return res.status(401).end("User doesn't exist!");
         if (!user.username)
             return res
                 .status(302)
@@ -40,7 +40,7 @@ export default async function handler(
         );
 
         if (!isMemberOfChatroom)
-            return res.status(401).end("Not a part of this chatroom");
+            return res.status(403).end("You're not a part of this chatroom!");
 
         const newMessage = await prisma.message.create({
             data: {
@@ -62,7 +62,7 @@ export default async function handler(
             }
         );
 
-        res.status(201).end();
+        res.status(204).end("Success!");
     } else {
         res.setHeader("Allow", "POST");
         res.status(405).end("Method Not Allowed");

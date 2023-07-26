@@ -12,7 +12,11 @@ async function getChatroomMembers(chatId: string) {
         throw new Error("Get chatroom messages req aborted");
 
     if (!response.ok) {
-        throw new Error("Failed to get chatroom messages");
+        if (response.status === 404) {
+            throw new Error(response.statusText);
+        }
+        const error = await response.text();
+        throw new Error(error);
     }
 
     const data: User[] = await response.json();

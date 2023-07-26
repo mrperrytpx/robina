@@ -19,11 +19,11 @@ export default async function handler(
     if (req.method === "DELETE") {
         const { chatId, messageId } = deleteMessageSchema.parse(req.query);
 
-        if (!chatId) return res.status(400).end("Please provide an ID");
+        if (!chatId) return res.status(400).end("Provide a valid chat ID!");
 
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session");
+        if (!session) return res.status(401).end("No session!");
 
         const user = await prisma.user.findFirst({
             where: {
@@ -31,7 +31,7 @@ export default async function handler(
             },
         });
 
-        if (!user) return res.status(401).end("No user");
+        if (!user) return res.status(401).end("User doesn't exist!");
 
         const message = await prisma.message.findFirst({
             where: {
@@ -46,13 +46,13 @@ export default async function handler(
             },
         });
 
-        if (!message) return res.status(404).end("No message found");
+        if (!message) return res.status(400).end("Message doesn't exist!");
 
         if (
             message.author_id !== user.id &&
             user.id !== message.chatroom.owner_id
         )
-            return res.status(401).end("Now allowed to delete that message");
+            return res.status(403).end("Now allowed to delete that message!");
 
         await prisma.message.delete({
             where: {

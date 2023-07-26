@@ -13,7 +13,11 @@ async function getJoinedChatrooms(): Promise<TChatroomWIthOwner[]> {
         throw new Error("Get joined chatrooms req aborted");
 
     if (!response.ok) {
-        throw new Error("Failed to get joined chatrooms");
+        if (response.status === 404) {
+            throw new Error(response.statusText);
+        }
+        const error = await response.text();
+        throw new Error(error);
     }
 
     const data: TChatroomWIthOwner[] = await response.json();

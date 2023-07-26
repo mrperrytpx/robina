@@ -10,7 +10,7 @@ export default async function handler(
     if (req.method === "GET") {
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session");
+        if (!session) return res.status(401).end("No session!");
 
         const user = await prisma.user.findFirst({
             where: {
@@ -26,7 +26,7 @@ export default async function handler(
             },
         });
 
-        if (!user) return res.status(401).end("No user");
+        if (!user) return res.status(401).end("User doesn't exist!");
 
         res.status(201).json(user?.invited_to_chatroom);
     } else {

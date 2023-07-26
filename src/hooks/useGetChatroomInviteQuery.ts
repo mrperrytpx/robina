@@ -7,15 +7,20 @@ export type TInviteLink = {
 const getInviteLink = async (chatId: string) => {
     const controller = new AbortController();
 
-    const response = await fetch(`/api/chatroom/${chatId}/invite/get`, {
+    const response = await fetch(`/api/chatroosm/${chatId}/invite/get`, {
         signal: controller.signal,
     });
 
-    if (controller.signal.aborted)
-        throw new Error("Get chatroom messages req aborted");
+    if (controller.signal.aborted) {
+        throw new Error("Fetch aborted");
+    }
 
     if (!response.ok) {
-        throw new Error("Failed to get chatroom messages");
+        if (response.status === 404) {
+            throw new Error(response.statusText);
+        }
+        const error = await response.text();
+        throw new Error(error);
     }
 
     const data: TInviteLink = await response.json();

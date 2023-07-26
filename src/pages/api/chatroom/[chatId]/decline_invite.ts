@@ -26,7 +26,7 @@ export default async function handler(
                 owned_chatroom: true,
             },
         });
-        if (!user) return res.status(401).end("No user");
+        if (!user) return res.status(401).end("User doesn't exist");
 
         await prisma.chatroom.update({
             where: {

@@ -7,15 +7,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "DELETE") {
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session");
+        if (!session) return res.status(401).end("No session!");
 
         const user = await prisma.user.findFirst({
             where: {
                 id: session.user.id,
-            }
+            },
         });
 
-        if (!user) return res.status(401).end("No user");
+        if (!user) return res.status(400).end("You don't exist?!");
 
         await prisma.user.delete({
             where: {
@@ -23,7 +23,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             },
         });
 
-        res.status(204).end();
+        res.status(204).end("Success!");
     } else {
         res.setHeader("Allow", "DELETE");
         res.status(405).end("Method Not Allowed");

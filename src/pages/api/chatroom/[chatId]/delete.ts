@@ -26,14 +26,14 @@ export default async function handler(
                 owned_chatroom: true,
             },
         });
-        if (!user) return res.status(401).end("No user!");
+        if (!user) return res.status(401).end("User doesn't exist!!");
 
         if (!user.owned_chatroom) {
             return res.status(400).end("You do not own a chatroom!");
         }
 
         if (user.owned_chatroom?.id !== chatId) {
-            return res.status(401).end("You do not own this chatroom!");
+            return res.status(403).end("You do not own this chatroom!");
         }
 
         await prisma.chatroom.delete({

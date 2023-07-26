@@ -11,7 +11,8 @@ export default async function handler(
     if (req.method === "PATCH") {
         const { username } = usernameSchema.parse(req.body);
 
-        if (!username) return res.status(404).end("No username provided!");
+        if (!username)
+            return res.status(404).end("User doesn't exist!name provided!");
 
         if (username.split(" ").length > 1)
             return res.status(404).end("No spaces allowed!");
@@ -26,10 +27,10 @@ export default async function handler(
             },
         });
 
-        if (!user) return res.status(401).end("No user!");
+        if (!user) return res.status(401).end("User doesn't exist?!");
 
         if (user.username === username)
-            return res.status(404).end("You already have that username!");
+            return res.status(409).end("You already have that username!");
 
         const usernameExsits = await prisma.user.findFirst({
             where: {

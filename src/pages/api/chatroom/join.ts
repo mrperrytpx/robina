@@ -17,11 +17,11 @@ export default async function handler(
             .min(10, "Invite link needs to be 10 chars")
             .parse(req.body.inviteLink);
 
-        if (!inviteLink) return res.status(404).end("Invalid invite string");
+        if (!inviteLink) return res.status(400).end("Invalid invite string!");
 
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session");
+        if (!session) return res.status(401).end("No session!");
 
         const user = await prisma.user.findFirst({
             where: {
@@ -37,11 +37,11 @@ export default async function handler(
             },
         });
 
-        if (!user) return res.status(401).end("No user");
+        if (!user) return res.status(401).end("User doesn't exist!");
 
         if (user.chatrooms.length === 5)
             return res
-                .status(404)
+                .status(409)
                 .end("You can only be a part of 5 chatrooms!");
 
         const chatroom = await prisma.chatroom.findFirst({
@@ -58,7 +58,7 @@ export default async function handler(
             },
         });
 
-        if (!chatroom) return res.status(404).end("Invalid invite string");
+        if (!chatroom) return res.status(400).end("Invalid invite string!");
 
         if (chatroom.banned_members.find((member) => member.id === user.id)) {
             return res.status(403).end("You are banned from this chatroom");

@@ -12,11 +12,11 @@ export default async function handler(
     if (req.method === "PATCH") {
         const chatId = z.string().parse(req.query.chatId);
 
-        if (!chatId) return res.status(404).end("Provide both a chatId");
+        if (!chatId) return res.status(400).end("Provide a valid chat ID!");
 
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session");
+        if (!session) return res.status(401).end("No session!");
 
         const user = await prisma.user.findFirst({
             where: {
@@ -29,12 +29,12 @@ export default async function handler(
             },
         });
 
-        if (!user) return res.status(401).end("No user");
+        if (!user) return res.status(401).end("User doesn't exist!");
 
         if (user.owned_chatroom?.id === chatId)
             return res
-                .status(404)
-                .end("You cannot leave your own chatroom, delete it instead");
+                .status(409)
+                .end("You cannot leave your own chatroom, delete it instead!");
 
         await prisma.user.update({
             where: {
@@ -58,7 +58,7 @@ export default async function handler(
             }
         );
 
-        res.status(204).end();
+        res.status(201).end("Success!");
     } else {
         res.setHeader("Allow", "PATCH");
         res.status(405).end("Method Not Allowed");

@@ -26,10 +26,10 @@ export default async function handler(
             },
         });
 
-        if (!user) return res.status(401).end("No user!");
+        if (!user) return res.status(401).end("User doesn't exist!");
 
         if (user.owned_chatroom)
-            return res.status(400).end("You already own a chatroom!");
+            return res.status(409).end("You already own a chatroom!");
 
         const chatroom = await prisma.chatroom.create({
             data: {
@@ -50,7 +50,10 @@ export default async function handler(
 
         const inviteString = randomString(10);
 
-        if (!chatroom) return res.status(500).end("Server issues!");
+        if (!chatroom)
+            return res
+                .status(500)
+                .end("Server issues! Try reloading the page.");
 
         await prisma.inviteLink.create({
             data: {

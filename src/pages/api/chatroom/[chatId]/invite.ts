@@ -13,8 +13,8 @@ export default async function handler(
         const chatId = z.string().parse(req.query.chatId);
         const username = z.string().parse(req.body.username);
 
-        if (!chatId) return res.status(404).end("Please provide an ID!");
-        if (!username) return res.status(404).end("Please provide a username");
+        if (!chatId) return res.status(400).end("Please provide an ID!");
+        if (!username) return res.status(400).end("Please provide a username");
 
         const session = await getServerSession(req, res, authOptions);
 
@@ -33,18 +33,18 @@ export default async function handler(
                 },
             },
         });
-        if (!user) return res.status(401).end("No user!");
+        if (!user) return res.status(401).end("User doesn't exist!!");
 
         if (!user.owned_chatroom) {
             return res.status(400).end("You do not own a chatroom!");
         }
 
         if (user.owned_chatroom?.id !== chatId) {
-            return res.status(401).end("You do not own this chatroom!");
+            return res.status(403).end("You do not own this chatroom!");
         }
 
         if (user.username === username.toLowerCase())
-            return res.status(404).end("You cannot invite yourself!");
+            return res.status(409).end("You cannot invite yourself!");
 
         const member = await prisma.user.findFirst({
             where: {
@@ -56,7 +56,7 @@ export default async function handler(
             },
         });
 
-        if (!member) return res.status(404).end("User doesn't exist!");
+        if (!member) return res.status(400).end("User doesn't exist!");
 
         if (
             member.banned_from_chatroom.find(
@@ -64,7 +64,7 @@ export default async function handler(
             )
         ) {
             return res
-                .status(404)
+                .status(409)
                 .end(`"${member.username}" is banned from this chatroom!`);
         }
 
@@ -73,7 +73,7 @@ export default async function handler(
                 (chatroom) => chatroom.id === chatId
             )
         ) {
-            return res.status(404).end("User is already invited!");
+            return res.status(409).end("User is already invited!");
         }
 
         await prisma.user.update({
@@ -105,7 +105,7 @@ export default async function handler(
             }
         );
 
-        res.status(201).end("Success");
+        res.status(204).end("Success");
     } else {
         res.setHeader("Allow", "POST");
         res.status(405).end("Method Not Allowed");
