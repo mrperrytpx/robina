@@ -22,8 +22,8 @@ export const Header = () => {
     useEffect(() => setIsExpanded(false), [pathname]);
 
     return (
-        <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center bg-sky-500">
-            <div className="flex w-full max-w-screen-2xl items-center justify-between px-4 py-2">
+        <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center bg-sky-500 shadow">
+            <div className="flex w-full items-center justify-between px-4 py-2">
                 <Link href="/" className="text-3xl text-white">
                     <Image
                         width={100}

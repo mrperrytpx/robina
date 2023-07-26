@@ -30,6 +30,7 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { useInviteUserMutation } from "../../hooks/useInviteUserMutation";
 import { TChatroomWIthOwner } from "../api/chatroom/get_owned";
+import { Portal } from "../../components/Portal";
 
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
@@ -356,6 +357,8 @@ const ChatPage = () => {
 
         const splitMessage = data.message.split(" ");
         if (splitMessage[0] === "/invite") {
+            if (session.data?.user.id !== chatroom.data?.owner_id) return;
+
             const response = await inviteUser.mutateAsync({
                 chatId,
                 username: splitMessage[1],
@@ -380,7 +383,6 @@ const ChatPage = () => {
 
         while (queue.length > 0) {
             const message = queue.pop();
-            console.log("Emptying queue with", message);
             if (!message) return;
             const response = await postMessage.mutateAsync({
                 ...message,
@@ -471,6 +473,14 @@ const ChatPage = () => {
                     <span>{chatroom.data.name}</span>
                 </div>
                 <ChatroomMessages chatroom={chatroom.data} />
+                {isSettingsActive && (
+                    <Portal shouldRoute={false} setState={setIsSettingsActive}>
+                        <ChatroomSettings
+                            description={chatroom.data.description}
+                            ownerId={chatroom.data.owner_id}
+                        />
+                    </Portal>
+                )}
                 <div className="flex h-14 items-center gap-3 px-4">
                     <button
                         type="submit"
@@ -516,12 +526,6 @@ const ChatPage = () => {
                         </button>
                     </form>
                 </div>
-                {isSettingsActive && (
-                    <ChatroomSettings
-                        description={chatroom.data.description}
-                        ownerId={chatroom.data.owner_id}
-                    />
-                )}
                 {isMembersActive && (
                     <ChatroomMembers ownerId={chatroom.data.owner_id} />
                 )}

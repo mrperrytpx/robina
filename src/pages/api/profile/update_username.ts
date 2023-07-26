@@ -28,6 +28,9 @@ export default async function handler(
 
         if (!user) return res.status(401).end("No user!");
 
+        if (user.username === username)
+            return res.status(404).end("You already have that username!");
+
         const usernameExsits = await prisma.user.findFirst({
             where: {
                 username,

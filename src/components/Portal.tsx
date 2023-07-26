@@ -12,10 +12,16 @@ import { createPortal } from "react-dom";
 interface PortalProps {
     children: ReactNode;
     shouldRoute: boolean;
+    isInModal?: boolean;
     setState?: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Portal = ({ shouldRoute, children, setState }: PortalProps) => {
+export const Portal = ({
+    shouldRoute,
+    children,
+    setState,
+    isInModal,
+}: PortalProps) => {
     const ref = useRef<Element | null>(null);
     const bgRef = useRef<HTMLDivElement>(null);
     const [mounted, setMounted] = useState(false);
@@ -59,11 +65,14 @@ export const Portal = ({ shouldRoute, children, setState }: PortalProps) => {
 
         return () => {
             ref.current = null;
+            if (mounted && setState) setState(false);
             setMounted(false);
         };
-    }, []);
+    }, [setState, mounted]);
 
-    const handleClosePortal = async (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleClickOutsidePortal = async (
+        e: React.MouseEvent<HTMLDivElement>
+    ) => {
         const target = e.target as HTMLDivElement;
         if (target.id === "bg" && bgRef.current && mounted) {
             if (shouldRoute) {
@@ -81,8 +90,10 @@ export const Portal = ({ shouldRoute, children, setState }: PortalProps) => {
                   id="bg"
                   role="dialog"
                   ref={bgRef}
-                  onClick={handleClosePortal}
-                  className="fixed inset-0 top-16 flex overflow-y-auto bg-black bg-opacity-75 sm:top-0 sm:items-center sm:justify-center"
+                  onClick={handleClickOutsidePortal}
+                  className={`fixed inset-0 top-16 flex overflow-y-auto bg-black ${
+                      isInModal ? "bg-opacity-0" : "bg-opacity-75"
+                  } sm:top-0 sm:items-center sm:justify-center`}
               >
                   {children}
               </div>,
