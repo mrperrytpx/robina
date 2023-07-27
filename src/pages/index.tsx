@@ -52,8 +52,8 @@ export default function Home() {
                         Have you ever asked yourself...
                     </h2>
                     <p className="font-medium sm:text-left">
-                        &quot;Is there an app like Discord I can use that's kind
-                        of... bad?&quot;
+                        &quot;Is there an app like Discord I can use that&apos;s
+                        kind of... bad?&quot;
                     </p>
                     <p className="font-medium sm:text-right">
                         &quot;I wonder what Discord&apos;s MVP looked
@@ -64,8 +64,8 @@ export default function Home() {
                         like using online chatrooms back in the 90&apos;s?&quot;
                     </p>
                     <p className="font-medium">
-                        &quot;Man I wish all these apps didn't have so many good
-                        features...&quot;
+                        &quot;Man I wish all these apps didn&apos;t have so many
+                        good features...&quot;
                     </p>
                 </article>
 
@@ -75,7 +75,7 @@ export default function Home() {
                     </h2>
                     <p>Presenting YetAnotherMessagingApp!</p>
                     <div>
-                        <p>The simplest messaging app you'll ever use!</p>
+                        <p>The simplest messaging app you&apos;ll ever use!</p>
                         <p className="text-xs font-bold">
                             (until I try to make profit from it)
                         </p>
@@ -96,7 +96,7 @@ export default function Home() {
             <div className="mt-4 flex grow select-text motion-reduce:overflow-x-scroll motion-reduce:scrollbar-thin motion-reduce:scrollbar-track-black motion-reduce:scrollbar-thumb-sky-100 sm:mt-16">
                 <div className="flex min-w-full shrink-0 items-center justify-around motion-safe:animate-scroll">
                     <TestimonyCard name="Quivby" date="27th of July, 2023">
-                        I guess it's not the worst thing I've used...
+                        I guess it&apos;s not the worst thing I&apos;ve used...
                     </TestimonyCard>
                     <TestimonyCard name="Zandria" date="14th of June, 2020">
                         You really will do anything except get a job, huh?
@@ -115,7 +115,7 @@ export default function Home() {
 
                 <div className="flex min-w-full shrink-0 animate-scroll items-center justify-around motion-reduce:hidden">
                     <TestimonyCard name="Quivby" date="27th of July, 2023">
-                        I guess it's not the worst thing I've used...
+                        I guess it&apos;s not the worst thing I&apos;ve used...
                     </TestimonyCard>
                     <TestimonyCard name="Zandria" date="14th of June, 2020">
                         You really will do anything except get a job, huh?
