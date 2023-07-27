@@ -11,4 +11,5 @@
 html,
 body {
     @apply bg-white;
+    @apply scroll-smooth;
 }
