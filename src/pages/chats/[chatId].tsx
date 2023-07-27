@@ -2,20 +2,12 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { VscArrowLeft, VscSend } from "react-icons/vsc";
+import { VscArrowLeft } from "react-icons/vsc";
 import { FiSettings, FiUsers } from "react-icons/fi";
 import { z } from "zod";
-import {
-    IPostMessage,
-    usePostChatMessageMutation,
-} from "../../hooks/usePostChatMessageMutation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { pusherClient } from "../../lib/pusher";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
-import { chatMessageSchema } from "../../lib/zSchemas";
-import type { TChatMessage } from "../../lib/zSchemas";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import {
     TChatroomMessage,
@@ -25,10 +17,8 @@ import { User } from "@prisma/client";
 import { ChatroomMembers } from "../../components/ChatroomMembers";
 import { ChatroomSettings } from "../../components/ChatroomSettings";
 import { ChatroomMessages } from "../../components/ChatroomMessages";
-import { randomString } from "../../util/randomString";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import { useInviteUserMutation } from "../../hooks/useInviteUserMutation";
 import { TChatroomWIthOwner } from "../api/chatroom/get_owned";
 import { Portal } from "../../components/Portal";
 
@@ -40,18 +30,9 @@ const ChatPage = () => {
     const chatId = z.string().parse(router.query.chatId);
     const session = useSession();
 
-    const postMessage = usePostChatMessageMutation();
-    const inviteUser = useInviteUserMutation();
-
     const chatroom = useGetChatroomQuery(chatId);
 
-    const { register, handleSubmit, reset } = useForm<TChatMessage>({
-        resolver: zodResolver(chatMessageSchema),
-    });
-
     const queryClient = useQueryClient();
-
-    const queue: IPostMessage[] = [];
 
     useEffect(() => {
         const newUserHandler = async (data: User) => {
@@ -298,58 +279,13 @@ const ChatPage = () => {
         };
     }, [chatId, chatroom.data, queryClient, router, session.data?.user.id]);
 
-    const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
-        if (!chatId) return;
-        reset();
-
-        const splitMessage = data.message.split(" ");
-        if (splitMessage[0] === "/invite") {
-            if (session.data?.user.id !== chatroom.data?.owner_id) return;
-
-            const response = await inviteUser.mutateAsync({
-                chatId,
-                username: splitMessage[1],
-            });
-
-            if (!response?.ok) {
-                const error = await response?.text();
-                toast.error(error);
-                return;
-            }
-
-            return;
-        }
-
-        const messageData = {
-            ...data,
-            chatId,
-            fakeId: randomString(10),
-        };
-
-        queue.unshift(messageData);
-
-        while (queue.length > 0) {
-            const message = queue.pop();
-            if (!message) return;
-            const response = await postMessage.mutateAsync({
-                ...message,
-            });
-
-            if (!response?.ok) {
-                const error = await response?.text();
-                toast.error(error);
-                return;
-            }
-        }
-    };
-
-    const handleSettings = () => {
-        setIsSettingsActive(!isSettingsActive);
+    const handleSettings = useCallback(() => {
+        setIsSettingsActive((old) => !old);
         setIsMembersActive(false);
-    };
+    }, []);
 
     const handleMembers = () => {
-        setIsMembersActive(!isMembersActive);
+        setIsMembersActive((old) => !old);
         setIsSettingsActive(false);
     };
 
@@ -425,7 +361,10 @@ const ChatPage = () => {
                     </Link>
                     <span>{chatroom.data.name}</span>
                 </div>
-                <ChatroomMessages chatroom={chatroom.data} />
+                <ChatroomMessages
+                    handleSettings={handleSettings}
+                    chatroom={chatroom.data}
+                />
                 {isSettingsActive && (
                     <Portal shouldRoute={false} setState={setIsSettingsActive}>
                         <ChatroomSettings
@@ -435,51 +374,7 @@ const ChatPage = () => {
                         />
                     </Portal>
                 )}
-                <div className="flex h-14 items-center gap-3 px-4">
-                    <button
-                        type="submit"
-                        className="group hidden rounded-full border-2 border-black p-2 hover:border-sky-500 focus:border-sky-500 sm:inline-block"
-                        aria-label="Send message"
-                        onClick={handleSettings}
-                    >
-                        <FiSettings
-                            size={20}
-                            className="group-hover:stroke-sky-500 group-focus:stroke-sky-500"
-                        />
-                    </button>
-                    <form
-                        onSubmit={handleSubmit(onSubmit)}
-                        className="flex w-full items-center justify-between gap-3"
-                    >
-                        <label
-                            aria-hidden="true"
-                            aria-label={`Chatroom with id ${chatId}`}
-                            htmlFor="message"
-                            className="hidden"
-                        />
-                        <input
-                            {...register("message")}
-                            autoComplete="off"
-                            name="message"
-                            id="message"
-                            type="text"
-                            placeholder="Message"
-                            maxLength={150}
-                            minLength={1}
-                            className="h-10 w-full rounded-md border-2 border-black p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
-                        />
-                        <button
-                            type="submit"
-                            className="group rounded-full border-2 border-black p-2 hover:border-sky-500 focus:border-sky-500"
-                            aria-label="Send message"
-                        >
-                            <VscSend
-                                className="fill-black group-hover:fill-sky-500 group-focus:fill-sky-500 group-active:fill-sky-500"
-                                size={20}
-                            />
-                        </button>
-                    </form>
-                </div>
+
                 {isMembersActive && (
                     <ChatroomMembers ownerId={chatroom.data.owner_id} />
                 )}

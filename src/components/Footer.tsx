@@ -11,7 +11,7 @@ export const Footer = () => {
                             className="font-medium hover:text-black hover:underline focus:text-black focus:underline"
                             href="/s/tos"
                         >
-                            Returns & FAQ
+                            FAQ
                         </Link>
                         <Link
                             className="font-medium hover:text-black hover:underline focus:text-black focus:underline"

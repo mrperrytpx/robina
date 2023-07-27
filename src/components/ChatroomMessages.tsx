@@ -10,6 +10,18 @@ import { useGetChatroomMessagesInfQuery } from "../hooks/useGetChatroomMessagesI
 import { shouldBeNewAuthor } from "../util/shouldBeNewAuthor";
 import { Chatroom } from "@prisma/client";
 import { LoadingSpinner } from "./LoadingSpinner";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { FiSettings } from "react-icons/fi";
+import { VscSend } from "react-icons/vsc";
+import { toast } from "react-toastify";
+import {
+    IPostMessage,
+    usePostChatMessageMutation,
+} from "../hooks/usePostChatMessageMutation";
+import { TChatMessage, chatMessageSchema } from "../lib/zSchemas";
+import { randomString } from "../util/randomString";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useInviteUserMutation } from "../hooks/useInviteUserMutation";
 
 type TIntersectionObserverOptions = {
     root?: Element | null;
@@ -47,9 +59,13 @@ export const useIntersectionObserver = (
 
 interface IChatroomMessagesProps {
     chatroom: Chatroom;
+    handleSettings: () => void;
 }
 
-export const ChatroomMessages = ({ chatroom }: IChatroomMessagesProps) => {
+export const ChatroomMessages = ({
+    chatroom,
+    handleSettings,
+}: IChatroomMessagesProps) => {
     const endRef = useRef<HTMLDivElement>(null);
     const startRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
@@ -60,6 +76,60 @@ export const ChatroomMessages = ({ chatroom }: IChatroomMessagesProps) => {
     const chatroomMessages = useGetChatroomMessagesInfQuery(chatId);
 
     const isStartIntersecting = useIntersectionObserver(startRef, {});
+
+    const queue: IPostMessage[] = [];
+
+    const postMessage = usePostChatMessageMutation();
+    const inviteUser = useInviteUserMutation();
+    const { register, handleSubmit, reset } = useForm<TChatMessage>({
+        resolver: zodResolver(chatMessageSchema),
+    });
+
+    const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
+        if (!chatId) return;
+        if (!chatroomMessages.data) return;
+        reset();
+
+        const splitMessage = data.message.split(" ");
+        if (splitMessage[0] === "/invite") {
+            if (session.data?.user.id !== chatroom.owner_id) return;
+
+            const response = await inviteUser.mutateAsync({
+                chatId,
+                username: splitMessage[1],
+            });
+
+            if (!response?.ok) {
+                const error = await response?.text();
+                toast.error(error);
+                return;
+            }
+
+            return;
+        }
+
+        const messageData = {
+            ...data,
+            chatId,
+            fakeId: randomString(10),
+        };
+
+        queue.unshift(messageData);
+
+        while (queue.length > 0) {
+            const message = queue.pop();
+            if (!message) return;
+            const response = await postMessage.mutateAsync({
+                ...message,
+            });
+
+            if (!response?.ok) {
+                const error = await response?.text();
+                toast.error(error);
+                return;
+            }
+        }
+    };
 
     useEffect(() => {
         if (chatroomMessages.hasPreviousPage) {
@@ -205,6 +275,53 @@ export const ChatroomMessages = ({ chatroom }: IChatroomMessagesProps) => {
                 </Fragment>
             ))}
             <div ref={endRef} />
+            <div className="flex h-14 items-center gap-3 px-4">
+                <button
+                    type="submit"
+                    className="group hidden rounded-full border-2 border-black p-2 hover:border-sky-500 focus:border-sky-500 sm:inline-block"
+                    aria-label="Send message"
+                    onClick={handleSettings}
+                >
+                    <FiSettings
+                        size={20}
+                        className="group-hover:stroke-sky-500 group-focus:stroke-sky-500"
+                    />
+                </button>
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="flex w-full items-center justify-between gap-3"
+                >
+                    <label
+                        aria-hidden="true"
+                        aria-label={`Chatroom with id ${chatId}`}
+                        htmlFor="message"
+                        className="hidden"
+                    />
+                    <input
+                        {...register("message")}
+                        autoComplete="off"
+                        name="message"
+                        id="message"
+                        type="text"
+                        placeholder="Message"
+                        maxLength={150}
+                        minLength={1}
+                        disabled={!chatroomMessages.data}
+                        className="h-10 w-full rounded-md border-2 border-black p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500 disabled:opacity-50"
+                    />
+                    <button
+                        type="submit"
+                        className="group rounded-full border-2 border-black p-2 hover:border-sky-500 focus:border-sky-500 disabled:opacity-50"
+                        aria-label="Send message"
+                        disabled={!chatroomMessages.data?.pages}
+                    >
+                        <VscSend
+                            className="fill-black group-hover:fill-sky-500 group-focus:fill-sky-500 group-active:fill-sky-500"
+                            size={20}
+                        />
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

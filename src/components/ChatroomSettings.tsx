@@ -12,6 +12,7 @@ import { useGetBannedChatroomMembersQuery } from "../hooks/useGetBannedChatroomM
 import { useUnbanChatroomMemberMutation } from "../hooks/useUnbanChatroomMemberMutation";
 import { MemberCard } from "./MemberCard";
 import { Portal } from "./Portal";
+import { toast } from "react-toastify";
 
 interface IChatroomSettingsProps {
     ownerId: string;
@@ -53,15 +54,21 @@ export const ChatroomSettings = ({
         setIsModalOpen(false);
         const { response } = await deleteChatroom.mutateAsync({ chatId });
 
-        if (!response.ok) return;
-
-        router.push("/chats");
+        if (!response.ok) {
+            const error = await response.text();
+            toast.error(error);
+            return;
+        }
     };
 
     const handleLeaveChatroom = async () => {
         const { response } = await leaveChatroom.mutateAsync({ chatId });
 
-        if (!response.ok) return;
+        if (!response.ok) {
+            const error = await response.text();
+            toast.error(error);
+            return;
+        }
 
         router.push("/chats");
     };

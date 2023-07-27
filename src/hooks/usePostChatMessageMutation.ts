@@ -44,10 +44,6 @@ export const usePostChatMessageMutation = () => {
             queryClient.setQueryData<typeof previousData>(
                 ["messages", chatId],
                 (oldData) => {
-                    const newData: typeof previousData = JSON.parse(
-                        JSON.stringify(oldData)
-                    );
-
                     const newMessage: TChatroomMessage = {
                         author: {
                             ...session.data.user,
@@ -60,6 +56,10 @@ export const usePostChatMessageMutation = () => {
                         created_at: new Date(),
                         id: fakeId,
                     };
+
+                    const newData: typeof previousData = JSON.parse(
+                        JSON.stringify(oldData)
+                    );
 
                     newData?.pages[newData?.pages.length - 1 ?? 0].push(
                         newMessage
