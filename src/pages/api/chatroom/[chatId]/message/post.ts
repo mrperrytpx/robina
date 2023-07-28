@@ -7,7 +7,10 @@ import { authOptions } from "../../../auth/[...nextauth]";
 import { AES } from "crypto-js";
 
 const encryptMessage = (str: string) => {
-    return AES.encrypt(str, process.env.SOMETHING_COOL as string).toString();
+    return AES.encrypt(
+        JSON.stringify({ str }),
+        process.env.SOMETHING_COOL as string
+    ).toString();
 };
 
 export default async function handler(

@@ -12,7 +12,7 @@ async function getChatroomMembers(chatId: string) {
         throw new Error("Get chatroom messages req aborted");
 
     if (!response.ok) {
-        if (response.status === 404) {
+        if (response.status === 404 || response.status >= 500) {
             throw new Error(response.statusText);
         }
         const error = await response.text();

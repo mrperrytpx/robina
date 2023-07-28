@@ -5,9 +5,11 @@ import { prisma } from "../../../../../prisma/prisma";
 import { authOptions } from "../../auth/[...nextauth]";
 import { AES, enc } from "crypto-js";
 
-export const decryptMessage = (str: string) => {
-    return AES.decrypt(str, process.env.SOMETHING_COOL as string).toString(
-        enc.Utf8
+const decryptMessage = (str: string) => {
+    return JSON.parse(
+        AES.decrypt(str, process.env.SOMETHING_COOL as string).toString(
+            enc.Utf8
+        )
     );
 };
 
@@ -62,7 +64,7 @@ export default async function handler(
             const decryptedMsg = decryptMessage(message.content);
             return {
                 ...message,
-                content: decryptedMsg,
+                content: decryptedMsg.str,
             };
         });
 

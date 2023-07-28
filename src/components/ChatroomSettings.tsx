@@ -101,30 +101,30 @@ export const ChatroomSettings = ({
                         </h1>
                         <p className="mb-2 max-w-xs text-sm">
                             You will{" "}
-                            <strong className="text-base text-red-600 underline">
-                                NOT
+                            <strong className="text-base uppercase text-red-600 underline">
+                                not
                             </strong>{" "}
                             be able to restore it once the chatroom is deleted!
                         </p>
                         <p className="mb-2 max-w-xs text-sm">
-                            <strong className="text-base text-red-600 underline">
-                                ALL
+                            <strong className="text-base uppercase text-red-600 underline">
+                                all
                             </strong>{" "}
                             messages will be deleted!
                         </p>
                         <div className="mt-2 flex w-full items-center justify-center gap-4">
                             <button
                                 onClick={handleDeleteChatroom}
-                                className="min-w-[100px] rounded-lg border-2 border-black bg-white p-2 font-semibold text-black hover:border-red-600 hover:bg-red-600 hover:text-gray-100 hover:shadow-sm focus:bg-red-600 focus:text-gray-100 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-gray-100"
+                                className="min-w-[100px] rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black hover:border-red-600 hover:bg-red-600 hover:text-gray-100 hover:shadow-sm focus:bg-red-600 focus:text-gray-100 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-gray-100"
                                 disabled={deleteChatroom.isLoading}
                             >
-                                DELETE
+                                Delete
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="flex h-10 min-w-[100px] items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                                className="flex h-10 min-w-[100px] items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium uppercase shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                             >
-                                NO
+                                No
                             </button>
                         </div>
                     </div>

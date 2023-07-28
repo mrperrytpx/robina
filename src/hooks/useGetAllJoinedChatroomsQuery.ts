@@ -13,7 +13,7 @@ async function getJoinedChatrooms(): Promise<TChatroomWIthOwner[]> {
         throw new Error("Get joined chatrooms req aborted");
 
     if (!response.ok) {
-        if (response.status === 404) {
+        if (response.status === 404 || response.status >= 500) {
             throw new Error(response.statusText);
         }
         const error = await response.text();

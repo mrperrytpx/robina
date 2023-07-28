@@ -170,26 +170,32 @@ const ProfilePage = () => {
             {isModalOpen && (
                 <Portal setState={setIsModalOpen} shouldRoute={false}>
                     <div className="relative flex max-h-full w-full flex-col items-center gap-8 overflow-y-auto rounded-md border-2 border-white bg-white p-4 text-center text-sm hover:border-sky-500 sm:max-w-md">
-                        <h1 className="mb-2  mt-4 text-xl font-bold uppercase sm:mt-0">
+                        <h1 className="mb-2 mt-4 text-xl font-bold uppercase sm:mt-0">
                             Are you sure?
                         </h1>
-                        <p className="mb-2 text-sm">
-                            This will also delete <strong>ALL</strong> of Your
-                            sent messages <strong>AND</strong> created
-                            chatrooms!
+                        <p className="mb-2">
+                            This will also delete{" "}
+                            <strong className="text-base uppercase text-red-600 underline">
+                                all
+                            </strong>{" "}
+                            of Your sent messages{" "}
+                            <strong className="text-base uppercase text-red-600 underline">
+                                and
+                            </strong>{" "}
+                            created chatrooms!
                         </p>
                         <div className="flex w-full items-center justify-center gap-4">
                             <button
                                 onClick={handleDelete}
-                                className="min-w-[100px] rounded-lg border-2 border-black bg-white p-2 font-semibold text-black hover:border-red-600 hover:bg-red-600 hover:text-gray-100 hover:shadow-sm focus:bg-red-600 focus:text-gray-100 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-gray-100"
+                                className="min-w-[100px] rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black hover:border-red-600 hover:bg-red-600 hover:text-gray-100 hover:shadow-sm focus:bg-red-600 focus:text-gray-100 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-gray-100"
                             >
-                                DELETE
+                                Delete
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="flex h-10 min-w-[100px] items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                                className="flex h-10 min-w-[100px] items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium uppercase shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                             >
-                                NO
+                                No
                             </button>
                         </div>
                     </div>
