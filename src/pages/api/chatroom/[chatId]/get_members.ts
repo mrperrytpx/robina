@@ -1,16 +1,8 @@
-import { Chatroom, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { prisma } from "../../../../../prisma/prisma";
-import { TChatroomMessage } from "../../../../hooks/useGetChatroomQuery";
 import { authOptions } from "../../auth/[...nextauth]";
-
-export type TChatroomData = Chatroom & {
-    members: User[];
-    owner: User;
-    messages: TChatroomMessage[];
-};
 
 export default async function handler(
     req: NextApiRequest,

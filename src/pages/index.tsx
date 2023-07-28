@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { Footer } from "../components/Footer";
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
+import { GetStaticProps, InferGetStaticPropsType } from "next";
+import { prisma } from "../../prisma/prisma";
+import LogoTextRectangle from "../../public/logo-text-rectangle.webp";
+import LogoTextSquare from "../../public/logo-text-square.webp";
+import FallBackLogoTextRectangle from "../../public/logo-text-rectangle.png";
+import FallBackLogoTextSquare from "../../public/logo-text-square.png";
+import { ImageWithFallback } from "../components/ImageWithFallback";
 
 interface ITestimonyCardProps {
     children: ReactNode | ReactNode[];
@@ -31,14 +38,28 @@ const TestimonyCard = ({ children, name, date }: ITestimonyCardProps) => {
     );
 };
 
-export default function Home() {
+export default function Home({
+    userCount,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
     return (
         <div className="flex w-full flex-1 flex-col items-center overflow-x-hidden">
             <div className="flex w-full max-w-screen-lg flex-col gap-8 px-2">
                 <article className="flex min-h-[calc(100svh-66px)] w-full flex-col items-center justify-center gap-8 py-4">
-                    <h1 className="text-2xl font-bold sm:text-4xl">
-                        YetAnotherMessagingApp
-                    </h1>
+                    <ImageWithFallback
+                        src={LogoTextRectangle}
+                        alt="Yet another messaging app"
+                        width={500}
+                        height={100}
+                        className="hidden scale-150 md:block"
+                        fallback={FallBackLogoTextRectangle}
+                    />
+                    <ImageWithFallback
+                        src={LogoTextSquare}
+                        alt="Yet another messaging app"
+                        width={300}
+                        className="md:hidden"
+                        fallback={FallBackLogoTextSquare}
+                    />
                     <Link
                         href="/chats"
                         className="rounded-lg px-4 py-2 uppercase shadow hover:text-sky-500 hover:shadow-sky-500 focus:text-sky-500 focus:shadow-sky-500 sm:text-xl"
@@ -47,8 +68,8 @@ export default function Home() {
                     </Link>
                 </article>
 
-                <article className="flex w-full flex-col gap-8 rounded-lg bg-sky-50 px-2 py-4 text-center shadow-md shadow-sky-50">
-                    <h2 className="text-lg font-bold">
+                <article className="flex w-full flex-col gap-8 rounded-lg px-2 py-4 text-center">
+                    <h2 className="text-lg font-bold text-sky-500">
                         Have you ever asked yourself...
                     </h2>
                     <p className="font-medium sm:text-left">
@@ -70,7 +91,7 @@ export default function Home() {
                 </article>
 
                 <article className="flex w-full flex-col gap-8 rounded-lg px-2 py-4 text-center">
-                    <h2 className="text-2xl font-bold uppercase">
+                    <h2 className="text-2xl font-bold uppercase text-sky-500">
                         Look no further!
                     </h2>
                     <p>Presenting YetAnotherMessagingApp!</p>
@@ -88,7 +109,7 @@ export default function Home() {
 
                 <article className="flex w-full flex-col gap-8 rounded-lg px-2 py-4 text-center">
                     <h2 className="text-2xl font-bold">
-                        Check out some of these testimonials 😏
+                        Check out these testimonials 😏
                     </h2>
                 </article>
             </div>
@@ -132,8 +153,29 @@ export default function Home() {
                     </TestimonyCard>
                 </div>
             </div>
+
+            <div className="flex min-h-[80svh] w-full max-w-screen-lg flex-col items-center justify-around gap-8 px-2 text-center">
+                <span className="text-3xl font-bold">Join</span>
+                <span className="scale-150 text-5xl font-bold text-sky-500">
+                    {userCount ? userCount : 0}
+                </span>
+                <span className="text-3xl font-bold">other happy users!</span>
+            </div>
             <div className="mt-12 sm:mt-20" />
             <Footer />
         </div>
     );
 }
+
+export const getStaticProps: GetStaticProps<{
+    userCount: number;
+}> = async () => {
+    const userCount = await prisma.user.count();
+
+    return {
+        props: {
+            userCount,
+        },
+        revalidate: 60,
+    };
+};
