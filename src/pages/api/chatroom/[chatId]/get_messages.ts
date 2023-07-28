@@ -5,6 +5,13 @@ import { z } from "zod";
 import { prisma } from "../../../../../prisma/prisma";
 import { TChatroomMessage } from "../../../../hooks/useGetChatroomQuery";
 import { authOptions } from "../../auth/[...nextauth]";
+import { AES, enc } from "crypto-js";
+
+export const decryptMessage = (str: string) => {
+    return AES.decrypt(str, process.env.SOMETHING_COOL as string).toString(
+        enc.Utf8
+    );
+};
 
 export type TChatroomData = Chatroom & {
     members: User[];
@@ -58,9 +65,18 @@ export default async function handler(
                 },
             },
         });
+
+        const decryptedMessages = chatroom?.messages.map((message) => {
+            const decryptedMsg = decryptMessage(message.content);
+            return {
+                ...message,
+                content: decryptedMsg,
+            };
+        });
+
         if (!chatroom) return res.status(400).end("Chatroom doesn't exist!?");
 
-        res.status(201).json(chatroom?.messages);
+        res.status(201).json(decryptedMessages);
     } else {
         res.setHeader("Allow", "GET");
         res.status(405).end("Method Not Allowed");
