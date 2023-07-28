@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Footer } from "../components/Footer";
 import { type ReactNode } from "react";
-import { GetStaticProps, InferGetStaticPropsType } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { prisma } from "../../prisma/prisma";
 import LogoTextRectangle from "../../public/logo-text-rectangle.webp";
 import LogoTextSquare from "../../public/logo-text-square.webp";
@@ -40,7 +40,7 @@ const TestimonyCard = ({ children, name, date }: ITestimonyCardProps) => {
 
 export default function Home({
     userCount,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
     return (
         <div className="flex w-full flex-1 flex-col items-center overflow-x-hidden">
             <div className="flex w-full max-w-screen-lg flex-col items-start gap-40 px-2">
@@ -174,7 +174,7 @@ export default function Home({
     );
 }
 
-export const getStaticProps: GetStaticProps<{
+export const getServerSideProps: GetServerSideProps<{
     userCount: number;
 }> = async () => {
     const userCount = await prisma.user.count();
@@ -183,6 +183,5 @@ export const getStaticProps: GetStaticProps<{
         props: {
             userCount,
         },
-        revalidate: 60,
     };
 };
