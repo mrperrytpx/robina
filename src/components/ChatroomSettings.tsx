@@ -221,7 +221,14 @@ export const ChatroomSettings = ({
                                                 : ""
                                         }`}
                                     >
-                                        {bannedMembers.data?.length ? (
+                                        {bannedMembers.isLoading ? (
+                                            <div className="w-full rounded-md bg-white px-2 py-3 text-center text-sm font-semibold shadow">
+                                                <LoadingSpinner
+                                                    color="rgb(14 165 233)"
+                                                    size={28}
+                                                />
+                                            </div>
+                                        ) : bannedMembers.data?.length ? (
                                             bannedMembers.data.map((member) => (
                                                 <MemberCard
                                                     key={member.id}

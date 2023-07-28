@@ -275,7 +275,7 @@ export const ChatroomMessages = ({
                 </Fragment>
             ))}
             <div ref={endRef} />
-            <div className="flex h-14 items-center gap-3 px-4">
+            <div className="flex h-14 items-center gap-3">
                 <button
                     type="submit"
                     className="group hidden rounded-full border-2 border-black p-2 hover:border-sky-500 focus:border-sky-500 sm:inline-block"

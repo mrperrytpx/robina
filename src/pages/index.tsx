@@ -9,7 +9,7 @@ interface ITestimonyCardProps {
 }
 const TestimonyCard = ({ children, name, date }: ITestimonyCardProps) => {
     return (
-        <div className="mx-[-60px] flex aspect-video w-80 max-w-[300px] flex-col rounded-lg bg-white shadow shadow-sky-500">
+        <div className="flex aspect-video w-80 max-w-[300px] flex-col rounded-lg bg-white shadow shadow-sky-500 motion-safe:mx-[-60px]">
             <div className="grid flex-1 grid-cols-[60px,1fr] items-center justify-center rounded-lg px-4 py-2 shadow">
                 <div className="grid aspect-square w-12 select-none items-center justify-center rounded-full bg-sky-500">
                     <span className="text-3xl uppercase text-white">
@@ -93,8 +93,8 @@ export default function Home() {
                 </article>
             </div>
 
-            <div className="mt-4 flex grow select-text motion-reduce:overflow-x-scroll motion-reduce:scrollbar-thin motion-reduce:scrollbar-track-black motion-reduce:scrollbar-thumb-sky-100 sm:mt-16">
-                <div className="flex min-w-full shrink-0 items-center justify-around motion-safe:animate-scroll">
+            <div className="mt-4 flex grow select-text motion-reduce:w-full motion-reduce:overflow-x-auto motion-reduce:px-4 motion-reduce:py-1 motion-reduce:scrollbar-thin motion-reduce:scrollbar-track-black motion-reduce:scrollbar-thumb-sky-100 sm:mt-16">
+                <div className="flex min-w-full shrink-0 items-center justify-around motion-safe:animate-scroll motion-reduce:justify-center motion-reduce:gap-8 ">
                     <TestimonyCard name="Quivby" date="27th of July, 2023">
                         I guess it&apos;s not the worst thing I&apos;ve used...
                     </TestimonyCard>

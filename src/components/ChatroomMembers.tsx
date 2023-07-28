@@ -24,7 +24,9 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
         <div className="flex-1 overflow-y-auto bg-sky-500 p-3 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100 sm:h-full sm:w-60 sm:py-0">
             {chatroomMembers.isLoading ? (
                 <div className="h4 flex w-full flex-col gap-2">
-                    <div className="mt-2 h-4 w-full animate-pulse rounded-md bg-gray-300 p-4 shadow" />
+                    <div className="flex h-4 w-full items-center rounded-md bg-white p-4 shadow">
+                        <div className="h-3 w-full animate-pulse bg-gray-300" />
+                    </div>
                     <SkeletonLoadingCard />
                     <SkeletonLoadingCard />
                     <SkeletonLoadingCard />
