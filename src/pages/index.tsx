@@ -5,8 +5,8 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { prisma } from "../../prisma/prisma";
 import LogoTextRectangle from "../../public/logo-text-rectangle.webp";
 import LogoTextSquare from "../../public/logo-text-square.webp";
-import FallBackLogoTextRectangle from "../../public/logo-text-rectangle.png";
-import FallBackLogoTextSquare from "../../public/logo-text-square.png";
+import FallbackLogoTextRectangle from "../../public/logo-text-rectangle.png";
+import FallbackLogoTextSquare from "../../public/logo-text-square.png";
 import { ImageWithFallback } from "../components/ImageWithFallback";
 
 interface ITestimonyCardProps {
@@ -43,33 +43,33 @@ export default function Home({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
     return (
         <div className="flex w-full flex-1 flex-col items-center overflow-x-hidden">
-            <div className="flex w-full max-w-screen-lg flex-col gap-8 px-2">
-                <article className="flex min-h-[calc(100svh-66px)] w-full flex-col items-center justify-center gap-8 py-4">
+            <div className="flex w-full max-w-screen-lg flex-col items-start gap-40 px-2">
+                <article className="flex min-h-[calc(100svh-200px)] w-full flex-col items-center justify-center gap-8 py-4">
                     <ImageWithFallback
                         src={LogoTextRectangle}
                         alt="Yet another messaging app"
                         width={500}
                         height={100}
                         className="hidden scale-150 md:block"
-                        fallback={FallBackLogoTextRectangle}
+                        fallback={FallbackLogoTextRectangle}
                     />
                     <ImageWithFallback
                         src={LogoTextSquare}
                         alt="Yet another messaging app"
                         width={300}
                         className="md:hidden"
-                        fallback={FallBackLogoTextSquare}
+                        fallback={FallbackLogoTextSquare}
                     />
                     <Link
                         href="/chats"
-                        className="rounded-lg px-4 py-2 uppercase shadow hover:text-sky-500 hover:shadow-sky-500 focus:text-sky-500 focus:shadow-sky-500 sm:text-xl"
+                        className="rounded-lg px-4 py-2 font-semibold uppercase shadow hover:text-sky-500 hover:shadow-sky-500 focus:text-sky-500 focus:shadow-sky-500 sm:text-xl"
                     >
                         Start Chatting
                     </Link>
                 </article>
 
                 <article className="flex w-full flex-col gap-8 rounded-lg px-2 py-4 text-center">
-                    <h2 className="text-lg font-bold text-sky-500">
+                    <h2 className="text-4xl font-bold text-sky-500">
                         Have you ever asked yourself...
                     </h2>
                     <p className="font-medium sm:text-left">
@@ -91,7 +91,7 @@ export default function Home({
                 </article>
 
                 <article className="flex w-full flex-col gap-8 rounded-lg px-2 py-4 text-center">
-                    <h2 className="text-2xl font-bold uppercase text-sky-500">
+                    <h2 className="text-4xl font-bold uppercase text-sky-500">
                         Look no further!
                     </h2>
                     <p>Presenting YetAnotherMessagingApp!</p>
@@ -102,8 +102,10 @@ export default function Home({
                         </p>
                     </div>
                     <div>
-                        <p>From its minimal design to its minimal features,</p>
-                        <p>there is simply (haha) no rival!</p>
+                        <p>
+                            From its minimal design to its minimal features,
+                            there is simply (haha) no rival!
+                        </p>
                     </div>
                 </article>
 
@@ -114,7 +116,7 @@ export default function Home({
                 </article>
             </div>
 
-            <div className="mt-4 flex grow select-text motion-reduce:w-full motion-reduce:overflow-x-auto motion-reduce:px-4 motion-reduce:py-1 motion-reduce:scrollbar-thin motion-reduce:scrollbar-track-black motion-reduce:scrollbar-thumb-sky-100 sm:mt-16">
+            <div className="mt-8 flex grow select-text motion-reduce:w-full motion-reduce:overflow-x-auto motion-reduce:px-4 motion-reduce:py-1 motion-reduce:scrollbar-thin motion-reduce:scrollbar-track-black motion-reduce:scrollbar-thumb-sky-100 sm:mt-16">
                 <div className="flex min-w-full shrink-0 items-center justify-around motion-safe:animate-scroll motion-reduce:justify-center motion-reduce:gap-8 ">
                     <TestimonyCard name="Quivby" date="27th of July, 2023">
                         I guess it&apos;s not the worst thing I&apos;ve used...
@@ -155,7 +157,12 @@ export default function Home({
             </div>
 
             <div className="flex min-h-[80svh] w-full max-w-screen-lg flex-col items-center justify-around gap-8 px-2 text-center">
-                <span className="text-3xl font-bold">Join</span>
+                <Link
+                    href="/signin"
+                    className="text-3xl font-bold uppercase hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
+                >
+                    Join
+                </Link>
                 <span className="scale-150 text-5xl font-bold text-sky-500">
                     {userCount ? userCount : 0}
                 </span>

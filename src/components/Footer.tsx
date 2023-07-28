@@ -4,7 +4,7 @@ import { VscGithub } from "react-icons/vsc";
 export const Footer = () => {
     return (
         <footer className="w-full bg-sky-500">
-            <div className="mx-auto flex max-w-screen-2xl flex-col items-center justify-center gap-4 px-4 py-8">
+            <div className="mx-auto flex max-w-screen-2xl flex-col items-center justify-center gap-4 px-4 py-20">
                 <div className="flex w-full flex-col items-center gap-4 md:flex-row md:justify-between">
                     <div className="flex flex-col items-center justify-center gap-4 p-2 text-white md:flex-row md:gap-6">
                         <Link
