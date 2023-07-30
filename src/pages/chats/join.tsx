@@ -129,7 +129,7 @@ export const getServerSideProps = async (
     if (session && !session.user.username) {
         return {
             redirect: {
-                destination: `/profile/username`,
+                destination: `/force-username`,
                 permanent: false,
             },
         };
