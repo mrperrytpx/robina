@@ -168,6 +168,7 @@ export const ChatroomSettings = ({
                                             <button
                                                 onClick={handleCopyInvite}
                                                 className="rounded-lg bg-white p-2 shadow"
+                                                aria-label="Copy invite string to clipboard."
                                             >
                                                 {copied ? (
                                                     <VscCheck
@@ -181,6 +182,7 @@ export const ChatroomSettings = ({
                                         )}
                                         {getInvite.data?.value && (
                                             <button
+                                                aria-label="Get new invite string."
                                                 onClick={async () =>
                                                     await patchInvite.mutateAsync(
                                                         {
@@ -260,6 +262,7 @@ export const ChatroomSettings = ({
                                         "group disabled:opacity-50"
                                     }
                                     disabled={deleteChatroom.isLoading}
+                                    aria-label="Delete the chatroom."
                                 >
                                     {deleteChatroom.isLoading ? (
                                         <LoadingSpinner
@@ -279,6 +282,7 @@ export const ChatroomSettings = ({
                                         dangerButtonStyles +
                                         "disabled:opacity-50"
                                     }
+                                    aria-label="Leave the chatroom."
                                     disabled={leaveChatroom.isLoading}
                                 >
                                     {leaveChatroom.isLoading ? (

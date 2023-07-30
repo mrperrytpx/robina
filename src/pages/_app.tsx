@@ -9,6 +9,12 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
 import type { ToastContainerProps } from "react-toastify/dist/types";
 import "react-toastify/dist/ReactToastify.css";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+    weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+    subsets: ["latin"],
+});
 
 const toastProps: ToastContainerProps = {
     autoClose: 1500,
@@ -36,6 +42,12 @@ export default function App({
         <SessionProvider session={session}>
             <QueryClientProvider client={queryClient}>
                 <Layout>
+                    <style jsx global>{`
+                        html,
+                        body {
+                            font-family: ${poppins.style.fontFamily};
+                        }
+                    `}</style>
                     <Component {...pageProps} />
                     <ToastContainer {...toastProps} />
                     <ReactQueryDevtools

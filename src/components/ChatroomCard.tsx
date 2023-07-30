@@ -44,23 +44,28 @@ export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
     };
 
     return (
-        <div className="group relative flex aspect-video w-[min(100%,280px)] flex-col items-center justify-center gap-4 rounded-xl p-4 shadow-md outline outline-2 hover:shadow-sky-500  hover:outline-sky-500 focus:shadow-sky-500 focus:outline-sky-500">
+        <div
+            tabIndex={0}
+            className="group relative flex aspect-video w-[min(100%,280px)] flex-col items-center justify-center gap-4 rounded-xl p-4 shadow-md outline outline-2 hover:shadow-sky-500  hover:outline-sky-500 focus:shadow-sky-500 focus:outline-sky-500"
+        >
             {joinChatroom.isLoading ? (
                 <LoadingSpinner size={50} color="#0ea5e9" />
             ) : (
                 <>
-                    <span className="line-clamp-2 w-full break-words text-center text-xl group-hover:line-clamp-none group-hover:hidden group-focus:line-clamp-none">
+                    <span className="line-clamp-2 w-full break-words text-center text-xl group-hover:line-clamp-none group-hover:hidden group-focus:line-clamp-none group-focus:hidden">
                         <strong>{chatroom.owner.username}&apos;s</strong>{" "}
                         {chatroom.name}
                     </span>
-                    <span className="line-clamp-3 w-full break-words text-center text-xs group-hover:line-clamp-none group-hover:hidden group-focus:line-clamp-none">
+                    <span className="line-clamp-3 w-full break-words text-center text-xs group-hover:line-clamp-none group-hover:hidden group-focus:line-clamp-none group-focus:hidden">
                         {chatroom.description}
                     </span>
-                    <div className="absolute inset-0 hidden h-full w-full items-center justify-between group-hover:flex">
+
+                    <div className="invisible absolute inset-0 flex h-full w-full items-center justify-between group-hover:visible group-focus:visible">
                         <button
                             onClick={handleAcceptInvite}
                             disabled={joinChatroom.isLoading}
-                            className="group/button mx-auto rounded-full p-1"
+                            className="group/button mx-auto rounded-full p-1 "
+                            aria-label={`Accept invite to a chatroom with the name ${chatroom.name}`}
                         >
                             <VscCheck
                                 className="fill-black group-hover/button:fill-sky-500 group-focus/button:fill-sky-500"
@@ -71,6 +76,7 @@ export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
                             onClick={handleDeclineInvite}
                             disabled={declineInvite.isLoading}
                             className="group/button mx-auto rounded-full p-1"
+                            aria-label={`Decline invite to a chatroom with the name ${chatroom.name}`}
                         >
                             <VscChromeClose
                                 className="fill-black group-hover/button:fill-red-600 group-focus/button:fill-red-600"

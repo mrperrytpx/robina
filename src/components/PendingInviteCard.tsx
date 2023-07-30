@@ -56,6 +56,7 @@ export const PendingInviteCard = ({ chatroom }: IPendingInviteCardProps) => {
                         handleAcceptInvite(chatroom.invite_link.value)
                     }
                     disabled={joinChatroom.isLoading}
+                    aria-label={`Accept invite to a chatroom with the name ${chatroom.name}.`}
                     className="group/button rounded-full"
                 >
                     {joinChatroom.isLoading ? (
@@ -71,6 +72,7 @@ export const PendingInviteCard = ({ chatroom }: IPendingInviteCardProps) => {
                     onClick={() => handleDeclineInvite(chatroom.id)}
                     disabled={declineInvite.isLoading}
                     className="group/button rounded-full"
+                    aria-label={`Decline invite to a chatroom with the name ${chatroom.name}.`}
                 >
                     <VscChromeClose
                         className="fill-black group-hover/button:fill-red-600 group-focus/button:fill-red-600"

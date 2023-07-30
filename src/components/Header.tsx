@@ -26,7 +26,7 @@ export const Header = () => {
     return (
         <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center bg-sky-500 shadow">
             <div className="flex w-full items-center justify-between px-4 py-2">
-                <Link href="/" className="text-3xl text-white">
+                <Link href="/" aria-label="Go to the homepage.">
                     <ImageWithFallback
                         width={48}
                         height={48}
@@ -46,6 +46,7 @@ export const Header = () => {
                                 <Link
                                     className="group px-1 py-2 text-xl font-bold uppercase text-white"
                                     href="/chats"
+                                    aria-label="New pending chat invites."
                                 >
                                     <VscBellDot
                                         className="fill-white group-hover:fill-black group-focus:fill-black"
@@ -60,6 +61,7 @@ export const Header = () => {
                                     <RiChat1Line
                                         className="fill-white group-hover:fill-black group-focus:fill-black"
                                         size={28}
+                                        aria-label="Go to all chatrooms page."
                                     />
                                 </Link>
                             )}

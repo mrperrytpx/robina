@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { ErrorBoundary } from "../components/ErrorBoundary";
-import { Chatroom } from "@prisma/client";
 import { pusherClient } from "../lib/pusher";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
@@ -32,8 +31,12 @@ const Layout = ({ children }: ILayoutProps) => {
             queryClient.invalidateQueries(["invites", session.data?.user.id]);
         };
 
-        pusherClient.subscribe(`chat__${session.data?.user.id}__new-invite`);
-        pusherClient.bind("new-invite", newInviteHandler);
+        if (session.data?.user) {
+            pusherClient.subscribe(
+                `chat__${session.data?.user.id}__new-invite`
+            );
+            pusherClient.bind("new-invite", newInviteHandler);
+        }
 
         return () => {
             pusherClient.unsubscribe(
@@ -41,7 +44,7 @@ const Layout = ({ children }: ILayoutProps) => {
             );
             pusherClient.unbind("new-invite", newInviteHandler);
         };
-    }, [queryClient, session.data?.user.id]);
+    }, [queryClient, session.data?.user]);
 
     useEffect(() => {
         const banUser = async (data: {
@@ -74,14 +77,16 @@ const Layout = ({ children }: ILayoutProps) => {
             }
         };
 
-        pusherClient.subscribe(`chat__${session.data?.user.id}__ban`);
-        pusherClient.bind("ban", banUser);
+        if (session.data?.user) {
+            pusherClient.subscribe(`chat__${session.data?.user.id}__ban`);
+            pusherClient.bind("ban", banUser);
+        }
 
         return () => {
             pusherClient.unsubscribe(`chat__${session.data?.user.id}__ban`);
             pusherClient.unbind("ban", banUser);
         };
-    }, [queryClient, session.data?.user.id]);
+    }, [queryClient, session.data?.user]);
 
     useEffect(() => {
         const revokeInvite = (data: { chatId: string; userId: string }) => {
@@ -97,8 +102,12 @@ const Layout = ({ children }: ILayoutProps) => {
             queryClient.invalidateQueries(["invites", session.data?.user.id]);
         };
 
-        pusherClient.subscribe(`chat__${session.data?.user.id}__revoke-invite`);
-        pusherClient.bind("revoke-invite", revokeInvite);
+        if (session.data?.user) {
+            pusherClient.subscribe(
+                `chat__${session.data?.user.id}__revoke-invite`
+            );
+            pusherClient.bind("revoke-invite", revokeInvite);
+        }
 
         return () => {
             pusherClient.unsubscribe(
@@ -106,7 +115,7 @@ const Layout = ({ children }: ILayoutProps) => {
             );
             pusherClient.unbind("revoke-invite", revokeInvite);
         };
-    }, [queryClient, session.data?.user.id]);
+    }, [queryClient, session.data?.user]);
 
     return (
         <>

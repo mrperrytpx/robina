@@ -334,7 +334,11 @@ const ChatPage = () => {
                         <span>{chatroom.data.name}</span>
                     </div>
                     <div className="flex items-center gap-4">
-                        <button className="group p-2" onClick={handleSettings}>
+                        <button
+                            className="group p-2"
+                            aria-label="Toggle chatroom settings modal."
+                            onClick={handleSettings}
+                        >
                             <FiSettings
                                 className=" group-hover:scale-110 group-hover:stroke-sky-500 group-focus:scale-110 group-focus:stroke-sky-500 group-active:scale-110"
                                 size={24}
@@ -342,6 +346,7 @@ const ChatPage = () => {
                         </button>
                         <button className="group p-2" onClick={handleMembers}>
                             <FiUsers
+                                aria-label="Toggle chatroom members aside"
                                 className="group-hover:scale-110 group-hover:stroke-sky-500 group-focus:scale-110 group-focus:stroke-sky-500 group-active:scale-110"
                                 size={24}
                             />

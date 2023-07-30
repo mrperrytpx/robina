@@ -49,16 +49,19 @@ export default function Home({
                         src={LogoTextRectangle}
                         alt="Yet another messaging app"
                         width={500}
-                        height={100}
+                        height={50}
                         className="hidden scale-150 md:block"
                         fallback={FallbackLogoTextRectangle}
+                        priority
                     />
                     <ImageWithFallback
                         src={LogoTextSquare}
                         alt="Yet another messaging app"
                         width={300}
+                        height={300}
                         className="md:hidden"
                         fallback={FallbackLogoTextSquare}
+                        priority
                     />
                     <Link
                         href="/chats"

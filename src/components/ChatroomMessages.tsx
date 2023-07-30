@@ -88,6 +88,7 @@ export const ChatroomMessages = ({
     const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
         if (!chatId) return;
         if (!chatroomMessages.data) return;
+        endRef.current?.scrollIntoView({ behavior: "instant" });
         reset();
 
         const splitMessage = data.message.split(" ");
@@ -138,10 +139,6 @@ export const ChatroomMessages = ({
             }
         }
     }, [isStartIntersecting, chatroomMessages]);
-
-    useEffect(() => {
-        endRef.current?.scrollIntoView({ behavior: "instant" });
-    }, [chatroomMessages.data]);
 
     useEffect(() => {
         const deleteMessageHandler = async (data: {
@@ -231,7 +228,10 @@ export const ChatroomMessages = ({
 
     if (chatroomMessages.isError && chatroomMessages.error instanceof Error) {
         return (
-            <div className="mx-auto flex max-h-[calc(100svh-66px)] w-full max-w-screen-lg flex-1 flex-col items-center justify-center px-8 py-4">
+            <div
+                aria-label="Error state"
+                className="mx-auto flex max-h-[calc(100svh-66px)] w-full max-w-screen-lg flex-1 flex-col items-center justify-center px-8 py-4"
+            >
                 <div className="flex flex-col items-center gap-4">
                     <span className="text-4xl">😅</span>
                     <p className="text-center text-xl font-medium">
@@ -277,9 +277,8 @@ export const ChatroomMessages = ({
             <div ref={endRef} />
             <div className="flex h-14 items-center gap-3">
                 <button
-                    type="submit"
                     className="group hidden rounded-full border-2 border-black p-2 hover:border-sky-500 focus:border-sky-500 sm:inline-block"
-                    aria-label="Send message"
+                    aria-label="Toggle chatroom settings modal."
                     onClick={handleSettings}
                 >
                     <FiSettings
@@ -312,7 +311,7 @@ export const ChatroomMessages = ({
                     <button
                         type="submit"
                         className="group rounded-full border-2 border-black p-2 hover:border-sky-500 focus:border-sky-500 disabled:opacity-50"
-                        aria-label="Send message"
+                        aria-label="Send message."
                         disabled={!chatroomMessages.data?.pages}
                     >
                         <VscSend

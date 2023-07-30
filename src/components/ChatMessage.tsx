@@ -64,6 +64,7 @@ export const ChatMessage = ({
                             messageId: message.id,
                         })
                     }
+                    aria-label="Delete message."
                     className="group/delete peer absolute right-3 hidden -translate-y-4 rounded-lg bg-white p-1.5 text-black shadow-lg group-hover/message:block  group-focus/message:block group-active/message:block active:block"
                 >
                     <VscTrash

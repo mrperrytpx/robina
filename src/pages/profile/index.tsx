@@ -82,13 +82,13 @@ const ProfilePage = () => {
                             style={{
                                 borderColor: errors.username
                                     ? "rgb(220 38 38)"
-                                    : "",
+                                    : "black",
                             }}
                             {...register("username")}
                             name="username"
                             id="username"
                             type="text"
-                            className="h-10 w-full max-w-md border-b-2 border-black p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500"
+                            className="h-10 w-full max-w-md border-b-2 p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500"
                             placeholder="lazyfox123_"
                             autoComplete="false"
                             maxLength={20}

@@ -39,6 +39,7 @@ const JoinChatroomPage = () => {
             reset();
             router.push("/chats");
         }
+        return;
     };
 
     return (
@@ -69,13 +70,13 @@ const JoinChatroomPage = () => {
                                 style={{
                                     borderColor: errors.invite
                                         ? "rgb(220 38 38)"
-                                        : "",
+                                        : "black",
                                 }}
                                 {...register("invite")}
                                 name="invite"
                                 id="invite"
                                 type="text"
-                                className="h-10 w-full border-b-2 border-black p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500 sm:w-auto sm:text-left"
+                                className="h-10 w-full border-b-2 p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500 sm:w-auto sm:text-left"
                                 placeholder="__________"
                                 autoComplete="false"
                                 maxLength={10}

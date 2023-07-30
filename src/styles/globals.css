@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-*,
-*::before,
-*::after {
-    font-family: "Poppins", sans-serif;
-}
-
 html,
 body {
     @apply bg-white;

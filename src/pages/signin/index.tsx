@@ -9,6 +9,12 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { Roboto } from "next/font/google";
+
+const roboto = Roboto({
+    weight: ["100", "300", "400", "500", "700", "900"],
+    subsets: ["latin"],
+});
 
 type ValidatedLoginForm = z.infer<typeof loginValidationSchema>;
 
@@ -87,10 +93,10 @@ export default function SignIn({
                                 style={{
                                     borderColor: errors.email
                                         ? "rgb(220 38 38)"
-                                        : "",
+                                        : "black",
                                 }}
                                 {...register("email")}
-                                className="h-10 w-full rounded-md border-2 border-black p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
+                                className="h-10 w-full rounded-md border-2 p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
                                 type="email"
                                 id="email"
                                 name="email"
@@ -134,7 +140,12 @@ export default function SignIn({
                                 height={18}
                             />
                         </div>
-                        <span className="pr-2 text-black group-hover:text-white">
+                        <span
+                            className={
+                                roboto.className +
+                                " pr-2 font-medium text-black group-hover:text-white"
+                            }
+                        >
                             Sign in with {provider.name}
                         </span>
                     </button>
