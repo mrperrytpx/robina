@@ -3,15 +3,6 @@ import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { prisma } from "../../../../../prisma/prisma";
 import { authOptions } from "../../auth/[...nextauth]";
-import { AES, enc } from "crypto-js";
-
-const decryptMessage = (str: string) => {
-    return JSON.parse(
-        AES.decrypt(str, process.env.SOMETHING_COOL as string).toString(
-            enc.Utf8
-        )
-    );
-};
 
 export default async function handler(
     req: NextApiRequest,
@@ -60,17 +51,9 @@ export default async function handler(
             },
         });
 
-        const decryptedMessages = chatroom?.messages.map((message) => {
-            const decryptedMsg = decryptMessage(message.content);
-            return {
-                ...message,
-                content: decryptedMsg.str,
-            };
-        });
-
         if (!chatroom) return res.status(400).end("Chatroom doesn't exist!?");
 
-        res.status(201).json(decryptedMessages);
+        res.status(201).json(chatroom.messages);
     } else {
         res.setHeader("Allow", "GET");
         res.status(405).end("Method Not Allowed");

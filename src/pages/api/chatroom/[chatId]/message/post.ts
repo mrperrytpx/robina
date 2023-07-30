@@ -4,14 +4,6 @@ import { prisma } from "../../../../../../prisma/prisma";
 import { pusherServer } from "../../../../../lib/pusher";
 import { chatMessageSchema } from "../../../../../lib/zSchemas";
 import { authOptions } from "../../../auth/[...nextauth]";
-import { AES } from "crypto-js";
-
-const encryptMessage = (str: string) => {
-    return AES.encrypt(
-        JSON.stringify({ str }),
-        process.env.SOMETHING_COOL as string
-    ).toString();
-};
 
 export default async function handler(
     req: NextApiRequest,
@@ -50,11 +42,9 @@ export default async function handler(
         if (!isMemberOfChatroom)
             return res.status(403).end("You're not a part of this chatroom!");
 
-        const encryptedMsg = encryptMessage(message);
-
         const newMessage = await prisma.message.create({
             data: {
-                content: encryptedMsg,
+                content: message,
                 author_id: user.id,
                 chatroom_id: isMemberOfChatroom.id,
             },
