@@ -231,7 +231,7 @@ export const ChatroomMessages = ({
 
     if (chatroomMessages.isError && chatroomMessages.error instanceof Error) {
         return (
-            <div className="mx-auto flex max-h-[calc(100svh-64px)] w-full max-w-screen-lg flex-1 flex-col items-center justify-center px-8 py-4">
+            <div className="mx-auto flex max-h-[calc(100svh-66px)] w-full max-w-screen-lg flex-1 flex-col items-center justify-center px-8 py-4">
                 <div className="flex flex-col items-center gap-4">
                     <span className="text-4xl">😅</span>
                     <p className="text-center text-xl font-medium">

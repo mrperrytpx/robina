@@ -303,7 +303,7 @@ const ChatPage = () => {
 
     if (chatroom.isError && chatroom.error instanceof Error) {
         return (
-            <div className="mx-auto flex max-h-[calc(100svh-64px)] w-full max-w-screen-lg flex-col items-center justify-center px-8 py-4">
+            <div className="mx-auto flex max-h-[calc(100svh-66px)] w-full max-w-screen-lg flex-col items-center justify-center px-8 py-4">
                 <div className="flex flex-col items-center gap-4">
                     <span className="text-4xl">😅</span>
                     <p className="text-center text-xl font-medium">
@@ -317,8 +317,8 @@ const ChatPage = () => {
     if (!chatroom.data) return null;
 
     return (
-        <div className="flex max-h-[calc(100svh-64px)] w-full flex-row">
-            <div className="flex max-h-[calc(100svh-64px)] w-full flex-col">
+        <div className="flex max-h-[calc(100svh-66px)] w-full flex-row">
+            <div className="flex max-h-[calc(100svh-66px)] w-full flex-col">
                 <div className="flex h-14 w-full items-center justify-between px-4 shadow sm:hidden">
                     <div className="line-clamp-2 flex items-center gap-2 text-sm font-semibold">
                         <Link

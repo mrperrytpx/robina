@@ -40,7 +40,7 @@ export default function App({
                     <ToastContainer {...toastProps} />
                     <ReactQueryDevtools
                         initialIsOpen={false}
-                        position="top-left"
+                        position="bottom-right"
                     />
                 </Layout>
             </QueryClientProvider>

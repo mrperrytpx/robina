@@ -7,9 +7,11 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useGetUserPendingInvitesQuery } from "../hooks/useGetUserPendingInvitesQuery";
 import DefaultPic from "../../public/default.png";
-import Logo from "../../public/logo.png";
+import LogoWhite from "../../public/logo-white.webp";
+import FallbackLogoWhite from "../../public/logo-white.png";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { ImageWithFallback } from "./ImageWithFallback";
 
 export const Header = () => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -25,19 +27,20 @@ export const Header = () => {
         <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center bg-sky-500 shadow">
             <div className="flex w-full items-center justify-between px-4 py-2">
                 <Link href="/" className="text-3xl text-white">
-                    <Image
-                        width={100}
-                        height={50}
-                        src={Logo}
+                    <ImageWithFallback
+                        width={48}
+                        height={48}
+                        src={LogoWhite}
                         alt="Website logo"
                         priority
+                        fallback={FallbackLogoWhite}
                     />
                 </Link>
                 <div className="flex items-center gap-3">
                     {session.status === "loading" ? (
                         <LoadingSpinner color="white" size={36} />
                     ) : null}
-                    {session?.data?.user && (
+                    {session.data?.user && (
                         <>
                             {pendingInvites.data?.length ? (
                                 <Link
@@ -76,6 +79,14 @@ export const Header = () => {
                                 />
                             </Link>
                         </>
+                    )}
+                    {!session.data?.user && session.status !== "loading" && (
+                        <Link
+                            className="vertical mt-[2px] hidden px-1 py-2 align-bottom text-lg font-semibold uppercase text-white hover:underline focus:underline sm:inline-block sm:text-xl"
+                            href="/signin"
+                        >
+                            Sign in
+                        </Link>
                     )}
                     <button
                         aria-label="Menu"

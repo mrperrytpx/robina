@@ -36,7 +36,7 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
         <div
             id="menu"
             ref={mobileRef}
-            className="absolute inset-0 top-16 z-20 flex h-[calc(100svh-64px)] w-full flex-col items-center bg-white px-4 py-8"
+            className="absolute inset-0 top-16 z-20 flex h-[calc(100svh-66px)] w-full flex-col items-center bg-white px-4 py-8"
         >
             {session.data?.user && (
                 <span className="text-center font-mono text-xl">

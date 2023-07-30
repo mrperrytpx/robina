@@ -30,7 +30,7 @@ const TestimonyCard = ({ children, name, date }: ITestimonyCardProps) => {
             </div>
 
             <div className="flex-[2] px-4 py-2">
-                <span className="line-clamp-3 text-xl italic">
+                <span className="line-clamp-3 text-lg italic">
                     &quot;{children}&quot;
                 </span>
             </div>
@@ -68,35 +68,39 @@ export default function Home({
                     </Link>
                 </article>
 
-                <article className="flex w-full flex-col gap-8 rounded-lg px-2 py-4 text-center">
+                <article className="flex w-full flex-col gap-8 rounded-lg px-2 py-4 text-center font-medium">
                     <h2 className="text-4xl font-bold text-sky-500">
                         Have you ever asked yourself...
                     </h2>
-                    <p className="font-medium sm:text-left">
+                    <p className="sm:text-left">
                         &quot;Is there an app like Discord I can use that&apos;s
                         kind of... bad?&quot;
                     </p>
-                    <p className="font-medium sm:text-right">
+                    <p className="sm:text-right">
                         &quot;I wonder what Discord&apos;s MVP looked
                         like...&quot;
                     </p>
-                    <p className="font-medium sm:text-left">
+                    <p className="sm:text-left">
                         &quot;Is there a way for me to experience what is was
                         like using online chatrooms back in the 90&apos;s?&quot;
                     </p>
-                    <p className="font-medium">
+                    <p>
                         &quot;Man I wish all these apps didn&apos;t have so many
                         good features...&quot;
                     </p>
                 </article>
 
-                <article className="flex w-full flex-col gap-8 rounded-lg px-2 py-4 text-center">
+                <article className="flex w-full flex-col gap-12 rounded-lg px-2 py-4 text-center font-medium">
                     <h2 className="text-4xl font-bold uppercase text-sky-500">
                         Look no further!
                     </h2>
-                    <p>Presenting YetAnotherMessagingApp!</p>
+                    <p className="text-xl">
+                        Presenting YetAnotherMessagingApp!
+                    </p>
                     <div>
-                        <p>The simplest messaging app you&apos;ll ever use!</p>
+                        <p>
+                            The most basic messaging app you&apos;ll ever use!
+                        </p>
                         <p className="text-xs font-bold">
                             (until I try to make profit from it)
                         </p>
@@ -104,7 +108,7 @@ export default function Home({
                     <div>
                         <p>
                             From its minimal design to its minimal features,
-                            there is simply (haha) no rival!
+                            there simply (haha) is no rival!
                         </p>
                     </div>
                 </article>
@@ -117,7 +121,7 @@ export default function Home({
             </div>
 
             <div className="mt-8 flex grow select-text motion-reduce:w-full motion-reduce:overflow-x-auto motion-reduce:px-4 motion-reduce:py-1 motion-reduce:scrollbar-thin motion-reduce:scrollbar-track-black motion-reduce:scrollbar-thumb-sky-100 sm:mt-16">
-                <div className="flex min-w-full shrink-0 items-center justify-around motion-safe:animate-scroll motion-reduce:justify-center motion-reduce:gap-8 ">
+                <div className="flex min-w-full shrink-0 items-center justify-around gap-8 motion-safe:flex-col sm:motion-safe:animate-scroll sm:motion-safe:flex-row sm:motion-safe:gap-0 sm:motion-reduce:justify-center">
                     <TestimonyCard name="Quivby" date="27th of July, 2023">
                         I guess it&apos;s not the worst thing I&apos;ve used...
                     </TestimonyCard>
@@ -136,7 +140,7 @@ export default function Home({
                     </TestimonyCard>
                 </div>
 
-                <div className="flex min-w-full shrink-0 animate-scroll items-center justify-around motion-reduce:hidden">
+                <div className="hidden min-w-full shrink-0 animate-scroll items-center justify-around sm:motion-safe:flex">
                     <TestimonyCard name="Quivby" date="27th of July, 2023">
                         I guess it&apos;s not the worst thing I&apos;ve used...
                     </TestimonyCard>
@@ -156,7 +160,7 @@ export default function Home({
                 </div>
             </div>
 
-            <div className="flex min-h-[80svh] w-full max-w-screen-lg flex-col items-center justify-around gap-8 px-2 text-center">
+            <div className="mb-20 mt-40 flex w-full max-w-screen-lg flex-col items-center justify-between gap-40 px-2 text-center">
                 <Link
                     href="/signin"
                     className="text-3xl font-bold uppercase hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
@@ -166,7 +170,9 @@ export default function Home({
                 <span className="scale-150 text-5xl font-bold text-sky-500">
                     {userCount ? userCount : 0}
                 </span>
-                <span className="text-3xl font-bold">other happy users!</span>
+                <span className="text-3xl font-bold">
+                    other happy {userCount === 1 ? "user" : "users"}!
+                </span>
             </div>
             <div className="mt-12 sm:mt-20" />
             <Footer />
