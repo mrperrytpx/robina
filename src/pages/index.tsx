@@ -64,6 +64,7 @@ export default function Home({
                         priority
                     />
                     <Link
+                        prefetch={false}
                         href="/chats"
                         className="rounded-lg px-4 py-2 font-semibold uppercase shadow hover:text-sky-500 hover:shadow-sky-500 focus:text-sky-500 focus:shadow-sky-500 sm:text-xl"
                     >
@@ -165,6 +166,7 @@ export default function Home({
 
             <div className="mb-20 mt-40 flex w-full max-w-screen-lg flex-col items-center justify-between gap-40 px-2 text-center">
                 <Link
+                    prefetch={false}
                     href="/signin"
                     className="text-3xl font-bold uppercase hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
                 >

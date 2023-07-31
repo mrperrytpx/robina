@@ -26,7 +26,11 @@ export const Header = () => {
     return (
         <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center bg-sky-500 shadow">
             <div className="flex w-full items-center justify-between px-4 py-2">
-                <Link href="/" aria-label="Go to the homepage.">
+                <Link
+                    prefetch={false}
+                    href="/"
+                    aria-label="Go to the homepage."
+                >
                     <ImageWithFallback
                         width={48}
                         height={48}
@@ -44,6 +48,7 @@ export const Header = () => {
                         <>
                             {pendingInvites.data?.length ? (
                                 <Link
+                                    prefetch={false}
                                     className="group px-1 py-2 text-xl font-bold uppercase text-white"
                                     href="/chats"
                                     aria-label="New pending chat invites."
@@ -55,6 +60,7 @@ export const Header = () => {
                                 </Link>
                             ) : (
                                 <Link
+                                    prefetch={false}
                                     className="group px-1 py-2 text-xl font-bold uppercase text-white"
                                     href="/chats"
                                 >
@@ -66,6 +72,7 @@ export const Header = () => {
                                 </Link>
                             )}
                             <Link
+                                prefetch={false}
                                 className="rounded-full border-2 border-sky-500 hover:border-white"
                                 href="/profile"
                                 aria-label="Profile"
@@ -84,6 +91,7 @@ export const Header = () => {
                     )}
                     {!session.data?.user && session.status !== "loading" && (
                         <Link
+                            prefetch={false}
                             className="vertical mt-[2px] hidden px-1 py-2 align-bottom text-lg font-semibold uppercase text-white hover:underline focus:underline sm:inline-block sm:text-xl"
                             href="/signin"
                         >

@@ -2,17 +2,19 @@ import React, { useEffect } from "react";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { ErrorBoundary } from "../components/ErrorBoundary";
-import { pusherClient } from "../lib/pusher";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import NextNProgress from "nextjs-progressbar";
 import { Header } from "../components/Header";
 import { TChatroomInvite } from "../hooks/useGetUserPendingInvitesQuery";
 import { TChatroomWIthOwner } from "./api/chatroom/get_owned";
+import type Pusher from "pusher-js/types/src/core/pusher";
 
 interface ILayoutProps {
     children: React.ReactNode;
 }
+
+let socketClient: Pusher;
 
 const Layout = ({ children }: ILayoutProps) => {
     const session = useSession();
@@ -32,17 +34,22 @@ const Layout = ({ children }: ILayoutProps) => {
         };
 
         if (session.data?.user) {
-            pusherClient.subscribe(
-                `chat__${session.data?.user.id}__new-invite`
-            );
-            pusherClient.bind("new-invite", newInviteHandler);
+            import("../lib/pusher").then(({ pusherClient }) => {
+                socketClient = pusherClient;
+                socketClient.subscribe(
+                    `chat__${session.data.user.id}__new-invite`
+                );
+                socketClient.bind("new-invite", newInviteHandler);
+            });
         }
 
         return () => {
-            pusherClient.unsubscribe(
-                `chat__${session.data?.user.id}__new-invite`
-            );
-            pusherClient.unbind("new-invite", newInviteHandler);
+            if (socketClient && session.data?.user) {
+                socketClient.unsubscribe(
+                    `chat__${session.data.user.id}__new-invite`
+                );
+                socketClient.unbind("new-invite", newInviteHandler);
+            }
         };
     }, [queryClient, session.data?.user]);
 
@@ -78,13 +85,19 @@ const Layout = ({ children }: ILayoutProps) => {
         };
 
         if (session.data?.user) {
-            pusherClient.subscribe(`chat__${session.data?.user.id}__ban`);
-            pusherClient.bind("ban", banUser);
+            import("../lib/pusher").then(({ pusherClient }) => {
+                socketClient = pusherClient;
+
+                socketClient.subscribe(`chat__${session.data?.user.id}__ban`);
+                socketClient.bind("ban", banUser);
+            });
         }
 
         return () => {
-            pusherClient.unsubscribe(`chat__${session.data?.user.id}__ban`);
-            pusherClient.unbind("ban", banUser);
+            if (socketClient && session.data?.user) {
+                socketClient.unsubscribe(`chat__${session.data?.user.id}__ban`);
+                socketClient.unbind("ban", banUser);
+            }
         };
     }, [queryClient, session.data?.user]);
 
@@ -103,17 +116,23 @@ const Layout = ({ children }: ILayoutProps) => {
         };
 
         if (session.data?.user) {
-            pusherClient.subscribe(
-                `chat__${session.data?.user.id}__revoke-invite`
-            );
-            pusherClient.bind("revoke-invite", revokeInvite);
+            import("../lib/pusher").then(({ pusherClient }) => {
+                socketClient = pusherClient;
+
+                socketClient.subscribe(
+                    `chat__${session.data?.user.id}__revoke-invite`
+                );
+                socketClient.bind("revoke-invite", revokeInvite);
+            });
         }
 
         return () => {
-            pusherClient.unsubscribe(
-                `chat__${session.data?.user.id}__revoke-invite`
-            );
-            pusherClient.unbind("revoke-invite", revokeInvite);
+            if (socketClient && session.data?.user) {
+                socketClient.unsubscribe(
+                    `chat__${session.data?.user.id}__revoke-invite`
+                );
+                socketClient.unbind("revoke-invite", revokeInvite);
+            }
         };
     }, [queryClient, session.data?.user]);
 

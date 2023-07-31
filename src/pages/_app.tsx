@@ -20,6 +20,9 @@ const toastProps: ToastContainerProps = {
     autoClose: 1500,
     theme: "light",
     limit: 5,
+    style: {
+        fontWeight: 600,
+    },
 };
 
 export default function App({
@@ -44,7 +47,8 @@ export default function App({
                 <Layout>
                     <style jsx global>{`
                         html,
-                        body {
+                        body,
+                        .Toastify {
                             font-family: ${poppins.style.fontFamily};
                         }
                     `}</style>
