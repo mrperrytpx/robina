@@ -63,13 +63,3 @@ export default function App({
         </SessionProvider>
     );
 }
-
-// const queryClient = new QueryClient();
-
-// await queryClient.prefetchQuery(["store"], getStoreData);
-
-// return {
-//     props: {
-//         dehydratedState: dehydrate(queryClient),
-//     },
-// };
