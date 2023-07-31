@@ -59,7 +59,7 @@ export default function App({
                 <meta property="og:title" content="YetAnotherMessagingApp" />
                 <meta
                     property="og:image"
-                    content={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/logo-text-rectangle.png`}
+                    content={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/meta-thumbnail.png`}
                 />
                 <meta property="og:type" content="website" />
                 <meta
