@@ -4,7 +4,7 @@ import { VscBellDot, VscChromeClose, VscMenu } from "react-icons/vsc";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { MobileMenu } from "./MobileMenu";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useGetUserPendingInvitesQuery } from "../hooks/useGetUserPendingInvitesQuery";
 import DefaultPic from "../../public/default.png";
 import LogoWhite from "../../public/logo-white.webp";
@@ -46,7 +46,7 @@ export const Header = () => {
                     ) : null}
                     {session.data?.user && (
                         <>
-                            {pendingInvites.data?.length ? (
+                            {(pendingInvites.data?.length || 0) >= 1 && (
                                 <Link
                                     prefetch={false}
                                     className="group px-1 py-2 text-xl font-bold uppercase text-white"
@@ -58,22 +58,23 @@ export const Header = () => {
                                         size={28}
                                     />
                                 </Link>
-                            ) : (
-                                <Link
-                                    prefetch={false}
-                                    className="group px-1 py-2 text-xl font-bold uppercase text-white"
-                                    href="/chats"
-                                >
-                                    <RiChat1Line
-                                        className="fill-white group-hover:fill-black group-focus:fill-black"
-                                        size={28}
-                                        aria-label="Go to all chatrooms page."
-                                    />
-                                </Link>
                             )}
                             <Link
                                 prefetch={false}
-                                className="rounded-full border-2 border-sky-500 hover:border-white"
+                                className="vertical mt-[2px] hidden px-1 py-2 text-lg font-semibold uppercase text-white hover:text-black hover:underline focus:text-black focus:underline sm:inline-block"
+                                href="/chats"
+                            >
+                                Chats
+                            </Link>
+                            <button
+                                onClick={() => signOut()}
+                                className="vertical mt-[2px] hidden px-1 py-2 text-lg font-semibold uppercase text-white hover:text-black hover:underline focus:text-black focus:underline sm:inline-block"
+                            >
+                                Sign out
+                            </button>
+                            <Link
+                                prefetch={false}
+                                className="rounded-full border-2 border-white shadow hover:border-black focus:border-black"
                                 href="/profile"
                                 aria-label="Profile"
                             >
@@ -89,10 +90,11 @@ export const Header = () => {
                             </Link>
                         </>
                     )}
+
                     {!session.data?.user && session.status !== "loading" && (
                         <Link
                             prefetch={false}
-                            className="vertical mt-[2px] hidden px-1 py-2 align-bottom text-lg font-semibold uppercase text-white hover:underline focus:underline sm:inline-block sm:text-xl"
+                            className="vertical mt-[2px] hidden px-1 py-2 text-lg font-semibold uppercase text-white hover:text-black hover:underline focus:text-black focus:underline sm:inline-block"
                             href="/signin"
                         >
                             Sign in

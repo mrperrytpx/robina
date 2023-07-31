@@ -8,6 +8,7 @@ import LogoTextSquare from "../../public/logo-text-square.webp";
 import FallbackLogoTextRectangle from "../../public/logo-text-rectangle.png";
 import FallbackLogoTextSquare from "../../public/logo-text-square.png";
 import { ImageWithFallback } from "../components/ImageWithFallback";
+import Head from "next/head";
 
 interface ITestimonyCardProps {
     children: ReactNode | ReactNode[];
@@ -44,7 +45,7 @@ export default function Home({
     return (
         <div className="flex w-full flex-1 flex-col items-center overflow-x-hidden">
             <div className="flex w-full max-w-screen-lg flex-col items-start gap-40 px-2">
-                <article className="flex min-h-[calc(100svh-200px)] w-full flex-col items-center justify-center gap-8 py-4">
+                <article className="flex min-h-[max(calc(100svh-200px),400px)] w-full flex-col items-center justify-center gap-8 py-4">
                     <ImageWithFallback
                         src={LogoTextRectangle}
                         alt="Yet another messaging app"
