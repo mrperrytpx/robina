@@ -9,6 +9,7 @@ import { Header } from "../components/Header";
 import { TChatroomInvite } from "../hooks/useGetUserPendingInvitesQuery";
 import { TChatroomWIthOwner } from "./api/chatroom/get_owned";
 import type Pusher from "pusher-js/types/src/core/pusher";
+import { CookieBanner } from "../components/CookieBanner";
 
 interface ILayoutProps {
     children: React.ReactNode;
@@ -161,6 +162,7 @@ const Layout = ({ children }: ILayoutProps) => {
                     color="black"
                     showOnShallow={false}
                 />
+                <CookieBanner />
                 <ErrorBoundary>
                     <main className="mx-auto flex min-h-[calc(100svh-66px)] w-full flex-1">
                         {children}
