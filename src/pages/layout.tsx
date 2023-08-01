@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { toast } from "react-toastify";
@@ -22,6 +21,14 @@ const Layout = ({ children }: ILayoutProps) => {
     const queryClient = useQueryClient();
 
     useEffect(() => {
+        if (session.data?.user) {
+            import("../lib/pusher").then(({ pusherClient }) => {
+                socketClient = pusherClient;
+            });
+        }
+    }, [session.data?.user]);
+
+    useEffect(() => {
         const newInviteHandler = async (data: TChatroomInvite) => {
             toast.success(`You are invited to join ${data.name}!`);
             queryClient.setQueryData(
@@ -34,14 +41,9 @@ const Layout = ({ children }: ILayoutProps) => {
             queryClient.invalidateQueries(["invites", session.data?.user.id]);
         };
 
-        if (session.data?.user) {
-            import("../lib/pusher").then(({ pusherClient }) => {
-                socketClient = pusherClient;
-                socketClient.subscribe(
-                    `chat__${session.data.user.id}__new-invite`
-                );
-                socketClient.bind("new-invite", newInviteHandler);
-            });
+        if (session.data?.user && socketClient) {
+            socketClient.subscribe(`chat__${session.data.user.id}__new-invite`);
+            socketClient.bind("new-invite", newInviteHandler);
         }
 
         return () => {
@@ -85,13 +87,9 @@ const Layout = ({ children }: ILayoutProps) => {
             }
         };
 
-        if (session.data?.user) {
-            import("../lib/pusher").then(({ pusherClient }) => {
-                socketClient = pusherClient;
-
-                socketClient.subscribe(`chat__${session.data?.user.id}__ban`);
-                socketClient.bind("ban", banUser);
-            });
+        if (session.data?.user && socketClient) {
+            socketClient.subscribe(`chat__${session.data?.user.id}__ban`);
+            socketClient.bind("ban", banUser);
         }
 
         return () => {
@@ -116,15 +114,11 @@ const Layout = ({ children }: ILayoutProps) => {
             queryClient.invalidateQueries(["invites", session.data?.user.id]);
         };
 
-        if (session.data?.user) {
-            import("../lib/pusher").then(({ pusherClient }) => {
-                socketClient = pusherClient;
-
-                socketClient.subscribe(
-                    `chat__${session.data?.user.id}__revoke-invite`
-                );
-                socketClient.bind("revoke-invite", revokeInvite);
-            });
+        if (session.data?.user && socketClient) {
+            socketClient.subscribe(
+                `chat__${session.data?.user.id}__revoke-invite`
+            );
+            socketClient.bind("revoke-invite", revokeInvite);
         }
 
         return () => {

@@ -77,8 +77,6 @@ export const ChatroomMessages = ({
 
     const isStartIntersecting = useIntersectionObserver(startRef, {});
 
-    const queue: IPostMessage[] = [];
-
     const postMessage = usePostChatMessageMutation();
     const inviteUser = useInviteUserMutation();
     const { register, handleSubmit, reset } = useForm<TChatMessage>({
@@ -86,13 +84,11 @@ export const ChatroomMessages = ({
     });
 
     const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
-        if (!chatId) return;
-        if (!chatroomMessages.data) return;
-        endRef.current?.scrollIntoView({ behavior: "instant" });
+        if (!chatId || !chatroomMessages.data) return;
         reset();
 
         const splitMessage = data.message.split(" ");
-        if (splitMessage[0] === "/invite") {
+        if (splitMessage[0].toLowerCase() === "/invite") {
             if (session.data?.user.id !== chatroom.owner_id) return;
 
             const response = await inviteUser.mutateAsync({
@@ -103,34 +99,28 @@ export const ChatroomMessages = ({
             if (!response?.ok) {
                 const error = await response?.text();
                 toast.error(error);
-                return;
             }
 
             return;
         }
 
-        const messageData = {
+        const messageData: IPostMessage = {
             ...data,
             chatId,
             fakeId: randomString(10),
         };
 
-        queue.unshift(messageData);
+        const response = await postMessage.mutateAsync({ ...messageData });
 
-        while (queue.length > 0) {
-            const message = queue.pop();
-            if (!message) return;
-            const response = await postMessage.mutateAsync({
-                ...message,
-            });
-
-            if (!response?.ok) {
-                const error = await response?.text();
-                toast.error(error);
-                return;
-            }
+        if (!response.ok) {
+            const error = await response.text();
+            toast.error(error);
         }
     };
+
+    useEffect(() => {
+        endRef.current?.scrollIntoView({ behavior: "instant" });
+    }, [chatroomMessages.data]);
 
     useEffect(() => {
         if (chatroomMessages.hasPreviousPage) {
@@ -243,39 +233,42 @@ export const ChatroomMessages = ({
     }
 
     return (
-        <div className="flex flex-1 flex-col overflow-y-auto p-2 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">
-            {chatroomMessages.isLoading ? (
-                <div className="mt-auto flex w-full items-center justify-center">
+        <>
+            <div className="flex flex-1 flex-col overflow-y-auto p-2 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">
+                {chatroomMessages.isLoading ? (
+                    <div className="mt-auto flex w-full items-center justify-center">
+                        <LoadingSpinner size={32} color="rgb(14 165 233)" />
+                    </div>
+                ) : chatroomMessages.isFetchingPreviousPage ? (
                     <LoadingSpinner size={32} color="rgb(14 165 233)" />
-                </div>
-            ) : chatroomMessages.isFetchingPreviousPage ? (
-                <LoadingSpinner size={32} color="rgb(14 165 233)" />
-            ) : (
-                <div className="mt-auto w-full" ref={startRef} />
-            )}
+                ) : (
+                    <div className="mt-auto w-full" ref={startRef} />
+                )}
 
-            {chatroomMessages.data?.pages.map((page, i) => (
-                <Fragment key={i}>
-                    {page.map((message, msgIdx) => {
-                        const isSameAuthor = shouldBeNewAuthor(
-                            page,
-                            msgIdx,
-                            message
-                        );
+                {chatroomMessages.data?.pages.map((page, i) => (
+                    <Fragment key={i}>
+                        {page.map((message, msgIdx) => {
+                            const isSameAuthor = shouldBeNewAuthor(
+                                page,
+                                msgIdx,
+                                message
+                            );
 
-                        return (
-                            <ChatMessage
-                                isSameAuthor={isSameAuthor}
-                                message={message}
-                                key={message.id}
-                                ownerId={chatroom.owner_id}
-                            />
-                        );
-                    })}
-                </Fragment>
-            ))}
-            <div ref={endRef} />
-            <div className="flex h-14 items-center gap-3">
+                            return (
+                                <ChatMessage
+                                    isSameAuthor={isSameAuthor}
+                                    message={message}
+                                    key={message.id}
+                                    ownerId={chatroom.owner_id}
+                                />
+                            );
+                        })}
+                    </Fragment>
+                ))}
+                <div ref={endRef} />
+            </div>
+
+            <div className="flex h-14 items-center gap-3 px-3">
                 <button
                     className="group hidden rounded-full border-2 border-black p-2 hover:border-sky-500 focus:border-sky-500 sm:inline-block"
                     aria-label="Toggle chatroom settings modal."
@@ -321,6 +314,6 @@ export const ChatroomMessages = ({
                     </button>
                 </form>
             </div>
-        </div>
+        </>
     );
 };

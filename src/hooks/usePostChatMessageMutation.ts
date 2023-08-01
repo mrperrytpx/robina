@@ -41,22 +41,22 @@ export const usePostChatMessageMutation = () => {
             const previousData: InfiniteData<TChatroomMessage[]> | undefined =
                 queryClient.getQueryData(["messages", chatId]);
 
+            const newMessage: TChatroomMessage = {
+                author: {
+                    ...session.data.user,
+                    created_at: new Date(),
+                    emailVerified: null,
+                },
+                author_id: session.data.user.id,
+                chatroom_id: chatId,
+                content: message,
+                created_at: new Date(),
+                id: fakeId,
+            };
+
             queryClient.setQueryData<typeof previousData>(
                 ["messages", chatId],
                 (oldData) => {
-                    const newMessage: TChatroomMessage = {
-                        author: {
-                            ...session.data.user,
-                            created_at: new Date(),
-                            emailVerified: null,
-                        },
-                        author_id: session.data.user.id,
-                        chatroom_id: chatId,
-                        content: message,
-                        created_at: new Date(),
-                        id: fakeId,
-                    };
-
                     const newData: typeof previousData = JSON.parse(
                         JSON.stringify(oldData)
                     );
@@ -71,10 +71,23 @@ export const usePostChatMessageMutation = () => {
 
             return { previousData, fakeId, chatId };
         },
-        onError: (_err, _player, context) => {
+        onError: (_err, _vars, context) => {
             queryClient.setQueryData(
                 ["messages", context?.chatId],
-                context?.previousData
+                (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
+                    if (!oldData) return;
+                    const newData: typeof oldData = JSON.parse(
+                        JSON.stringify(oldData)
+                    );
+
+                    newData.pages.forEach((page) => {
+                        page.filter(
+                            (message) => message.id !== context?.fakeId
+                        );
+                    });
+
+                    return newData;
+                }
             );
         },
     });
