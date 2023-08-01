@@ -1,4 +1,4 @@
-import { Fragment, RefObject, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { ChatMessage } from "./ChatMessage";
 import { TChatroomMessage } from "../hooks/useGetChatroomQuery";
 import { useRouter } from "next/router";
@@ -22,45 +22,14 @@ import { TChatMessage, chatMessageSchema } from "../lib/zSchemas";
 import { randomString } from "../util/randomString";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useInviteUserMutation } from "../hooks/useInviteUserMutation";
-
-type TIntersectionObserverOptions = {
-    root?: Element | null;
-    rootMargin?: string;
-    threshold?: number | number[];
-};
-
-export const useIntersectionObserver = (
-    ref: RefObject<HTMLDivElement>,
-    options: TIntersectionObserverOptions
-) => {
-    const [isIntersecting, setIsIntersecting] = useState(false);
-
-    useEffect(() => {
-        const current = ref.current as HTMLDivElement;
-
-        const hasIOSupport = !!window.IntersectionObserver;
-
-        if (!hasIOSupport || !current) return;
-
-        const observer = new IntersectionObserver(([entry]) => {
-            setIsIntersecting(entry.isIntersecting);
-        }, options);
-
-        observer.observe(current);
-
-        return () => {
-            setIsIntersecting(false);
-            observer.disconnect();
-        };
-    }, [ref, options]);
-
-    return isIntersecting;
-};
+import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 
 interface IChatroomMessagesProps {
     chatroom: Chatroom;
     handleSettings: () => void;
 }
+
+const queue: IPostMessage[] = [];
 
 export const ChatroomMessages = ({
     chatroom,
@@ -85,10 +54,11 @@ export const ChatroomMessages = ({
 
     const onSubmit: SubmitHandler<TChatMessage> = async (data) => {
         if (!chatId || !chatroomMessages.data) return;
-        reset();
 
         const splitMessage = data.message.split(" ");
         if (splitMessage[0].toLowerCase() === "/invite") {
+            reset();
+
             if (session.data?.user.id !== chatroom.owner_id) return;
 
             const response = await inviteUser.mutateAsync({
@@ -104,18 +74,75 @@ export const ChatroomMessages = ({
             return;
         }
 
+        if (queue.length >= 5) return;
+
         const messageData: IPostMessage = {
             ...data,
             chatId,
             fakeId: randomString(10),
         };
 
-        const response = await postMessage.mutateAsync({ ...messageData });
+        queue.push(messageData);
+        reset();
 
-        if (!response.ok) {
-            const error = await response.text();
-            toast.error(error);
+        if (!session.data?.user) return;
+
+        await queryClient.cancelQueries(["messages", chatId]);
+        const previousData: InfiniteData<TChatroomMessage[]> | undefined =
+            queryClient.getQueryData(["messages", chatId]);
+
+        const newMessage: TChatroomMessage = {
+            author: {
+                ...session.data.user,
+                created_at: new Date(),
+                emailVerified: null,
+            },
+            author_id: session.data.user.id,
+            chatroom_id: chatId,
+            content: data.message,
+            created_at: new Date(),
+            id: messageData.fakeId,
+        };
+
+        queryClient.setQueryData<typeof previousData>(
+            ["messages", chatId],
+            (oldData) => {
+                const newData: typeof previousData = JSON.parse(
+                    JSON.stringify(oldData)
+                );
+
+                newData?.pages[newData?.pages.length - 1 ?? 0].push(newMessage);
+
+                return newData;
+            }
+        );
+
+        while (queue.length > 0 && !postMessage.isLoading) {
+            const message = queue.shift();
+            if (!message) return;
+
+            const response = await postMessage.mutateAsync(message);
+            if (!response.ok) {
+                const error = await response.text();
+                toast.error(error);
+                queryClient.setQueryData(
+                    ["messages", messageData.chatId],
+                    (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
+                        if (!oldData) return;
+                        const newData: typeof oldData = JSON.parse(
+                            JSON.stringify(oldData)
+                        );
+                        newData.pages.forEach((page) => {
+                            page.filter(
+                                (message) => message.id !== messageData.fakeId
+                            );
+                        });
+                        return newData;
+                    }
+                );
+            }
         }
+        return;
     };
 
     useEffect(() => {
