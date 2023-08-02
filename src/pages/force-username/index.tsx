@@ -7,16 +7,19 @@ import { z } from "zod";
 import { useUpdateUsernameMutation } from "../../hooks/useUpdateUsernameMutation";
 import { useRouter } from "next/router";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { fword, nword } from "../../util/regex";
 
 export type TUsernameFormValues = z.infer<typeof usernameSchema>;
 
 export const usernameSchema = z.object({
     username: z
         .string()
-        .min(1, "Username must be 1 to 20 characters long")
-        .max(20, "Username must be 1 to 20 characters long")
+        .min(2, "Username must be 2 to 20 characters long")
+        .max(20, "Username must be 2 to 20 characters long")
         .toLowerCase()
-        .trim(),
+        .trim()
+        .refine((val) => !nword.test(val), "Hey! 😡")
+        .refine((val) => !fword.test(val), "Hey! 😡"),
 });
 
 const UsernamePage = () => {
@@ -35,6 +38,11 @@ const UsernamePage = () => {
     const updateUsername = useUpdateUsernameMutation();
 
     const onSubmit: SubmitHandler<TUsernameFormValues> = async (data) => {
+        if (data.username.match(nword) || data.username.match(fword)) {
+            setError("username", { message: "Hey! 😡" });
+            return;
+        }
+
         const response = await updateUsername.mutateAsync({ ...data });
 
         if (!response?.ok) {
@@ -68,13 +76,13 @@ const UsernamePage = () => {
                                 style={{
                                     borderColor: errors.username
                                         ? "rgb(220 38 38)"
-                                        : "",
+                                        : "black",
                                 }}
                                 {...register("username")}
                                 name="username"
                                 id="username"
                                 type="text"
-                                className="h-10 w-full border-b-2 border-black p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500"
+                                className="h-10 w-full border-b-2 p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500"
                                 placeholder="lazyfox123_"
                                 maxLength={20}
                                 minLength={1}
