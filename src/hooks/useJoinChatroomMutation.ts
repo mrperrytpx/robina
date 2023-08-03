@@ -48,7 +48,7 @@ export const useJoinChatroomMutation = () => {
                     return oldData.filter((room) => room.id !== chatroom.id);
                 }
             );
-            toast.success(`You joined "${chatroom.name}"!`);
+            toast.success(`You joined ${chatroom.name}!`);
             queryClient.invalidateQueries(["chatrooms", session.data?.user.id]);
         },
     });

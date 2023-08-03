@@ -63,7 +63,7 @@ const Layout = ({ children }: ILayoutProps) => {
             chatroomName: string;
         }) => {
             if (data.id === session.data?.user.id) {
-                toast.error(`You got removed from "${data.chatroomName}"!`);
+                toast.error(`You have been removed from ${data.chatroomName}!`);
                 queryClient.setQueryData(
                     ["chatrooms", session.data?.user.id],
                     (oldData: TChatroomWIthOwner[] | undefined) => {

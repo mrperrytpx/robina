@@ -59,7 +59,7 @@ export const useLeaveChatroomMutation = () => {
         },
         onSuccess: async (data, _vars, context) => {
             if (!data.response.ok) return;
-            toast.success(`You left "${context?.chatName}"!`);
+            toast.success(`You left ${context?.chatName}!`);
             queryClient.invalidateQueries(["chatrooms", session.data?.user.id]);
         },
     });

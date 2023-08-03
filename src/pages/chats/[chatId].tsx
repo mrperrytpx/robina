@@ -82,7 +82,7 @@ const ChatPage = () => {
                     const member = (
                         queryClient.getQueryData(["members", chatId]) as User[]
                     ).find((user) => user.id === data.id);
-                    toast.error(`${member?.username} got banned!`);
+                    toast.error(`${member?.username} has been banned!`);
                 }
 
                 queryClient.setQueryData(
@@ -157,7 +157,7 @@ const ChatPage = () => {
                     queryClient.getQueryData(["members", chatId]) as User[]
                 ).find((user) => user.id === data.id);
 
-                toast.warn(`${member?.username} left the chatroom!`);
+                toast.warn(`${member?.username} has left the chatroom!`);
 
                 queryClient.setQueryData(
                     ["members", chatId],
@@ -239,7 +239,7 @@ const ChatPage = () => {
         }) => {
             await router.push("/chats");
             if (data.userId !== session.data?.user.id) {
-                toast.error("Owner deleted the chatroom!");
+                toast.error("Owner has deleted the chatroom!");
                 queryClient.setQueryData(
                     ["chatrooms", session.data?.user.id],
                     (oldData: TChatroomWIthOwner[] | undefined) => {

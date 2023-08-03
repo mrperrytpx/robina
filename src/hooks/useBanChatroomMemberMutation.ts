@@ -64,7 +64,7 @@ export const useBanChatroomMemberMutation = () => {
             );
         },
         onSuccess: (data, _vars, context) => {
-            toast.success(`You banned "${context?.username}"!`);
+            toast.success(`${context?.username} has been banned!`);
             queryClient.invalidateQueries(["banned_members", data.chatId]);
         },
     });

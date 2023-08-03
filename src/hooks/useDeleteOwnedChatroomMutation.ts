@@ -50,7 +50,7 @@ export const useDeleteOwnedChatroomMutation = () => {
             if (!data.response.ok) return;
             if (context?.previousData?.name) {
                 toast.success(
-                    `You successfully deleted "${context?.previousData?.name}"!`
+                    `${context?.previousData?.name} successfully deleted!`
                 );
             } else {
                 toast.success("Chatroom successfully deleted!");

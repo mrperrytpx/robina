@@ -48,7 +48,7 @@ export const useUnbanChatroomMemberMutation = () => {
                 }
             );
 
-            toast.success(`You unbanned ${unbannedUser?.username}!`);
+            toast.success(`${unbannedUser?.username} has been unbanned!`);
 
             return { previousData, chatId: data.chatId };
         },
