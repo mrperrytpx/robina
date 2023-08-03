@@ -12,7 +12,7 @@ export const Footer = () => {
                             className="font-medium hover:text-black hover:underline focus:text-black focus:underline"
                             href="/s/tos"
                         >
-                            FAQ
+                            Terms of Service
                         </Link>
                         <Link
                             prefetch={false}

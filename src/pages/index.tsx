@@ -8,7 +8,6 @@ import LogoTextSquare from "../../public/logo-text-square.webp";
 import FallbackLogoTextRectangle from "../../public/logo-text-rectangle.png";
 import FallbackLogoTextSquare from "../../public/logo-text-square.png";
 import { ImageWithFallback } from "../components/ImageWithFallback";
-import Head from "next/head";
 
 interface ITestimonyCardProps {
     children: ReactNode | ReactNode[];

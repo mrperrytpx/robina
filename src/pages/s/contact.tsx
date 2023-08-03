@@ -4,7 +4,7 @@ const ContactPage = () => {
     return (
         <>
             <Head>
-                <title>YetAnotherMessagingApp - Contact Us</title>
+                <title>Contact Us</title>
             </Head>
             <div className="mx-auto mb-20 mt-6 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4">
                 <h1 className="text-2xl font-semibold">Contact</h1>
