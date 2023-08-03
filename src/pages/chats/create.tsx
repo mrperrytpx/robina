@@ -143,7 +143,7 @@ export const getServerSideProps = async (
     if (!session) {
         return {
             redirect: {
-                destination: `/api/auth/signin?callbackUrl=${encodeURIComponent(
+                destination: `/signin?callbackUrl=${encodeURIComponent(
                     process.env.NEXTAUTH_URL + ctx.resolvedUrl
                 )}`,
                 permanent: false,

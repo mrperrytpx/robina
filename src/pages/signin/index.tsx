@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { Roboto } from "next/font/google";
+import { useState } from "react";
 
 const roboto = Roboto({
     weight: ["100", "300", "400", "500", "700", "900"],
@@ -39,8 +40,8 @@ export default function SignIn({
     // config provider order matters - same as order in authConfig file
     const allProviders = Object.values(providers).slice(1);
 
-    const onSubmit = handleSubmit((data) => {
-        signIn("email", {
+    const onSubmit = handleSubmit(async (data) => {
+        await signIn("email", {
             email: data.email,
             callbackUrl: "/",
         });
@@ -57,7 +58,7 @@ export default function SignIn({
                         YetAnotherMessagingApp
                     </Link>
                     {error === "SessionRequired" && (
-                        <p className="text-sm">
+                        <p className="text-center text-sm text-red-600">
                             <u>
                                 Please <strong>Sign In</strong> to access this
                                 page.
@@ -65,14 +66,15 @@ export default function SignIn({
                         </p>
                     )}
                     {error === "OAuthAccountNotLinked" && (
-                        <p>
+                        <p className="text-center text-sm text-red-600">
                             <u>
-                                This email is already linked to another account.
+                                This email is already linked, but not to this
+                                OAuth account.
                             </u>
                         </p>
                     )}
                     {error === "Default" && (
-                        <p className="text-sm text-red-600">
+                        <p className="text-center text-sm text-red-600">
                             Something is wrong... Try again.
                         </p>
                     )}
@@ -116,7 +118,7 @@ export default function SignIn({
                         className="h-10 rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500   enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                         disabled={!!isSubmitting}
                     >
-                        Sign in
+                        {isSubmitting ? "Signing in..." : "Sign in"}
                     </button>
                 </form>
                 <div className="relative flex w-full items-center justify-center text-xs">
