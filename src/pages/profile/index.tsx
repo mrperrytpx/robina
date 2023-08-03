@@ -24,7 +24,7 @@ const ProfilePage = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isSubmitting },
         setError,
     } = useForm<TUsernameFormValues>({
         resolver: zodResolver(usernameSchema),
@@ -63,67 +63,66 @@ const ProfilePage = () => {
 
     return (
         <div className="mx-auto flex w-full max-w-screen-md flex-1 flex-col p-2 px-4">
-            <form
-                className="mt-4 flex w-full flex-col items-center gap-8"
-                onSubmit={handleSubmit(onSubmit)}
-            >
+            <div className="mt-4 flex w-full flex-col items-center gap-8">
                 <div className="flex w-full flex-col items-center gap-2">
-                    <fieldset className="flex w-full flex-col items-center gap-1">
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="flex w-full flex-col items-center gap-1"
+                    >
                         <label
-                            className="block w-full text-center text-sm sm:w-auto"
+                            className="block w-full text-center text-sm font-bold uppercase text-glacier-900 sm:w-auto"
                             htmlFor="username"
                             aria-label="username"
                         >
-                            <span className="font-bold uppercase">
-                                Username:
-                            </span>
+                            Username:
                         </label>
                         <input
-                            style={{
-                                borderColor: errors.username
-                                    ? "rgb(220 38 38)"
-                                    : "black",
-                            }}
                             {...register("username")}
                             name="username"
                             id="username"
                             type="text"
-                            className="h-10 w-full max-w-md border-b-2 p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500"
+                            className={`h-10 w-full max-w-md border-b-2 border-glacier-900 p-2 text-center text-sm font-medium hover:border-glacier-400 focus:border-glacier-400 focus:outline-glacier-400 ${
+                                errors.username && "border-red-600"
+                            }`}
                             placeholder="lazyfox123_"
                             autoComplete="false"
                             maxLength={20}
                             minLength={1}
                         />
-                    </fieldset>
+                        <div className="mt-2 flex w-full flex-col items-center gap-2">
+                            <button
+                                className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium text-glacier-900 shadow-glacier-600 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600 enabled:hover:text-white enabled:hover:shadow enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow disabled:border-0 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
+                                type="submit"
+                                disabled={
+                                    updateUsername.isLoading || isSubmitting
+                                }
+                            >
+                                {updateUsername.isLoading ? (
+                                    <LoadingSpinner
+                                        color="rgb(2 132 199)"
+                                        size={24}
+                                    />
+                                ) : (
+                                    "Change username"
+                                )}
+                            </button>
+                        </div>
+                    </form>
                     {errors.username && (
-                        <span className="text-xs font-semibold text-red-500">
+                        <span className="text-xs font-semibold text-red-600">
                             {errors.username.message}
                         </span>
                     )}
-                    <p className="w-full text-center text-xs">
-                        *Usernames get converted to lowercase letters.
-                    </p>
-                </div>
-
-                <div className="flex w-full flex-col items-center gap-2">
-                    <button
-                        className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
-                        type="submit"
-                        disabled={updateUsername.isLoading}
-                    >
-                        {updateUsername.isLoading ? (
-                            <LoadingSpinner color="rgb(2 132 199)" size={24} />
-                        ) : (
-                            "Change username"
-                        )}
-                    </button>
                     {errors.root && (
-                        <span className="text-xs font-semibold text-red-500">
+                        <span className="text-xs font-semibold text-red-600">
                             {errors.root.message}
                         </span>
                     )}
+                    <p className="w-full text-center text-xs font-medium">
+                        *Usernames get converted to lowercase letters.
+                    </p>
                 </div>
-            </form>
+            </div>
 
             <article className="my-4 flex w-full flex-col items-center gap-1 sm:mt-8">
                 <h2 className="text-sm font-bold uppercase">
@@ -131,7 +130,7 @@ const ProfilePage = () => {
                 </h2>
                 {pendingInvites.isLoading ? (
                     <div className="my-1">
-                        <LoadingSpinner color="rgb(14 165 233)" size={28} />
+                        <LoadingSpinner color="#337387" size={28} />
                     </div>
                 ) : pendingInvites.data?.length ? (
                     pendingInvites.data.map((invitedToChatroom) => (
@@ -169,8 +168,8 @@ const ProfilePage = () => {
             </article>
             {isModalOpen && (
                 <Portal setState={setIsModalOpen} shouldRoute={false}>
-                    <div className="relative flex max-h-full w-full flex-col items-center gap-8 overflow-y-auto rounded-md border-2 border-white bg-white p-4 text-center text-sm hover:border-sky-500 sm:max-w-md">
-                        <h1 className="mb-2 mt-4 text-xl font-bold uppercase sm:mt-0">
+                    <div className="relative flex max-h-full w-full flex-col items-center gap-8 overflow-y-auto rounded-md border-2 border-white bg-white p-4 text-center text-sm hover:border-glacier-600 sm:max-w-md">
+                        <h1 className="mb-2 mt-4 text-xl font-bold uppercase text-glacier-950 sm:mt-0">
                             Are you sure?
                         </h1>
                         <p className="mb-2">

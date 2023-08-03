@@ -18,8 +18,7 @@ export const usernameSchema = z.object({
         .max(20, "Username must be 2 to 20 characters long")
         .toLowerCase()
         .trim()
-        .refine((val) => !nword.test(val), "Hey! 😡")
-        .refine((val) => !fword.test(val), "Hey! 😡"),
+        .refine((val) => !val.match(nword) && !val.match(fword), "Hey! 😡"),
 });
 
 const UsernamePage = () => {
@@ -38,11 +37,6 @@ const UsernamePage = () => {
     const updateUsername = useUpdateUsernameMutation();
 
     const onSubmit: SubmitHandler<TUsernameFormValues> = async (data) => {
-        if (data.username.match(nword) || data.username.match(fword)) {
-            setError("username", { message: "Hey! 😡" });
-            return;
-        }
-
         const response = await updateUsername.mutateAsync({ ...data });
 
         if (!response?.ok) {
@@ -82,7 +76,7 @@ const UsernamePage = () => {
                                 name="username"
                                 id="username"
                                 type="text"
-                                className="h-10 w-full border-b-2 p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500"
+                                className="h-10 w-full border-b-2 p-2 text-center text-sm font-medium hover:border-glacier-600 hover:outline-glacier-600 focus:border-white focus:outline-glacier-600"
                                 placeholder="lazyfox123_"
                                 maxLength={20}
                                 minLength={1}
@@ -100,7 +94,7 @@ const UsernamePage = () => {
 
                     <div className="flex w-full flex-col items-center gap-2">
                         <button
-                            className="flex h-10 w-full max-w-[250px] select-none items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500   enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                            className="flex h-10 w-full max-w-[250px] select-none items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-glacier-600 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600   enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                             type="submit"
                             disabled={updateUsername.isLoading}
                         >

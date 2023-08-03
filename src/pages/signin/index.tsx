@@ -97,7 +97,7 @@ export default function SignIn({
                                         : "black",
                                 }}
                                 {...register("email")}
-                                className="h-10 w-full rounded-md border-2 p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
+                                className="h-10 w-full rounded-md border-2 p-2 text-sm font-medium hover:border-glacier-600 hover:outline-glacier-600 focus:border-glacier-600 focus:outline-glacier-600"
                                 type="email"
                                 id="email"
                                 name="email"
@@ -114,7 +114,7 @@ export default function SignIn({
                     </fieldset>
                     <button
                         type="submit"
-                        className="h-10 rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500   enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                        className="h-10 rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-glacier-600 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600   enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                         disabled={!!isSubmitting}
                     >
                         {isSubmitting ? "Signing in..." : "Sign in"}

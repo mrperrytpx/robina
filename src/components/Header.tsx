@@ -24,7 +24,7 @@ export const Header = () => {
     useEffect(() => setIsExpanded(false), [pathname]);
 
     return (
-        <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center bg-sky-500 shadow">
+        <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center bg-glacier-600 shadow">
             <div className="flex w-full items-center justify-between px-4 py-2">
                 <Link
                     prefetch={false}
@@ -62,14 +62,14 @@ export const Header = () => {
                             )}
                             <Link
                                 prefetch={false}
-                                className="vertical mt-[2px] hidden px-1 py-2 text-lg font-semibold uppercase text-white hover:text-black hover:underline focus:text-black focus:underline sm:inline-block"
+                                className="mt-[2px] hidden border-b border-glacier-600 px-2 py-0.5 text-lg font-semibold uppercase text-white hover:border-glacier-100 sm:inline-block"
                                 href="/chats"
                             >
                                 Chats
                             </Link>
                             <button
                                 onClick={() => signOut()}
-                                className="vertical mt-[2px] hidden px-1 py-2 text-lg font-semibold uppercase text-white hover:text-black hover:underline focus:text-black focus:underline sm:inline-block"
+                                className="mt-[2px] hidden border-b border-glacier-600 px-2 py-0.5 text-lg font-semibold uppercase text-white hover:border-glacier-100 sm:inline-block"
                             >
                                 Sign out
                             </button>
@@ -95,7 +95,7 @@ export const Header = () => {
                     {!session.data?.user && session.status !== "loading" && (
                         <Link
                             prefetch={false}
-                            className="vertical mt-[2px] hidden px-1 py-2 text-lg font-semibold uppercase text-white hover:text-black hover:underline focus:text-black focus:underline sm:inline-block"
+                            className="vertical mt-[2px] hidden px-1 py-2 text-lg font-semibold uppercase text-white  hover:underline focus:underline sm:inline-block"
                             href="/signin"
                         >
                             Sign in

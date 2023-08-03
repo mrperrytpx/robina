@@ -17,7 +17,7 @@ export const createChatroomSchema = z.object({
         .max(50, "Name can't exceed 50 characters"),
     description: z
         .string()
-        .min(1, "Required")
+        .min(2, "Required")
         .max(500, "Description cann't exceed 500 characters"),
 });
 

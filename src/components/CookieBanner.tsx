@@ -40,7 +40,7 @@ export const CookieBanner = () => {
             </p>
             <button
                 onClick={handleAcceptCookies}
-                className="mt-4 select-none rounded-lg border-2 border-white bg-white px-4 py-2 font-semibold text-black hover:border-black hover:text-sky-500 focus:border-black focus:text-sky-500"
+                className="mt-4 select-none rounded-lg border-2 border-white bg-white px-4 py-2 font-semibold text-black hover:border-black hover:text-glacier-600 focus:border-black focus:text-glacier-600"
             >
                 I understand
             </button>

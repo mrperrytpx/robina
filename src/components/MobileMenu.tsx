@@ -52,28 +52,28 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
                     <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-4">
                         <Link
                             prefetch={false}
-                            className="p-2 text-center text-2xl hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
+                            className="p-2 text-center text-2xl hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
                             href="/profile"
                         >
                             Profile
                         </Link>
                         <Link
                             prefetch={false}
-                            className="p-2 text-center text-2xl hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
+                            className="p-2 text-center text-2xl hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
                             href="/chats"
                         >
                             Chatrooms
                         </Link>
                         <Link
                             prefetch={false}
-                            className="p-2 text-center text-2xl hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
+                            className="p-2 text-center text-2xl hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
                             href="/chats/join"
                         >
                             Join Chatroom
                         </Link>
 
                         <button
-                            className="p-2 text-center text-2xl hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
+                            className="p-2 text-center text-2xl hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
                             onClick={() => signOut()}
                         >
                             Sign Out
@@ -84,7 +84,7 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
                 <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-4">
                     <Link
                         prefetch={false}
-                        className="select-none p-2 text-center text-2xl hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
+                        className="select-none p-2 text-center text-2xl hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
                         href="/signin"
                     >
                         Sign In
@@ -99,7 +99,7 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
                 className="group mt-auto select-none"
             >
                 <VscGithub
-                    className="group-hover:fill-sky-500 group-focus:fill-sky-500"
+                    className="group-hover:fill-glacier-600 group-focus:fill-glacier-600"
                     size={56}
                 />
             </a>

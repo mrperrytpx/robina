@@ -11,9 +11,6 @@ export default async function handler(
     if (req.method === "PATCH") {
         const { username } = usernameSchema.parse(req.body);
 
-        if (!username)
-            return res.status(404).end("User doesn't exist!name provided!");
-
         if (username.split(" ").length > 1)
             return res.status(404).end("No spaces allowed!");
 

@@ -47,10 +47,10 @@ const JoinChatroomPage = () => {
             <div className="flex w-full max-w-md flex-col p-2">
                 <button
                     onClick={() => router.back()}
-                    className="group mb-6 flex select-none items-center gap-1 self-start rounded-md border-2 border-black px-2 py-1 text-sm font-semibold uppercase antialiased shadow  hover:border-white hover:shadow-sky-500 focus:border-white focus:shadow-sky-500"
+                    className="group mb-6 flex select-none items-center gap-1 self-start rounded-md border-2 border-black px-2 py-1 text-sm font-semibold uppercase antialiased shadow  hover:border-white hover:shadow-glacier-600 focus:border-white focus:shadow-glacier-600"
                 >
                     <VscArrowLeft
-                        className="group-hover:fill-sky-500 group-focus:fill-sky-500"
+                        className="group-hover:fill-glacier-600 group-focus:fill-glacier-600"
                         size={32}
                     />{" "}
                     Go Back
@@ -76,7 +76,7 @@ const JoinChatroomPage = () => {
                                 name="invite"
                                 id="invite"
                                 type="text"
-                                className="h-10 w-full border-b-2 p-2 text-center text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-white focus:outline-sky-500 sm:w-auto sm:text-left"
+                                className="h-10 w-full border-b-2 p-2 text-center text-sm font-medium hover:border-glacier-600 hover:outline-glacier-600 focus:border-white focus:outline-glacier-600 sm:w-auto sm:text-left"
                                 placeholder="__________"
                                 autoComplete="false"
                                 maxLength={10}
@@ -91,7 +91,7 @@ const JoinChatroomPage = () => {
                     </div>
                     <div className="flex w-full flex-col items-center gap-2">
                         <button
-                            className="h-10 w-full max-w-[250px] select-none rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500   enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                            className="h-10 w-full max-w-[250px] select-none rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-glacier-600 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600   enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                             type="submit"
                             disabled={joinChatroom.isLoading}
                         >

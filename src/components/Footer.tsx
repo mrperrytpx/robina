@@ -3,27 +3,27 @@ import { VscGithub } from "react-icons/vsc";
 
 export const Footer = () => {
     return (
-        <footer className="w-full bg-sky-500">
+        <footer className="w-full bg-glacier-600">
             <div className="mx-auto flex max-w-screen-2xl flex-col items-center justify-center gap-4 px-4 py-20">
                 <div className="flex w-full flex-col items-center gap-4 md:flex-row md:justify-between">
                     <div className="flex flex-col items-center justify-center gap-4 p-2 text-white md:flex-row md:gap-6">
                         <Link
                             prefetch={false}
-                            className="font-medium hover:text-black hover:underline focus:text-black focus:underline"
+                            className="border-b border-glacier-600 text-sm font-medium  text-white hover:border-glacier-100 sm:inline-block"
                             href="/tos"
                         >
                             Terms of Service
                         </Link>
                         <Link
                             prefetch={false}
-                            className="font-medium hover:text-black hover:underline focus:text-black focus:underline"
+                            className="border-b border-glacier-600 text-sm font-medium  text-white hover:border-glacier-100 sm:inline-block"
                             href="/contact"
                         >
                             Contact
                         </Link>
                         <Link
                             prefetch={false}
-                            className="font-medium hover:text-black hover:underline focus:text-black focus:underline"
+                            className="border-b border-glacier-600 text-sm font-medium  text-white hover:border-glacier-100 sm:inline-block"
                             href="/privacy"
                         >
                             Privacy Policy

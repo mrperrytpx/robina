@@ -309,13 +309,13 @@ export const ChatroomMessages = ({
 
             <div className="flex h-14 items-center gap-3 px-3">
                 <button
-                    className="group hidden rounded-full border-2 border-black p-2 hover:border-sky-500 focus:border-sky-500 sm:inline-block"
+                    className="group hidden rounded-full border-2 border-black p-2 hover:border-glacier-600 focus:border-glacier-600 sm:inline-block"
                     aria-label="Toggle chatroom settings modal."
                     onClick={handleSettings}
                 >
                     <FiSettings
                         size={20}
-                        className="group-hover:stroke-sky-500 group-focus:stroke-sky-500"
+                        className="group-hover:stroke-glacier-600 group-focus:stroke-glacier-600"
                     />
                 </button>
                 <form
@@ -338,16 +338,16 @@ export const ChatroomMessages = ({
                         maxLength={150}
                         minLength={1}
                         disabled={!chatroomMessages.data}
-                        className="h-10 w-full rounded-md border-2 border-black p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500 disabled:opacity-50"
+                        className="h-10 w-full rounded-md border-2 border-black p-2 text-sm font-medium hover:border-glacier-600 hover:outline-glacier-600 focus:border-glacier-600 focus:outline-glacier-600 disabled:opacity-50"
                     />
                     <button
                         type="submit"
-                        className="group rounded-full border-2 border-black p-2 hover:border-sky-500 focus:border-sky-500 disabled:opacity-50"
+                        className="group rounded-full border-2 border-black p-2 hover:border-glacier-600 focus:border-glacier-600 disabled:opacity-50"
                         aria-label="Send message."
                         disabled={!chatroomMessages.data?.pages}
                     >
                         <VscSend
-                            className="fill-black group-hover:fill-sky-500 group-focus:fill-sky-500 group-active:fill-sky-500"
+                            className="fill-black group-hover:fill-glacier-600 group-focus:fill-glacier-600 group-active:fill-glacier-600"
                             size={20}
                         />
                     </button>

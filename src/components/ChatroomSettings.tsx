@@ -88,14 +88,14 @@ export const ChatroomSettings = ({
     };
 
     return (
-        <div className="w-full flex-1 overflow-y-auto bg-sky-500 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100 sm:mx-auto sm:my-20 sm:max-h-[50svh] sm:max-w-lg sm:rounded-xl sm:bg-opacity-100">
+        <div className="w-full flex-1 overflow-y-auto bg-glacier-600 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100 sm:mx-auto sm:my-20 sm:max-h-[50svh] sm:max-w-lg sm:rounded-xl sm:bg-opacity-100">
             {isModalOpen ? (
                 <Portal
                     isInModal={true}
                     setState={setIsModalOpen}
                     shouldRoute={false}
                 >
-                    <div className="relative flex w-full flex-1 flex-col items-center gap-2 overflow-y-auto rounded-md border-2 border-white bg-white p-4 text-center text-sm hover:border-sky-500 sm:max-w-md">
+                    <div className="relative flex w-full flex-1 flex-col items-center gap-2 overflow-y-auto rounded-md border-2 border-white bg-white p-4 text-center text-sm hover:border-glacier-600 sm:max-w-md">
                         <h1 className="my-4 text-xl font-bold uppercase sm:mt-0">
                             Are you sure?
                         </h1>
@@ -122,7 +122,7 @@ export const ChatroomSettings = ({
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="h-10 min-w-[100px] select-none items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium uppercase shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                                className="h-10 min-w-[100px] select-none items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium uppercase shadow-glacier-600 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                             >
                                 No
                             </button>
@@ -135,10 +135,10 @@ export const ChatroomSettings = ({
                         <button
                             onClick={() => setIsSettingsActive(false)}
                             aria-label="Close settings"
-                            className="group flex items-center gap-1 self-start rounded-full border-2 border-white bg-white p-1 text-sm font-semibold uppercase antialiased shadow  hover:border-black hover:shadow-sky-500 focus:border-black focus:shadow-sky-500"
+                            className="group flex items-center gap-1 self-start rounded-full border-2 border-white bg-white p-1 text-sm font-semibold uppercase antialiased shadow  hover:border-black hover:shadow-glacier-600 focus:border-black focus:shadow-glacier-600"
                         >
                             <VscChromeClose
-                                className="group-hover:fill-sky-500 group-focus:fill-sky-500"
+                                className="group-hover:fill-glacier-600 group-focus:fill-glacier-600"
                                 size={28}
                             />
                         </button>

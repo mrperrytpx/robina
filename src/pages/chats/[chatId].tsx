@@ -327,7 +327,7 @@ const ChatPage = () => {
                             aria-label="Back to all chats page"
                         >
                             <VscArrowLeft
-                                className="fill-black group-hover:fill-sky-500 group-focus:fill-sky-500"
+                                className="fill-black group-hover:fill-glacier-600 group-focus:fill-glacier-600"
                                 size={24}
                             />
                         </Link>
@@ -340,14 +340,14 @@ const ChatPage = () => {
                             onClick={handleSettings}
                         >
                             <FiSettings
-                                className=" group-hover:scale-110 group-hover:stroke-sky-500 group-focus:scale-110 group-focus:stroke-sky-500 group-active:scale-110"
+                                className=" group-hover:scale-110 group-hover:stroke-glacier-600 group-focus:scale-110 group-focus:stroke-glacier-600 group-active:scale-110"
                                 size={24}
                             />
                         </button>
                         <button className="group p-2" onClick={handleMembers}>
                             <FiUsers
                                 aria-label="Toggle chatroom members aside"
-                                className="group-hover:scale-110 group-hover:stroke-sky-500 group-focus:scale-110 group-focus:stroke-sky-500 group-active:scale-110"
+                                className="group-hover:scale-110 group-hover:stroke-glacier-600 group-focus:scale-110 group-focus:stroke-glacier-600 group-active:scale-110"
                                 size={24}
                             />
                         </button>
@@ -360,7 +360,7 @@ const ChatPage = () => {
                         aria-label="Back to all chats page"
                     >
                         <VscArrowLeft
-                            className="fill-black group-hover:fill-sky-500 group-focus:fill-sky-500"
+                            className="fill-black group-hover:fill-glacier-600 group-focus:fill-glacier-600"
                             size={24}
                         />
                     </Link>

@@ -40,7 +40,7 @@ export const PendingInviteCard = ({ chatroom }: IPendingInviteCardProps) => {
     return (
         <div
             key={chatroom.id}
-            className="my-1 flex w-full max-w-md items-center justify-between rounded-md border-2 border-black p-2 text-sm font-medium hover:border-sky-500"
+            className="my-1 flex w-full max-w-md items-center justify-between rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium hover:border-glacier-400"
         >
             <span className="truncate">
                 <strong>
@@ -62,7 +62,7 @@ export const PendingInviteCard = ({ chatroom }: IPendingInviteCardProps) => {
                         <LoadingSpinner size={20} color="#0ea5e9" />
                     ) : (
                         <VscCheck
-                            className="fill-black group-hover/button:fill-sky-500 group-focus/button:fill-sky-500"
+                            className="fill-black group-hover/button:fill-glacier-600 group-focus/button:fill-glacier-600"
                             size={20}
                         />
                     )}

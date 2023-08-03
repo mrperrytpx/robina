@@ -20,9 +20,9 @@ export const TestimonyCard = ({
     date,
 }: ITestimonyCardProps) => {
     return (
-        <div className="flex w-full max-w-[min(100%,300px)] flex-col rounded-lg bg-white shadow shadow-sky-500 xl:aspect-video xl:w-80 xl:max-w-[300px]">
+        <div className="flex w-full max-w-[min(100%,300px)] flex-col rounded-lg bg-white shadow shadow-glacier-500 xl:aspect-video xl:w-80 xl:max-w-[300px]">
             <div className="grid flex-1 grid-cols-[60px,1fr] items-center justify-center rounded-lg px-4 py-2 shadow">
-                <div className="grid aspect-square w-12 select-none items-center justify-center rounded-full bg-sky-500">
+                <div className="grid aspect-square w-12 select-none items-center justify-center rounded-full bg-glacier-500">
                     <span className="text-3xl uppercase text-white">
                         {name[0]}
                     </span>
@@ -47,7 +47,7 @@ export default function Home({
         <div className="flex w-full flex-1 flex-col items-center overflow-x-hidden">
             <div className="flex h-full w-full max-w-screen-lg flex-col items-start gap-40 px-2">
                 <article className="flex min-h-[min(calc(100svh-200px),1024px)] w-full flex-col items-center justify-center gap-8 py-4">
-                    <ImageWithFallback
+                    {/* <ImageWithFallback
                         src={LogoTextRectangle}
                         alt="Yet another messaging app"
                         width={500}
@@ -64,18 +64,18 @@ export default function Home({
                         className="md:hidden"
                         fallback={FallbackLogoTextSquare}
                         priority
-                    />
+                    /> */}
                     <Link
                         prefetch={false}
                         href="/chats"
-                        className="select-none rounded-lg px-4 py-2 font-semibold uppercase shadow hover:text-sky-500 hover:shadow-sky-500 focus:text-sky-500 focus:shadow-sky-500 xl:text-xl"
+                        className="select-none rounded-lg bg-glacier-600 px-4 py-2 font-semibold uppercase text-white shadow shadow-glacier-600 hover:bg-glacier-700 active:bg-glacier-800 xl:text-xl"
                     >
                         Start Chatting
                     </Link>
                 </article>
 
                 <article className="flex w-full flex-col gap-8 rounded-lg px-2 py-4 text-center font-medium">
-                    <h2 className="text-4xl font-bold text-sky-500">
+                    <h2 className="text-4xl font-bold text-glacier-600">
                         Have you ever asked yourself...
                     </h2>
                     <p className="xl:text-left">
@@ -97,7 +97,7 @@ export default function Home({
                 </article>
 
                 <article className="flex w-full flex-col gap-12 rounded-lg px-2 py-4 text-center font-medium">
-                    <h2 className="text-4xl font-bold text-sky-500">
+                    <h2 className="text-4xl font-bold text-glacier-600">
                         Welcome home!
                     </h2>
                     <p className="text-xl">
@@ -121,7 +121,7 @@ export default function Home({
             </div>
 
             <article className="mt-40 flex w-full flex-col px-2 py-4 text-center">
-                <h2 className="text-2xl font-bold">
+                <h2 className="text-2xl font-bold text-glacier-900">
                     Check out these testimonials 😏
                 </h2>
             </article>
@@ -170,14 +170,14 @@ export default function Home({
                 <Link
                     prefetch={false}
                     href="/signin"
-                    className="text-3xl font-bold uppercase hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
+                    className="text-3xl font-bold uppercase text-glacier-900 hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
                 >
                     Join
                 </Link>
-                <span className="scale-150 text-5xl font-bold text-sky-500">
+                <span className="scale-150 text-5xl font-bold text-glacier-600">
                     {userCount ? userCount : 0}
                 </span>
-                <span className="text-3xl font-bold">
+                <span className="text-3xl font-bold text-glacier-900">
                     other happy {userCount === 1 ? "user" : "users"}!
                 </span>
             </div>
