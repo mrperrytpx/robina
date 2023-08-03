@@ -10,21 +10,21 @@ export const Footer = () => {
                         <Link
                             prefetch={false}
                             className="font-medium hover:text-black hover:underline focus:text-black focus:underline"
-                            href="/s/tos"
+                            href="/tos"
                         >
                             Terms of Service
                         </Link>
                         <Link
                             prefetch={false}
                             className="font-medium hover:text-black hover:underline focus:text-black focus:underline"
-                            href="/s/contact"
+                            href="/contact"
                         >
                             Contact
                         </Link>
                         <Link
                             prefetch={false}
                             className="font-medium hover:text-black hover:underline focus:text-black focus:underline"
-                            href="/s/privacy"
+                            href="/privacy"
                         >
                             Privacy Policy
                         </Link>

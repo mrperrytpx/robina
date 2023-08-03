@@ -7,18 +7,19 @@ const TosPage = () => {
             <Head>
                 <title>Terms of Service</title>
             </Head>
-            <div className="mx-auto mb-20 mt-6 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4">
+            <div className="mx-auto mb-20 mt-10 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4">
                 <h1 className="text-2xl font-semibold">Terms of Service</h1>
                 <span className="text-xl">
                     Welcome to YetAnotherMessagingApp!
                 </span>
                 <p>
-                    These Terms of Service ("Terms") govern your use of our
-                    chatroom website and any related services provided by
-                    YetAnotherMessagingApp ("we," "our," or "us"). By accessing
-                    or using our website and services, you agree to be bound by
-                    these Terms. If you do not agree to these Terms, please do
-                    not use our website and services.
+                    These Terms of Service (&quot;Terms&quot;) govern your use
+                    of our chatroom website and any related services provided by
+                    YetAnotherMessagingApp (&quot;we,&quot; &quot;our,&quot; or
+                    &quot;us&quot;). By accessing or using our website and
+                    services, you agree to be bound by these Terms. If you do
+                    not agree to these Terms, please do not use our website and
+                    services.
                 </p>
                 <p>
                     By using our website and services, you acknowledge that you
@@ -124,23 +125,11 @@ const TosPage = () => {
                         Disclaimer of Warranty
                     </h2>
                     <p>
-                        Our website and services are provided "as is" without
-                        any warranty of any kind. We do not guarantee the
-                        accuracy, completeness, or reliability of any content or
-                        information on our website. You use our website and
-                        services at your own risk.
-                    </p>
-                </article>
-                <article className="flex flex-col items-start gap-2 text-sm">
-                    <h2 className="text-base font-semibold underline">
-                        Disclaimer of Warranty
-                    </h2>
-                    <p>
-                        Our website and services are provided "as is" without
-                        any warranty of any kind. We do not guarantee the
-                        accuracy, completeness, or reliability of any content or
-                        information on our website. You use our website and
-                        services at your own risk.
+                        Our website and services are provided &quot;as is&quot;
+                        without any warranty of any kind. We do not guarantee
+                        the accuracy, completeness, or reliability of any
+                        content or information on our website. You use our
+                        website and services at your own risk.
                     </p>
                 </article>
                 <article className="flex flex-col items-start gap-2 text-sm">
@@ -176,9 +165,8 @@ const TosPage = () => {
                             prefetch={false}
                             href="/contact"
                         >
-                            contact us
+                            contact us!
                         </Link>
-                        !
                     </p>
                 </article>
             </div>
