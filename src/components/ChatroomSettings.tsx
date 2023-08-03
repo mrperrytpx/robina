@@ -88,7 +88,7 @@ export const ChatroomSettings = ({
     };
 
     return (
-        <div className="w-full flex-1 overflow-y-auto bg-sky-500 bg-opacity-70 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100 sm:mx-auto sm:my-20 sm:max-h-[50svh] sm:max-w-lg sm:rounded-xl sm:bg-opacity-100">
+        <div className="w-full flex-1 overflow-y-auto bg-sky-500 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100 sm:mx-auto sm:my-20 sm:max-h-[50svh] sm:max-w-lg sm:rounded-xl sm:bg-opacity-100">
             {isModalOpen ? (
                 <Portal
                     isInModal={true}
@@ -115,14 +115,14 @@ export const ChatroomSettings = ({
                         <div className="mt-2 flex w-full items-center justify-center gap-4">
                             <button
                                 onClick={handleDeleteChatroom}
-                                className="min-w-[100px] rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black hover:border-red-600 hover:bg-red-600 hover:text-gray-100 hover:shadow-sm focus:bg-red-600 focus:text-gray-100 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-gray-100"
+                                className="min-w-[100px] select-none rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black hover:border-red-600 hover:bg-red-600 hover:text-gray-100 hover:shadow-sm focus:bg-red-600 focus:text-gray-100 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-gray-100"
                                 disabled={deleteChatroom.isLoading}
                             >
                                 Delete
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="flex h-10 min-w-[100px] items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium uppercase shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                                className="h-10 min-w-[100px] select-none items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium uppercase shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                             >
                                 No
                             </button>
@@ -131,18 +131,16 @@ export const ChatroomSettings = ({
                 </Portal>
             ) : (
                 <div className="w-full p-4">
-                    <div className="mx-auto flex w-full max-w-md flex-col items-center gap-4 py-4">
+                    <div className="mx-auto flex w-full max-w-md flex-col items-center gap-4">
                         <button
                             onClick={() => setIsSettingsActive(false)}
-                            className="group flex items-center gap-1 self-start rounded-md border-2 border-white bg-white p-1 text-sm font-semibold uppercase antialiased shadow  hover:border-black hover:shadow-sky-500 focus:border-black focus:shadow-sky-500"
+                            aria-label="Close settings"
+                            className="group flex items-center gap-1 self-start rounded-full border-2 border-white bg-white p-1 text-sm font-semibold uppercase antialiased shadow  hover:border-black hover:shadow-sky-500 focus:border-black focus:shadow-sky-500"
                         >
                             <VscChromeClose
                                 className="group-hover:fill-sky-500 group-focus:fill-sky-500"
-                                size={32}
+                                size={28}
                             />
-                            <span className="group-hover:text-sky-500 group-focus:text-sky-500">
-                                Close Settings
-                            </span>
                         </button>
                         <div className="w-full space-y-2">
                             <h3 className="block text-sm font-bold uppercase text-white">
@@ -183,13 +181,14 @@ export const ChatroomSettings = ({
                                         {getInvite.data?.value && (
                                             <button
                                                 aria-label="Get new invite string."
-                                                onClick={async () =>
+                                                onClick={async () => {
                                                     await patchInvite.mutateAsync(
                                                         {
                                                             chatId,
                                                         }
-                                                    )
-                                                }
+                                                    );
+                                                    setCopied(false);
+                                                }}
                                                 className="rounded-lg bg-white p-2 shadow"
                                             >
                                                 {patchInvite.isLoading ? (
@@ -224,7 +223,7 @@ export const ChatroomSettings = ({
                                         }`}
                                     >
                                         {bannedMembers.isLoading ? (
-                                            <div className="w-full rounded-md bg-white px-2 py-3 text-center text-sm font-semibold shadow">
+                                            <div className="w-full rounded-md bg-white px-2 py-2 text-center text-sm font-semibold shadow">
                                                 <LoadingSpinner
                                                     color="rgb(14 165 233)"
                                                     size={28}
@@ -248,7 +247,7 @@ export const ChatroomSettings = ({
                                                 />
                                             ))
                                         ) : (
-                                            <p className="w-full rounded-md bg-white p-4 text-center text-sm font-semibold shadow">
+                                            <p className="w-full rounded-md bg-white px-4 py-3 text-center text-sm font-semibold shadow">
                                                 No banned members
                                             </p>
                                         )}
@@ -259,7 +258,7 @@ export const ChatroomSettings = ({
                                     onClick={() => setIsModalOpen(!isModalOpen)}
                                     className={
                                         dangerButtonStyles +
-                                        "group disabled:opacity-50"
+                                        "group select-none disabled:opacity-50"
                                     }
                                     disabled={deleteChatroom.isLoading}
                                     aria-label="Delete the chatroom."
@@ -280,7 +279,7 @@ export const ChatroomSettings = ({
                                     onClick={handleLeaveChatroom}
                                     className={
                                         dangerButtonStyles +
-                                        "disabled:opacity-50"
+                                        "select-none disabled:opacity-50"
                                     }
                                     aria-label="Leave the chatroom."
                                     disabled={leaveChatroom.isLoading}

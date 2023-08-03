@@ -13,7 +13,7 @@ const VerifyRequestPage = () => {
             </Head>
             <div className="mx-auto mt-12 flex w-full max-w-screen-sm flex-col items-center gap-4 rounded-lg p-8">
                 <div className="flex w-full flex-col items-center justify-center">
-                    <VscMail size="80" />
+                    <VscMail size="80" className="select-none" />
                     <h1 className="text-center text-2xl uppercase">
                         <strong>Check your email</strong>
                     </h1>

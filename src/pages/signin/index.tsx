@@ -10,7 +10,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { Roboto } from "next/font/google";
-import { useState } from "react";
 
 const roboto = Roboto({
     weight: ["100", "300", "400", "500", "700", "900"],

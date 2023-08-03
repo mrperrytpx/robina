@@ -197,22 +197,19 @@ export const ChatroomMessages = ({
             data: TChatroomMessage & { fakeId: string }
         ) => {
             if (!chatId) return;
+
             if (data.author_id === session.data?.user.id) {
                 queryClient.setQueryData(
                     ["messages", chatId],
                     (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
-                        oldData?.pages[oldData?.pages.length - 1 ?? 0]
-                            .sort((a, b) => {
-                                if (a.id.length === b.id.length) return 0;
-                                if (a.id.length > b.id.length) return -1;
-                                return 1;
-                            })
-                            .map((msg) => {
+                        oldData?.pages[oldData?.pages.length - 1 ?? 0].map(
+                            (msg) => {
                                 if (msg.id === data.fakeId) {
                                     msg.id = data.id;
                                 }
                                 return msg;
-                            });
+                            }
+                        );
 
                         return oldData;
                     }
@@ -232,6 +229,21 @@ export const ChatroomMessages = ({
                     }
                 );
             }
+
+            queryClient.setQueryData(
+                ["messages", chatId],
+                (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
+                    oldData?.pages[oldData?.pages.length - 1 ?? 0].sort(
+                        (a, b) => {
+                            if (a.id.length === b.id.length) return 0;
+                            if (a.id.length > b.id.length) return -1;
+                            return 1;
+                        }
+                    );
+
+                    return oldData;
+                }
+            );
         };
 
         pusherClient.subscribe(`chat__${chatId}__new-message`);

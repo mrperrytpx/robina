@@ -38,6 +38,7 @@ export const Header = () => {
                         alt="Website logo"
                         priority
                         fallback={FallbackLogoWhite}
+                        className="select-none"
                     />
                 </Link>
                 <div className="flex items-center gap-3">
@@ -49,7 +50,7 @@ export const Header = () => {
                             {(pendingInvites.data?.length || 0) >= 1 && (
                                 <Link
                                     prefetch={false}
-                                    className="group px-1 py-2 text-xl font-bold uppercase text-white"
+                                    className="group select-none px-1 py-2 text-xl font-bold uppercase text-white"
                                     href="/chats"
                                     aria-label="New pending chat invites."
                                 >
@@ -79,7 +80,7 @@ export const Header = () => {
                                 aria-label="Profile"
                             >
                                 <Image
-                                    className="w-9 rounded-full"
+                                    className="w-9 select-none rounded-full"
                                     width={100}
                                     height={100}
                                     src={

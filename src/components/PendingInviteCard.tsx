@@ -1,4 +1,3 @@
-import React from "react";
 import { TChatroomInvite } from "../hooks/useGetUserPendingInvitesQuery";
 import { VscCheck, VscChromeClose } from "react-icons/vsc";
 import { toast } from "react-toastify";
@@ -57,7 +56,7 @@ export const PendingInviteCard = ({ chatroom }: IPendingInviteCardProps) => {
                     }
                     disabled={joinChatroom.isLoading}
                     aria-label={`Accept invite to a chatroom with the name ${chatroom.name}.`}
-                    className="group/button rounded-full"
+                    className="group/button select-none rounded-full"
                 >
                     {joinChatroom.isLoading ? (
                         <LoadingSpinner size={20} color="#0ea5e9" />
@@ -71,7 +70,7 @@ export const PendingInviteCard = ({ chatroom }: IPendingInviteCardProps) => {
                 <button
                     onClick={() => handleDeclineInvite(chatroom.id)}
                     disabled={declineInvite.isLoading}
-                    className="group/button rounded-full"
+                    className="group/button select-none rounded-full"
                     aria-label={`Decline invite to a chatroom with the name ${chatroom.name}.`}
                 >
                     <VscChromeClose

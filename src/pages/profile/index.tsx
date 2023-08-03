@@ -107,7 +107,7 @@ const ProfilePage = () => {
 
                 <div className="flex w-full flex-col items-center gap-2">
                     <button
-                        className="flex h-10 w-full max-w-md items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                        className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                         type="submit"
                         disabled={updateUsername.isLoading}
                     >
@@ -151,7 +151,7 @@ const ProfilePage = () => {
                 <h2 className="text-sm font-bold uppercase">Account:</h2>
 
                 <button
-                    className="flex h-10 w-full max-w-md items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium text-black shadow hover:border-red-600 hover:bg-red-600 hover:text-gray-100 focus:border-red-600 focus:bg-red-600 focus:text-gray-100 active:bg-red-600 active:text-gray-100 disabled:opacity-50"
+                    className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium text-black shadow hover:border-red-600 hover:bg-red-600 hover:text-gray-100 focus:border-red-600 focus:bg-red-600 focus:text-gray-100 active:bg-red-600 active:text-gray-100 disabled:opacity-50"
                     onClick={() => setIsModalOpen(!isModalOpen)}
                     disabled={deleteProfile.isLoading}
                 >
@@ -187,13 +187,13 @@ const ProfilePage = () => {
                         <div className="flex w-full items-center justify-center gap-4">
                             <button
                                 onClick={handleDelete}
-                                className="min-w-[100px] rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black hover:border-red-600 hover:bg-red-600 hover:text-gray-100 hover:shadow-sm focus:bg-red-600 focus:text-gray-100 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-gray-100"
+                                className="min-w-[100px] select-none rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black hover:border-red-600 hover:bg-red-600 hover:text-gray-100 hover:shadow-sm focus:bg-red-600 focus:text-gray-100 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-gray-100"
                             >
                                 Delete
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="flex h-10 min-w-[100px] items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium uppercase shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                                className="min-w-[100px] select-none rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black hover:border-red-600 hover:bg-red-600 hover:text-gray-100 hover:shadow-sm focus:bg-red-600 focus:text-gray-100 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-gray-100"
                             >
                                 No
                             </button>

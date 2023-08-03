@@ -16,7 +16,7 @@ interface ITestimonyCardProps {
 }
 const TestimonyCard = ({ children, name, date }: ITestimonyCardProps) => {
     return (
-        <div className="flex aspect-video w-80 max-w-[300px] flex-col rounded-lg bg-white shadow shadow-sky-500 motion-safe:mx-[-60px]">
+        <div className="flex w-full max-w-[min(100%,300px)] flex-col rounded-lg bg-white shadow shadow-sky-500 motion-safe:mx-[-60px] sm:aspect-video sm:w-80 sm:max-w-[300px]">
             <div className="grid flex-1 grid-cols-[60px,1fr] items-center justify-center rounded-lg px-4 py-2 shadow">
                 <div className="grid aspect-square w-12 select-none items-center justify-center rounded-full bg-sky-500">
                     <span className="text-3xl uppercase text-white">
@@ -29,10 +29,8 @@ const TestimonyCard = ({ children, name, date }: ITestimonyCardProps) => {
                 </div>
             </div>
 
-            <div className="flex-[2] px-4 py-2">
-                <span className="line-clamp-3 text-lg italic">
-                    &quot;{children}&quot;
-                </span>
+            <div className="inline-block min-h-[100px] flex-[2] px-4 py-2 text-lg italic">
+                &quot;{children}&quot;
             </div>
         </div>
     );
@@ -50,7 +48,7 @@ export default function Home({
                         alt="Yet another messaging app"
                         width={500}
                         height={50}
-                        className="hidden scale-150 md:block"
+                        className="hidden scale-150 select-none md:block"
                         fallback={FallbackLogoTextRectangle}
                         priority
                     />
@@ -66,7 +64,7 @@ export default function Home({
                     <Link
                         prefetch={false}
                         href="/chats"
-                        className="rounded-lg px-4 py-2 font-semibold uppercase shadow hover:text-sky-500 hover:shadow-sky-500 focus:text-sky-500 focus:shadow-sky-500 sm:text-xl"
+                        className="select-none rounded-lg px-4 py-2 font-semibold uppercase shadow hover:text-sky-500 hover:shadow-sky-500 focus:text-sky-500 focus:shadow-sky-500 sm:text-xl"
                     >
                         Start Chatting
                     </Link>
@@ -124,8 +122,8 @@ export default function Home({
                 </article>
             </div>
 
-            <div className="mt-8 flex grow select-text motion-reduce:w-full motion-reduce:overflow-x-auto motion-reduce:px-4 motion-reduce:py-1 motion-reduce:scrollbar-thin motion-reduce:scrollbar-track-black motion-reduce:scrollbar-thumb-sky-100 sm:mt-16">
-                <div className="flex min-w-full shrink-0 items-center justify-around gap-8 motion-safe:flex-col sm:motion-safe:animate-scroll sm:motion-safe:flex-row sm:motion-safe:gap-0 sm:motion-reduce:justify-center">
+            <div className="mt-8 flex min-w-full select-text motion-reduce:w-full motion-reduce:overflow-x-auto motion-reduce:px-4 motion-reduce:py-1 motion-reduce:scrollbar-thin motion-reduce:scrollbar-track-black motion-reduce:scrollbar-thumb-sky-100 sm:mt-16">
+                <div className="flex w-full items-center justify-around gap-8 px-2 motion-safe:flex-col sm:px-0 sm:motion-safe:w-auto sm:motion-safe:min-w-full sm:motion-safe:animate-scroll sm:motion-safe:flex-row sm:motion-safe:gap-0 sm:motion-reduce:justify-center">
                     <TestimonyCard name="Quivby" date="27th of July, 2023">
                         I guess it&apos;s not the worst thing I&apos;ve used...
                     </TestimonyCard>

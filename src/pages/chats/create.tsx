@@ -53,7 +53,7 @@ const CreateChatPage = () => {
             <div className="flex w-full flex-col p-2">
                 <button
                     onClick={() => router.back()}
-                    className="group mb-6 flex items-center gap-1 self-start rounded-md border-2 border-black px-2 py-1 text-sm font-semibold uppercase antialiased shadow  hover:border-white hover:shadow-sky-500 focus:border-white focus:shadow-sky-500"
+                    className="group mb-6 flex select-none items-center gap-1 self-start rounded-md border-2 border-black px-2 py-1 text-sm font-semibold uppercase antialiased shadow  hover:border-white hover:shadow-sky-500 focus:border-white focus:shadow-sky-500"
                 >
                     <VscArrowLeft
                         className="group-hover:fill-sky-500 group-focus:fill-sky-500"
@@ -114,7 +114,7 @@ const CreateChatPage = () => {
                     )}
 
                     <button
-                        className="h-10 rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500   enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                        className="h-10 select-none rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500   enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                         type="submit"
                         disabled={createRoom.isLoading}
                     >

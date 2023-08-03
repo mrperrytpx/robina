@@ -31,19 +31,19 @@ export const ChatMessage = ({
 
     return (
         <div
-            className="group/message relative grid w-full grid-cols-[48px,1fr] gap-1"
+            className="group/message relative grid w-full grid-cols-[44px,1fr] gap-1"
             style={{
                 marginTop: !isSameAuthor ? "0.75rem" : "",
             }}
         >
             {!isSameAuthor ? (
-                <div className="aspect-square w-12">
+                <div className="aspect-square w-11">
                     <Image
                         src={message.author.image || DefaultImage}
                         alt={`${message.author.username}'s profile image`}
                         width={100}
                         height={100}
-                        className="w-full rounded-full"
+                        className="w-full select-none rounded-full"
                     />
                 </div>
             ) : (

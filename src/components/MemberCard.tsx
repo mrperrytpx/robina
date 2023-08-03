@@ -35,7 +35,7 @@ export const MemberCard = ({
     const session = useSession();
 
     return (
-        <div className="group relative flex items-center gap-2 rounded-md border-2 border-white bg-white p-2 shadow hover:border-black">
+        <div className="group relative flex items-center gap-2 rounded-md border-2 border-white bg-white px-2 py-1 shadow hover:border-black">
             <div
                 className="aspect-square w-8"
                 style={{ opacity: opaque ? "0.6" : "1" }}
@@ -45,7 +45,7 @@ export const MemberCard = ({
                     alt={`${member.username}'s image`}
                     width={100}
                     height={100}
-                    className="w-full min-w-[32px] rounded-full"
+                    className="w-full min-w-[32px] select-none rounded-full"
                 />
             </div>
             <span
@@ -61,7 +61,7 @@ export const MemberCard = ({
             {member.id !== ownerId && session.data?.user.id === ownerId && (
                 <button
                     onClick={onClick}
-                    className="absolute right-1 top-1/2 hidden -translate-y-1/2 cursor-pointer rounded-lg bg-white p-1 group-target:block group-hover:block"
+                    className="absolute right-1 top-1/2 hidden -translate-y-1/2 cursor-pointer select-none rounded-lg bg-white p-1 group-target:block group-hover:block"
                     disabled={loading}
                     aria-label="Ban or unban member depending where the card is rendered."
                 >

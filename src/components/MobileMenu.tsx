@@ -52,28 +52,28 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
                     <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-4">
                         <Link
                             prefetch={false}
-                            className="select-none p-2 text-center text-2xl hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
+                            className="p-2 text-center text-2xl hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
                             href="/profile"
                         >
                             Profile
                         </Link>
                         <Link
                             prefetch={false}
-                            className="select-none p-2 text-center text-2xl hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
+                            className="p-2 text-center text-2xl hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
                             href="/chats"
                         >
                             Chatrooms
                         </Link>
                         <Link
                             prefetch={false}
-                            className="select-none p-2 text-center text-2xl hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
+                            className="p-2 text-center text-2xl hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
                             href="/chats/join"
                         >
                             Join Chatroom
                         </Link>
 
                         <button
-                            className="select-none p-2 text-center text-2xl hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
+                            className="p-2 text-center text-2xl hover:text-sky-500 hover:underline focus:text-sky-500 focus:underline"
                             onClick={() => signOut()}
                         >
                             Sign Out
