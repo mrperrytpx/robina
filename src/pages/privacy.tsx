@@ -16,7 +16,7 @@ const PrivacyPage = () => {
                     information when you use our services or visit our Website.
                 </p>
                 <article className="flex flex-col items-start gap-2">
-                    <h2 className="font-semibold underline">
+                    <h2 className="text-base font-semibold underline">
                         Personal Information Collection
                     </h2>
                     <p>
@@ -51,7 +51,7 @@ const PrivacyPage = () => {
                     </p>
                 </article>
                 <article className="flex flex-col items-start gap-2">
-                    <h2 className="font-semibold underline">
+                    <h2 className="text-base font-semibold underline">
                         How We Use Your Personal Data
                     </h2>
                     <p>
@@ -74,7 +74,7 @@ const PrivacyPage = () => {
                     </p>
                 </article>
                 <article className="flex flex-col items-start gap-2">
-                    <h2 className="font-semibold underline">
+                    <h2 className="text-base font-semibold underline">
                         How We Share Your Personal Data
                     </h2>
                     <p>
@@ -96,7 +96,9 @@ const PrivacyPage = () => {
                     </p>
                 </article>
                 <article className="flex flex-col items-start gap-2">
-                    <h2 className="font-semibold underline">Your rights</h2>
+                    <h2 className="text-base font-semibold underline">
+                        Your rights
+                    </h2>
                     <p>
                         If you are a European resident, you have the right to
                         access personal information we hold about you and to ask
@@ -121,7 +123,9 @@ const PrivacyPage = () => {
                     </p>
                 </article>
                 <article className="flex flex-col items-start gap-2">
-                    <h2 className="font-semibold underline">Data retention</h2>
+                    <h2 className="text-base font-semibold underline">
+                        Data retention
+                    </h2>
                     <p>
                         When you join and create chatrooms and send messages
                         through the Website, we will maintain your Entity
@@ -136,7 +140,7 @@ const PrivacyPage = () => {
                     </p>
                 </article>
                 <article className="flex flex-col items-start gap-2">
-                    <h2 className="font-semibold underline">
+                    <h2 className="text-base font-semibold underline">
                         Changes to This Privacy Policy
                     </h2>
                     <p>
@@ -152,7 +156,9 @@ const PrivacyPage = () => {
                     </p>
                 </article>
                 <article className="flex flex-col items-start gap-2">
-                    <h2 className="font-semibold underline">Contact Us</h2>
+                    <h2 className="text-base font-semibold underline">
+                        Contact Us
+                    </h2>
                     <p>
                         If you have any questions or comments about this Privacy
                         Policy or our practices regarding personal data, please{" "}

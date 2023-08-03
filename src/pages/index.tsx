@@ -78,7 +78,7 @@ export default function Home({
                     </h2>
                     <p className="sm:text-left">
                         &quot;Is there an app like Discord I can use that&apos;s
-                        kind of... bad?&quot;
+                        kind of... basic?&quot;
                     </p>
                     <p className="sm:text-right">
                         &quot;I wonder what Discord&apos;s MVP looked
@@ -95,8 +95,8 @@ export default function Home({
                 </article>
 
                 <article className="flex w-full flex-col gap-12 rounded-lg px-2 py-4 text-center font-medium">
-                    <h2 className="text-4xl font-bold uppercase text-sky-500">
-                        Look no further!
+                    <h2 className="text-4xl font-bold text-sky-500">
+                        Welcome home!
                     </h2>
                     <p className="text-xl">
                         Presenting YetAnotherMessagingApp!

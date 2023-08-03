@@ -9,10 +9,10 @@ const TosPage = () => {
             </Head>
             <div className="mx-auto mb-20 mt-10 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4">
                 <h1 className="text-2xl font-semibold">Terms of Service</h1>
-                <span className="text-xl">
+                <span className="text-xl font-medium">
                     Welcome to YetAnotherMessagingApp!
                 </span>
-                <p>
+                <p className="text-sm">
                     These Terms of Service (&quot;Terms&quot;) govern your use
                     of our chatroom website and any related services provided by
                     YetAnotherMessagingApp (&quot;we,&quot; &quot;our,&quot; or
@@ -21,7 +21,7 @@ const TosPage = () => {
                     not agree to these Terms, please do not use our website and
                     services.
                 </p>
-                <p>
+                <p className="text-sm">
                     By using our website and services, you acknowledge that you
                     have read, understood, and agreed to these Terms of Service.
                 </p>
