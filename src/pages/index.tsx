@@ -20,7 +20,7 @@ export const TestimonyCard = ({
     date,
 }: ITestimonyCardProps) => {
     return (
-        <div className="flex w-full max-w-[min(100%,300px)] flex-col rounded-lg bg-white shadow shadow-sky-500 lg:aspect-video lg:w-80 lg:max-w-[300px] lg:motion-safe:mx-[-60px] lg:motion-reduce:mx-0">
+        <div className="flex w-full max-w-[min(100%,300px)] flex-col rounded-lg bg-white shadow shadow-sky-500 xl:aspect-video xl:w-80 xl:max-w-[300px]">
             <div className="grid flex-1 grid-cols-[60px,1fr] items-center justify-center rounded-lg px-4 py-2 shadow">
                 <div className="grid aspect-square w-12 select-none items-center justify-center rounded-full bg-sky-500">
                     <span className="text-3xl uppercase text-white">
@@ -68,7 +68,7 @@ export default function Home({
                     <Link
                         prefetch={false}
                         href="/chats"
-                        className="select-none rounded-lg px-4 py-2 font-semibold uppercase shadow hover:text-sky-500 hover:shadow-sky-500 focus:text-sky-500 focus:shadow-sky-500 lg:text-xl"
+                        className="select-none rounded-lg px-4 py-2 font-semibold uppercase shadow hover:text-sky-500 hover:shadow-sky-500 focus:text-sky-500 focus:shadow-sky-500 xl:text-xl"
                     >
                         Start Chatting
                     </Link>
@@ -78,15 +78,15 @@ export default function Home({
                     <h2 className="text-4xl font-bold text-sky-500">
                         Have you ever asked yourself...
                     </h2>
-                    <p className="lg:text-left">
+                    <p className="xl:text-left">
                         &quot;Is there an app like Discord I can use that&apos;s
                         kind of... basic?&quot;
                     </p>
-                    <p className="lg:text-right">
+                    <p className="xl:text-right">
                         &quot;I wonder what Discord&apos;s MVP looked
                         like...&quot;
                     </p>
-                    <p className="lg:text-left">
+                    <p className="xl:text-left">
                         &quot;Is there a way for me to experience what is was
                         like using online chatrooms back in the 90&apos;s?&quot;
                     </p>
@@ -127,7 +127,7 @@ export default function Home({
             </article>
 
             <div className="mt-8 flex min-w-full select-text motion-reduce:w-full motion-reduce:px-4 motion-reduce:py-1">
-                <div className="flex min-w-full flex-col items-center justify-around gap-8 px-4 lg:flex lg:min-w-full lg:flex-row lg:px-0 lg:motion-safe:animate-scroll lg:motion-safe:gap-0 lg:motion-reduce:flex-wrap lg:motion-reduce:justify-center">
+                <div className="flex min-w-full flex-row flex-wrap items-center justify-center gap-8 px-4 xl:flex xl:min-w-full xl:px-0 xl:motion-safe:animate-scroll xl:motion-safe:justify-around xl:motion-safe:gap-0">
                     <TestimonyCard name="Quivby" date="27th of July, 2023">
                         I guess it&apos;s not the worst thing I&apos;ve used...
                     </TestimonyCard>
@@ -146,7 +146,7 @@ export default function Home({
                     </TestimonyCard>
                 </div>
 
-                <div className="hidden min-w-full animate-scroll items-center justify-around lg:motion-safe:flex">
+                <div className="hidden min-w-full animate-scroll items-center justify-around xl:motion-safe:flex">
                     <TestimonyCard name="Quivby" date="27th of July, 2023">
                         I guess it&apos;s not the worst thing I&apos;ve used...
                     </TestimonyCard>
@@ -181,7 +181,7 @@ export default function Home({
                     other happy {userCount === 1 ? "user" : "users"}!
                 </span>
             </div>
-            <div className="mt-12 lg:mt-20" />
+            <div className="mt-12 xl:mt-20" />
             <Footer />
         </div>
     );
