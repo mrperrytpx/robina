@@ -1,5 +1,5 @@
 export const nword =
-    /^.*([nN])+[\w\W]*([iI&])+\s*[\w\W]*([gG]\s*[\w\W]*|[qQ]\s*[\w\W]*){2,}\s*[\w\W]*[aAeE3rR]+/g;
+    /^.*([nN])+[\W_]*([iI&])+\s*[\W_]*([gG]\s*[\W_]*|[qQ]\s*[\W_]*){2,}\s*[\W_]*([aA]{1,}|[rR7]{1,}|([eErR]+[\W_]*\s*[eErR]+))/g
 
 export const fword =
-    /^.*([fF])+[\w\W]*([aA&])+\s*[\w\W]*([gG]\s*[\w\W]*|[qQ]\s*[\w\W]*){2,}\s*[\w\W]*[oO0tT]+/g;
+    /^.*([fF])+[\w\W]*([aA&])+\s*[\w\W]*([gG]\s*[\w\W]*|[qQ]\s*[\w\W]*){2,}\s*[\w\W]*([oO0]+[\W_]*\s*[tT7]+)/g;
