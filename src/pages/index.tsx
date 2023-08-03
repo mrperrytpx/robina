@@ -14,9 +14,13 @@ interface ITestimonyCardProps {
     name: string;
     date: string;
 }
-const TestimonyCard = ({ children, name, date }: ITestimonyCardProps) => {
+export const TestimonyCard = ({
+    children,
+    name,
+    date,
+}: ITestimonyCardProps) => {
     return (
-        <div className="flex w-full max-w-[min(100%,300px)] flex-col rounded-lg bg-white shadow shadow-sky-500 motion-safe:mx-[-60px] sm:aspect-video sm:w-80 sm:max-w-[300px]">
+        <div className="flex w-full max-w-[min(100%,300px)] flex-col rounded-lg bg-white shadow shadow-sky-500 lg:aspect-video lg:w-80 lg:max-w-[300px] lg:motion-safe:mx-[-60px] lg:motion-reduce:mx-0">
             <div className="grid flex-1 grid-cols-[60px,1fr] items-center justify-center rounded-lg px-4 py-2 shadow">
                 <div className="grid aspect-square w-12 select-none items-center justify-center rounded-full bg-sky-500">
                     <span className="text-3xl uppercase text-white">
@@ -41,8 +45,8 @@ export default function Home({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     return (
         <div className="flex w-full flex-1 flex-col items-center overflow-x-hidden">
-            <div className="flex w-full max-w-screen-lg flex-col items-start gap-40 px-2">
-                <article className="flex min-h-[max(calc(100svh-200px),400px)] w-full flex-col items-center justify-center gap-8 py-4">
+            <div className="flex h-full w-full max-w-screen-lg flex-col items-start gap-40 px-2">
+                <article className="flex min-h-[min(calc(100svh-200px),1024px)] w-full flex-col items-center justify-center gap-8 py-4">
                     <ImageWithFallback
                         src={LogoTextRectangle}
                         alt="Yet another messaging app"
@@ -64,7 +68,7 @@ export default function Home({
                     <Link
                         prefetch={false}
                         href="/chats"
-                        className="select-none rounded-lg px-4 py-2 font-semibold uppercase shadow hover:text-sky-500 hover:shadow-sky-500 focus:text-sky-500 focus:shadow-sky-500 sm:text-xl"
+                        className="select-none rounded-lg px-4 py-2 font-semibold uppercase shadow hover:text-sky-500 hover:shadow-sky-500 focus:text-sky-500 focus:shadow-sky-500 lg:text-xl"
                     >
                         Start Chatting
                     </Link>
@@ -74,15 +78,15 @@ export default function Home({
                     <h2 className="text-4xl font-bold text-sky-500">
                         Have you ever asked yourself...
                     </h2>
-                    <p className="sm:text-left">
+                    <p className="lg:text-left">
                         &quot;Is there an app like Discord I can use that&apos;s
                         kind of... basic?&quot;
                     </p>
-                    <p className="sm:text-right">
+                    <p className="lg:text-right">
                         &quot;I wonder what Discord&apos;s MVP looked
                         like...&quot;
                     </p>
-                    <p className="sm:text-left">
+                    <p className="lg:text-left">
                         &quot;Is there a way for me to experience what is was
                         like using online chatrooms back in the 90&apos;s?&quot;
                     </p>
@@ -114,16 +118,16 @@ export default function Home({
                         </p>
                     </div>
                 </article>
-
-                <article className="flex w-full flex-col gap-8 rounded-lg px-2 py-4 text-center">
-                    <h2 className="text-2xl font-bold">
-                        Check out these testimonials 😏
-                    </h2>
-                </article>
             </div>
 
-            <div className="mt-8 flex min-w-full select-text motion-reduce:w-full motion-reduce:overflow-x-auto motion-reduce:px-4 motion-reduce:py-1 motion-reduce:scrollbar-thin motion-reduce:scrollbar-track-black motion-reduce:scrollbar-thumb-sky-100 sm:mt-16">
-                <div className="flex w-full items-center justify-around gap-8 px-2 motion-safe:flex-col sm:px-0 sm:motion-safe:w-auto sm:motion-safe:min-w-full sm:motion-safe:animate-scroll sm:motion-safe:flex-row sm:motion-safe:gap-0 sm:motion-reduce:justify-center">
+            <article className="mt-40 flex w-full flex-col px-2 py-4 text-center">
+                <h2 className="text-2xl font-bold">
+                    Check out these testimonials 😏
+                </h2>
+            </article>
+
+            <div className="mt-8 flex min-w-full select-text motion-reduce:w-full motion-reduce:px-4 motion-reduce:py-1">
+                <div className="flex min-w-full flex-col items-center justify-around gap-8 px-4 lg:flex lg:min-w-full lg:flex-row lg:px-0 lg:motion-safe:animate-scroll lg:motion-safe:gap-0 lg:motion-reduce:flex-wrap lg:motion-reduce:justify-center">
                     <TestimonyCard name="Quivby" date="27th of July, 2023">
                         I guess it&apos;s not the worst thing I&apos;ve used...
                     </TestimonyCard>
@@ -142,7 +146,7 @@ export default function Home({
                     </TestimonyCard>
                 </div>
 
-                <div className="hidden min-w-full shrink-0 animate-scroll items-center justify-around sm:motion-safe:flex">
+                <div className="hidden min-w-full animate-scroll items-center justify-around lg:motion-safe:flex">
                     <TestimonyCard name="Quivby" date="27th of July, 2023">
                         I guess it&apos;s not the worst thing I&apos;ve used...
                     </TestimonyCard>
@@ -177,7 +181,7 @@ export default function Home({
                     other happy {userCount === 1 ? "user" : "users"}!
                 </span>
             </div>
-            <div className="mt-12 sm:mt-20" />
+            <div className="mt-12 lg:mt-20" />
             <Footer />
         </div>
     );

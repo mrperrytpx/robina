@@ -132,7 +132,7 @@ const Layout = ({ children }: ILayoutProps) => {
     }, [queryClient, session.data?.user]);
 
     return (
-        <div className="relative flex min-h-[100svh] flex-col">
+        <div className="relative flex flex-col">
             <Header />
             <NextNProgress
                 height={2}
