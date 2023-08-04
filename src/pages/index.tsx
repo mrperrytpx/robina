@@ -20,10 +20,10 @@ export const TestimonyCard = ({
     date,
 }: ITestimonyCardProps) => {
     return (
-        <div className="flex w-full max-w-[min(100%,300px)] flex-col rounded-lg bg-white shadow shadow-glacier-500 xl:aspect-video xl:w-80 xl:max-w-[300px]">
+        <div className="flex w-full max-w-[min(100%,300px)] flex-col rounded-lg bg-white shadow shadow-glacier-600 xl:aspect-video xl:w-80 xl:max-w-[300px]">
             <div className="grid flex-1 grid-cols-[60px,1fr] items-center justify-center rounded-lg px-4 py-2 shadow">
                 <div className="grid aspect-square w-12 select-none items-center justify-center rounded-full bg-glacier-500">
-                    <span className="text-3xl uppercase text-white">
+                    <span className="text-3xl uppercase text-glacier-50">
                         {name[0]}
                     </span>
                 </div>
@@ -51,7 +51,7 @@ export default function Home({
                         src={LogoTextRectangle}
                         alt="Yet another messaging app"
                         width={500}
-                        height={50}
+                        height={40}
                         className="hidden scale-150 select-none md:block"
                         fallback={FallbackLogoTextRectangle}
                         priority
@@ -68,7 +68,7 @@ export default function Home({
                     <Link
                         prefetch={false}
                         href="/chats"
-                        className="select-none rounded-lg bg-glacier-600 px-4 py-2 font-semibold uppercase text-white shadow shadow-glacier-600 hover:bg-glacier-700 active:bg-glacier-800 xl:text-xl"
+                        className="select-none rounded-lg bg-glacier-600 px-4 py-2 font-semibold uppercase text-white shadow shadow-glacier-600 transition-all duration-75 hover:bg-glacier-700 focus:bg-glacier-700 active:bg-glacier-800 xl:text-xl"
                     >
                         Start Chatting
                     </Link>
@@ -97,7 +97,7 @@ export default function Home({
                 </article>
 
                 <article className="flex w-full flex-col gap-12 rounded-lg px-2 py-4 text-center font-medium">
-                    <h2 className="text-4xl font-bold text-glacier-600">
+                    <h2 className="space text-4xl font-bold tracking-wider text-glacier-600">
                         Welcome home!
                     </h2>
                     <p className="text-xl">
@@ -170,7 +170,7 @@ export default function Home({
                 <Link
                     prefetch={false}
                     href="/signin"
-                    className="text-3xl font-bold uppercase text-glacier-900 hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
+                    className="text-3xl font-bold uppercase text-glacier-900 transition-all duration-75 hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
                 >
                     Join
                 </Link>

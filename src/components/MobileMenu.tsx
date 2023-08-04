@@ -36,7 +36,7 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
         <div
             id="menu"
             ref={mobileRef}
-            className="b-[64px] absolute inset-0 top-16 z-20 flex h-[100svh] w-full flex-col items-center bg-glacier-50 px-4 py-8"
+            className="b-[64px] absolute inset-0 top-16 z-20 flex h-[100svh] w-full flex-col items-center bg-glacier-50 px-4 py-8 text-glacier-900"
         >
             {session.data?.user && (
                 <span className="text-center font-mono text-xl">
@@ -52,28 +52,28 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
                     <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-4">
                         <Link
                             prefetch={false}
-                            className="p-2 text-center text-2xl hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
+                            className="p-2 text-center text-2xl transition-all duration-75 hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
                             href="/profile"
                         >
                             Profile
                         </Link>
                         <Link
                             prefetch={false}
-                            className="p-2 text-center text-2xl hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
+                            className="p-2 text-center text-2xl transition-all duration-75 hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
                             href="/chats"
                         >
                             Chatrooms
                         </Link>
                         <Link
                             prefetch={false}
-                            className="p-2 text-center text-2xl hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
+                            className="p-2 text-center text-2xl transition-all duration-75 hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
                             href="/chats/join"
                         >
                             Join Chatroom
                         </Link>
 
                         <button
-                            className="p-2 text-center text-2xl hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
+                            className="p-2 text-center text-2xl transition-all duration-75 hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
                             onClick={() => signOut()}
                         >
                             Sign Out
@@ -84,7 +84,7 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
                 <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-4">
                     <Link
                         prefetch={false}
-                        className="select-none p-2 text-center text-2xl hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
+                        className="select-none p-2 text-center text-2xl transition-all duration-75 hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
                         href="/signin"
                     >
                         Sign In
@@ -96,11 +96,11 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
                 rel="noreferrer"
                 href="https://github.com/mrperrytpx/robina/"
                 aria-label="Github"
-                className="group mt-auto select-none"
+                className="group mt-auto select-none rounded-full hover:bg-glacier-50 focus:bg-glacier-50"
             >
                 <VscGithub
-                    className="group-hover:fill-glacier-600 group-focus:fill-glacier-600"
-                    size={56}
+                    className="fill-glacier-900 group-hover:scale-105 group-hover:fill-glacier-600 group-focus:scale-105 group-focus:fill-glacier-600"
+                    size={40}
                 />
             </a>
             <div className="h-16" />

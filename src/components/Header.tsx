@@ -49,32 +49,32 @@ export const Header = () => {
                             {(pendingInvites.data?.length || 0) >= 1 && (
                                 <Link
                                     prefetch={false}
-                                    className="group select-none px-1 py-2 text-xl font-bold uppercase text-white"
+                                    className="group select-none rounded-md p-1 text-xl font-bold uppercase text-white transition-all duration-75 hover:bg-glacier-50 focus:bg-glacier-50"
                                     href="/chats"
                                     aria-label="New pending chat invites."
                                 >
                                     <VscBellDot
-                                        className="fill-white group-hover:fill-black group-focus:fill-black"
+                                        className="fill-white group-hover:fill-glacier-600 group-focus:fill-glacier-600"
                                         size={28}
                                     />
                                 </Link>
                             )}
                             <Link
                                 prefetch={false}
-                                className="mt-[2px] hidden border-b border-glacier-600 px-2 py-0.5 text-lg font-semibold uppercase text-white hover:border-glacier-100 sm:inline-block"
+                                className="mt-[2px] hidden rounded-md px-2 py-1 text-lg font-semibold uppercase text-white transition-all duration-75 hover:bg-glacier-50 hover:text-glacier-600 focus:bg-glacier-50 focus:text-glacier-600 sm:inline-block"
                                 href="/chats"
                             >
                                 Chats
                             </Link>
                             <button
                                 onClick={() => signOut()}
-                                className="mt-[2px] hidden border-b border-glacier-600 px-2 py-0.5 text-lg font-semibold uppercase text-white hover:border-glacier-100 sm:inline-block"
+                                className="mt-[2px] hidden rounded-md px-2 py-1 text-lg font-semibold uppercase text-white transition-all duration-75 hover:bg-glacier-50 hover:text-glacier-600 focus:bg-glacier-50 focus:text-glacier-600 sm:inline-block"
                             >
                                 Sign out
                             </button>
                             <Link
                                 prefetch={false}
-                                className="rounded-full border-2 border-white shadow hover:border-black focus:border-black"
+                                className="rounded-full border-2 border-glacier-50 shadow transition-all duration-75 hover:border-black focus:border-black"
                                 href="/profile"
                                 aria-label="Profile"
                             >
@@ -94,7 +94,7 @@ export const Header = () => {
                     {!session.data?.user && session.status !== "loading" && (
                         <Link
                             prefetch={false}
-                            className="vertical mt-[2px] hidden px-1 py-2 text-lg font-semibold uppercase text-white  hover:underline focus:underline sm:inline-block"
+                            className="mt-[2px] hidden rounded-md px-2 py-1 text-lg font-semibold uppercase text-white transition-all duration-75 hover:bg-glacier-50 hover:text-glacier-600 focus:bg-glacier-50 focus:text-glacier-600 sm:inline-block"
                             href="/signin"
                         >
                             Sign in
