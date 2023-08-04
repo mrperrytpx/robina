@@ -47,9 +47,6 @@ export const ChatroomSettings = ({
     const deleteChatroom = useDeleteOwnedChatroomMutation();
     const leaveChatroom = useLeaveChatroomMutation();
 
-    const dangerButtonStyles =
-        "w-full rounded-lg bg-white p-2 font-semibold text-black shadow hover:bg-red-600 hover:text-gray-100 focus:bg-red-600 focus:text-gray-100 active:bg-red-600 active:text-gray-100";
-
     const handleDeleteChatroom = async () => {
         setIsModalOpen(false);
         const { response } = await deleteChatroom.mutateAsync({ chatId });
@@ -88,7 +85,7 @@ export const ChatroomSettings = ({
     };
 
     return (
-        <div className="scrollbar-track-glacier-900scrollbar-thumb-glacier-200 w-full flex-1 overflow-y-auto bg-glacier-600 scrollbar-thin sm:mx-auto sm:my-20 sm:max-h-[50svh] sm:max-w-lg sm:rounded-xl sm:bg-opacity-100">
+        <div className="scrollbar-track-glacier-900scrollbar-thumb-glacier-200 w-full flex-1 overflow-y-auto bg-glacier-50 scrollbar-thin sm:mx-auto sm:my-20 sm:max-h-[50svh] sm:max-w-lg sm:rounded-xl sm:bg-opacity-100">
             {isModalOpen ? (
                 <Portal
                     isInModal={true}
@@ -96,33 +93,30 @@ export const ChatroomSettings = ({
                     shouldRoute={false}
                 >
                     <div className="relative flex w-full flex-1 flex-col items-center gap-2 overflow-y-auto rounded-md border-2 border-white bg-white p-4 text-center text-sm hover:border-glacier-600 sm:max-w-md">
-                        <h1 className="my-4 text-xl font-bold uppercase sm:mt-0">
+                        <h1 className="mb-2 mt-4 text-xl font-bold uppercase text-glacier-900 sm:mt-0">
                             Are you sure?
                         </h1>
-                        <p className="mb-2 max-w-xs text-sm">
-                            You will{" "}
-                            <strong className="text-base uppercase text-red-600 underline">
-                                not
-                            </strong>{" "}
-                            be able to restore it once the chatroom is deleted!
-                        </p>
-                        <p className="mb-2 max-w-xs text-sm">
+                        <p className="mb-2">
+                            This will also delete{" "}
                             <strong className="text-base uppercase text-red-600 underline">
                                 all
                             </strong>{" "}
-                            messages will be deleted!
+                            of your sent messages{" "}
+                            <strong className="text-base uppercase text-red-600 underline">
+                                and
+                            </strong>{" "}
+                            created chatrooms!
                         </p>
-                        <div className="mt-2 flex w-full items-center justify-center gap-4">
+                        <div className="flex w-full items-center justify-center gap-4">
                             <button
                                 onClick={handleDeleteChatroom}
-                                className="min-w-[100px] select-none rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black hover:border-red-600 hover:bg-red-600 hover:text-gray-100 hover:shadow-sm focus:bg-red-600 focus:text-gray-100 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-gray-100"
-                                disabled={deleteChatroom.isLoading}
+                                className="min-w-[100px] select-none rounded-lg border-2 border-glacier-900 bg-white p-2 font-semibold uppercase text-glacier-900 transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 hover:shadow-sm focus:bg-red-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-glacier-50"
                             >
                                 Delete
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="h-10 min-w-[100px] select-none items-center justify-center rounded-lg border-2 border-black bg-white p-2 text-sm font-medium uppercase shadow-glacier-600 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                                className="min-w-[100px] select-none rounded-lg border-2 border-glacier-900 bg-white p-2 font-semibold uppercase text-glacier-900 transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 hover:shadow-sm focus:bg-glacier-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-glacier-600 active:bg-glacier-600 active:text-glacier-50"
                             >
                                 No
                             </button>
@@ -135,15 +129,15 @@ export const ChatroomSettings = ({
                         <button
                             onClick={() => setIsSettingsActive(false)}
                             aria-label="Close settings"
-                            className="group flex items-center gap-1 self-start rounded-full border-2 border-white bg-white p-1 text-sm font-semibold uppercase antialiased shadow  hover:border-black hover:shadow-glacier-600 focus:border-black focus:shadow-glacier-600"
+                            className="group flex items-center gap-1 self-start rounded-full border-2 border-glacier-900 bg-white p-1 shadow transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 focus:border-glacier-600 focus:bg-glacier-600"
                         >
                             <VscChromeClose
-                                className="group-hover:fill-glacier-600 group-focus:fill-glacier-600"
+                                className="fill-glacier-900 transition-all duration-75 group-hover:fill-glacier-50 group-focus:fill-glacier-50"
                                 size={28}
                             />
                         </button>
                         <div className="w-full space-y-2">
-                            <h3 className="block text-sm font-bold uppercase text-white">
+                            <h3 className="block text-sm font-bold uppercase text-glacier-900">
                                 Chatroom description:
                             </h3>
                             <p className="rounded-md bg-white p-2 text-center text-sm shadow">
@@ -153,7 +147,7 @@ export const ChatroomSettings = ({
                         {ownerId === session.data?.user.id ? (
                             <div className="flex w-full flex-col items-center gap-4">
                                 <div className="flex w-full flex-wrap items-center gap-2 md:justify-normal">
-                                    <span className="text-sm font-semibold uppercase text-white">
+                                    <span className="text-sm font-semibold uppercase text-glacier-900">
                                         Invite Link:{" "}
                                     </span>
                                     <span className="rounded-lg bg-white p-2 font-mono shadow">
@@ -165,16 +159,19 @@ export const ChatroomSettings = ({
                                         {getInvite.data?.value && (
                                             <button
                                                 onClick={handleCopyInvite}
-                                                className="rounded-lg bg-white p-2 shadow"
+                                                className="group/button focus:bg-glacer-600 rounded-lg bg-white p-2 shadow transition-all duration-75 hover:bg-glacier-600 focus:bg-glacier-600"
                                                 aria-label="Copy invite string to clipboard."
                                             >
                                                 {copied ? (
                                                     <VscCheck
-                                                        fill="rgb(14 165 233)"
+                                                        className="fill-glacier-400 transition-all duration-75 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50"
                                                         size={24}
                                                     />
                                                 ) : (
-                                                    <VscCopy size={24} />
+                                                    <VscCopy
+                                                        className="fill-glacier-600 transition-all duration-75 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50"
+                                                        size={24}
+                                                    />
                                                 )}
                                             </button>
                                         )}
@@ -189,29 +186,33 @@ export const ChatroomSettings = ({
                                                     );
                                                     setCopied(false);
                                                 }}
-                                                className="rounded-lg bg-white p-2 shadow"
+                                                disabled={patchInvite.isLoading}
+                                                className="group/button rounded-lg bg-white p-2 shadow transition-all duration-75 enabled:hover:bg-glacier-600 enabled:focus:bg-glacier-600 disabled:bg-glacier-200 disabled:opacity-50"
                                             >
                                                 {patchInvite.isLoading ? (
                                                     <LoadingSpinner
-                                                        color="rgb(14 165 233)"
+                                                        color="#2f5e6f"
                                                         size={24}
                                                     />
                                                 ) : (
-                                                    <VscRefresh size={24} />
+                                                    <VscRefresh
+                                                        className="fill-glacier-600 transition-all duration-75 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50"
+                                                        size={24}
+                                                    />
                                                 )}
                                             </button>
                                         )}
                                     </div>
                                     {getInvite.isError &&
                                         getInvite.error instanceof Error && (
-                                            <span className="text-sm font-semibold uppercase text-white">
+                                            <span className="text-sm font-semibold uppercase">
                                                 {getInvite.error.message}
                                             </span>
                                         )}
                                 </div>
 
                                 <div className="flex w-full flex-col gap-2">
-                                    <span className="text-sm font-semibold uppercase text-white">
+                                    <span className="text-sm font-semibold uppercase text-glacier-900">
                                         Banned members
                                     </span>
                                     <div
@@ -225,7 +226,7 @@ export const ChatroomSettings = ({
                                         {bannedMembers.isLoading ? (
                                             <div className="w-full rounded-md bg-white px-2 py-2 text-center text-sm font-semibold shadow">
                                                 <LoadingSpinner
-                                                    color="rgb(14 165 233)"
+                                                    color="#337387"
                                                     size={28}
                                                 />
                                             </div>
@@ -247,7 +248,7 @@ export const ChatroomSettings = ({
                                                 />
                                             ))
                                         ) : (
-                                            <p className="w-full rounded-md bg-white px-4 py-3 text-center text-sm font-semibold shadow">
+                                            <p className="w-full rounded-md bg-white px-4 py-3 text-center text-sm font-semibold text-glacier-900 shadow">
                                                 No banned members
                                             </p>
                                         )}
@@ -256,16 +257,13 @@ export const ChatroomSettings = ({
 
                                 <button
                                     onClick={() => setIsModalOpen(!isModalOpen)}
-                                    className={
-                                        dangerButtonStyles +
-                                        "group select-none disabled:opacity-50"
-                                    }
+                                    className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium text-glacier-900 shadow transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 focus:border-red-600 focus:bg-red-600 focus:text-glacier-50 active:bg-red-600 active:text-glacier-50 disabled:border-glacier-200 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
                                     disabled={deleteChatroom.isLoading}
                                     aria-label="Delete the chatroom."
                                 >
                                     {deleteChatroom.isLoading ? (
                                         <LoadingSpinner
-                                            color="rgb(2 132 199)"
+                                            color="#2f5e6f"
                                             size={28}
                                         />
                                     ) : (
@@ -277,15 +275,15 @@ export const ChatroomSettings = ({
                             <div className="mt-auto flex w-full justify-center gap-6">
                                 <button
                                     onClick={handleLeaveChatroom}
-                                    className={
-                                        dangerButtonStyles +
-                                        "select-none disabled:opacity-50"
-                                    }
+                                    className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium text-glacier-900 shadow transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 focus:border-red-600 focus:bg-red-600 focus:text-glacier-50 active:bg-red-600 active:text-glacier-50 disabled:border-glacier-200 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
                                     aria-label="Leave the chatroom."
                                     disabled={leaveChatroom.isLoading}
                                 >
                                     {leaveChatroom.isLoading ? (
-                                        <LoadingSpinner size={28} />
+                                        <LoadingSpinner
+                                            color="#2f5e6f"
+                                            size={28}
+                                        />
                                     ) : (
                                         "Leave Chatroom"
                                     )}

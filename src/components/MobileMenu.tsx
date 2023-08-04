@@ -96,7 +96,7 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
                 rel="noreferrer"
                 href="https://github.com/mrperrytpx/robina/"
                 aria-label="Github"
-                className="group mt-auto select-none rounded-full hover:bg-glacier-50 focus:bg-glacier-50"
+                className="group mt-auto select-none rounded-full"
             >
                 <VscGithub
                     className="fill-glacier-900 group-hover:scale-105 group-hover:fill-glacier-600 group-focus:scale-105 group-focus:fill-glacier-600"

@@ -342,7 +342,7 @@ export const ChatroomMessages = ({
                     />
                     <button
                         type="submit"
-                        className="group hidden rounded-full border-2 border-glacier-900 bg-white p-2 hover:border-glacier-600 hover:bg-glacier-600 focus:border-glacier-600 focus:bg-glacier-600 sm:inline-block"
+                        className="group rounded-full border-2 border-glacier-900 bg-white p-2 transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 focus:border-glacier-600 focus:bg-glacier-600 sm:inline-block"
                         aria-label="Send message."
                         disabled={!chatroomMessages.data?.pages}
                     >
