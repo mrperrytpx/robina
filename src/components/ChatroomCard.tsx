@@ -46,7 +46,7 @@ export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
     return (
         <div
             tabIndex={0}
-            className="group relative flex aspect-video w-[min(100%,280px)] flex-col items-center justify-center gap-4 rounded-xl bg-white p-4 shadow-md outline outline-2 hover:shadow-glacier-600 hover:outline-[3px] hover:outline-glacier-600  focus:shadow-glacier-600 focus:outline-[3px] focus:outline-glacier-600"
+            className="group relative flex aspect-video w-[min(100%,280px)] flex-col items-center justify-center gap-4 rounded-xl bg-white p-4 shadow-md outline outline-2 hover:shadow-glacier-600 hover:outline-[3px] hover:outline-glacier-600 focus:shadow-glacier-600 focus:outline-[3px] focus:outline-glacier-600"
         >
             {joinChatroom.isLoading ? (
                 <LoadingSpinner size={50} color="#0ea5e9" />
@@ -66,7 +66,7 @@ export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
                         <button
                             onClick={handleAcceptInvite}
                             disabled={joinChatroom.isLoading}
-                            className="group/button mx-auto rounded-full p-1 transition-all duration-75 "
+                            className="group/button mx-auto rounded-full p-1 transition-colors duration-75 "
                             aria-label={`Accept invite to a chatroom with the name ${chatroom.name}`}
                         >
                             <VscCheck
@@ -77,7 +77,7 @@ export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
                         <button
                             onClick={handleDeclineInvite}
                             disabled={declineInvite.isLoading}
-                            className="group/button mx-auto rounded-full p-1 transition-all duration-75"
+                            className="group/button mx-auto rounded-full p-1 transition-colors duration-75"
                             aria-label={`Decline invite to a chatroom with the name ${chatroom.name}`}
                         >
                             <VscChromeClose

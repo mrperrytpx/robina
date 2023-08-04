@@ -52,7 +52,7 @@ export default function SignIn({
                 <div className="flex w-full flex-col items-center gap-2">
                     <Link
                         href="/"
-                        className="mb-4 w-full break-all rounded-md p-2 text-center text-lg shadow-md"
+                        className="mb-4 w-full break-all rounded-md bg-white p-2 text-center text-lg font-bold tracking-wider shadow transition-all duration-75 hover:bg-glacier-600 hover:text-glacier-50 hover:shadow-glacier-600 focus:bg-glacier-600 focus:text-glacier-50 focus:shadow-glacier-600"
                     >
                         YetAnotherMessagingApp
                     </Link>
@@ -86,18 +86,15 @@ export default function SignIn({
                 >
                     <fieldset>
                         <label
-                            className="pl-1 text-sm font-semibold"
+                            className="pl-1 text-sm font-semibold text-glacier-900"
                             htmlFor="email"
                         >
                             Email
                             <input
-                                style={{
-                                    borderColor: errors.email
-                                        ? "rgb(220 38 38)"
-                                        : "black",
-                                }}
                                 {...register("email")}
-                                className="h-10 w-full rounded-md border-2 p-2 text-sm font-medium hover:border-glacier-600 hover:outline-glacier-600 focus:border-glacier-600 focus:outline-glacier-600"
+                                className={`h-10 w-full rounded-md border-2 border-glacier-900 p-2 text-sm font-medium hover:border-glacier-600 hover:outline-glacier-600 focus:border-glacier-600 focus:outline-glacier-600 ${
+                                    errors.email && "border-red-600"
+                                }`}
                                 type="email"
                                 id="email"
                                 name="email"
@@ -105,31 +102,32 @@ export default function SignIn({
                                 placeholder="john.doe@foo.com"
                             />
                         </label>
-
                         {errors.email && (
-                            <span className="pl-1 text-xs font-semibold text-red-500">
+                            <span className="pl-1 text-xs font-semibold text-red-600">
                                 {errors.email.message}
                             </span>
                         )}
                     </fieldset>
                     <button
                         type="submit"
-                        className="h-10 rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-glacier-600 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600   enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                        className="h-10 rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium shadow-glacier-600 transition-all duration-75 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
                         disabled={!!isSubmitting}
                     >
                         {isSubmitting ? "Signing in..." : "Sign in"}
                     </button>
                 </form>
                 <div className="relative flex w-full items-center justify-center text-xs">
-                    <span className="absolute left-0 top-1/2 h-0.5 w-1/2 -translate-y-1/2 transform bg-black" />
-                    <span className="z-10 bg-white p-2 font-bold">OR</span>
-                    <span className="absolute right-0 top-1/2 h-0.5 w-1/2 -translate-y-1/2 transform bg-black" />
+                    <span className="absolute left-0 top-1/2 h-0.5 w-1/2 -translate-y-1/2 transform bg-glacier-900" />
+                    <span className="z-10 rounded-full bg-glacier-50 p-2 font-bold text-glacier-900">
+                        OR
+                    </span>
+                    <span className="absolute right-0 top-1/2 h-0.5 w-1/2 -translate-y-1/2 transform bg-glacier-900" />
                 </div>
                 {allProviders.map((provider) => (
                     <button
                         aria-label={`${provider.name} sign in.`}
                         key={provider.id}
-                        className="group mb-2 flex h-[40px] w-full items-center justify-center gap-2 rounded-lg border-2 border-black bg-white text-sm hover:border-[#4285F4] hover:bg-[#4285F4]"
+                        className="group mb-2 flex h-[40px] w-full items-center justify-center gap-2 rounded-lg border-2 border-glacier-900 bg-white text-sm transition-all duration-75 hover:border-[#4285F4] hover:bg-[#4285F4]"
                         onClick={() => signIn(provider.id)}
                     >
                         <div className="rounded-sm bg-white p-2">

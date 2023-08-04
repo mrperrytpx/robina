@@ -24,7 +24,7 @@ const ChatsPage = () => {
 
     return (
         <div className="mx-auto max-w-screen-lg flex-1 p-4">
-            <article className="mb-4 flex flex-col space-y-2">
+            <article className="mb-4 mt-2 flex flex-col space-y-2">
                 <h2 className="block text-center font-bold uppercase text-glacier-900 sm:pl-2 sm:text-left">
                     Owned Chatroom
                 </h2>
