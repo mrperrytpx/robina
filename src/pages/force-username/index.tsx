@@ -50,9 +50,9 @@ const UsernamePage = () => {
     };
 
     return (
-        <div className="flex w-full max-w-screen-sm flex-1 flex-col items-center bg-white p-4 sm:mx-auto sm:my-20 sm:max-w-md">
+        <div className="flex w-full max-w-screen-sm flex-1 flex-col items-center p-4 sm:mx-auto sm:my-20 sm:max-w-md">
             <div className="flex w-full max-w-sm flex-col p-2">
-                <h2 className="mb-8 w-full text-center text-xl font-bold uppercase">
+                <h2 className="mb-8 w-full text-center text-xl font-bold uppercase text-glacier-900">
                     Let&apos;s give you a username 😊
                 </h2>
                 <form
@@ -65,25 +65,23 @@ const UsernamePage = () => {
                                 className="block w-full text-center text-sm sm:w-auto"
                                 htmlFor="username"
                                 aria-label="username"
+                                aria-hidden="true"
                             />
                             <input
-                                style={{
-                                    borderColor: errors.username
-                                        ? "rgb(220 38 38)"
-                                        : "black",
-                                }}
                                 {...register("username")}
                                 name="username"
                                 id="username"
                                 type="text"
-                                className="h-10 w-full border-b-2 p-2 text-center text-sm font-medium hover:border-glacier-600 hover:outline-glacier-600 focus:border-white focus:outline-glacier-600"
+                                className={`h-10 w-full max-w-md border-b-2 border-glacier-900 p-2 text-center text-sm font-medium transition-all duration-75 hover:border-glacier-400 focus:border-glacier-400 focus:outline-glacier-400 ${
+                                    errors.username && "border-red-600"
+                                }`}
                                 placeholder="lazyfox123_"
                                 maxLength={20}
                                 minLength={1}
                             />
                         </div>
                         {errors.username && (
-                            <span className="text-xs font-semibold text-red-500">
+                            <span className="text-xs font-semibold text-red-600">
                                 {errors.username.message}
                             </span>
                         )}
@@ -94,21 +92,18 @@ const UsernamePage = () => {
 
                     <div className="flex w-full flex-col items-center gap-2">
                         <button
-                            className="flex h-10 w-full max-w-[250px] select-none items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-glacier-600 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600   enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                            className="flex h-10 w-full max-w-[250px] select-none items-center justify-center rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium shadow-glacier-600 transition-all duration-75 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow-sm disabled:border-glacier-200 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
                             type="submit"
                             disabled={updateUsername.isLoading}
                         >
                             {updateUsername.isLoading ? (
-                                <LoadingSpinner
-                                    color="rgb(2 132 199)"
-                                    size={24}
-                                />
+                                <LoadingSpinner color="#2f5e6f" size={24} />
                             ) : (
                                 "Pick!"
                             )}
                         </button>
                         {errors.root && (
-                            <span className="text-xs font-semibold text-red-500">
+                            <span className="text-xs font-semibold text-red-600">
                                 {errors.root.message}
                             </span>
                         )}

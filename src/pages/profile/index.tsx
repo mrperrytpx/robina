@@ -148,18 +148,18 @@ const ProfilePage = () => {
                 <h2 className="text-sm font-bold uppercase">Account:</h2>
 
                 <button
-                    className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium text-black shadow transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 focus:border-red-600 focus:bg-red-600 focus:text-glacier-50 active:bg-red-600 active:text-glacier-50 disabled:opacity-50"
+                    className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium text-glacier-900 shadow transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 focus:border-red-600 focus:bg-red-600 focus:text-glacier-50 active:bg-red-600 active:text-glacier-50 disabled:border-glacier-200 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
                     onClick={() => setIsModalOpen(!isModalOpen)}
                     disabled={deleteProfile.isLoading}
                 >
                     {deleteProfile.isLoading ? (
-                        <LoadingSpinner color="rgb(2 132 199)" size={24} />
+                        <LoadingSpinner color="#2f5e6f" size={24} />
                     ) : (
                         "Delete Account"
                     )}
                 </button>
                 {err && (
-                    <span className="mt-1 text-xs font-semibold text-red-500">
+                    <span className="mt-1 text-xs font-semibold text-red-600">
                         {err}
                     </span>
                 )}
@@ -175,7 +175,7 @@ const ProfilePage = () => {
                             <strong className="text-base uppercase text-red-600 underline">
                                 all
                             </strong>{" "}
-                            of Your sent messages{" "}
+                            of your sent messages{" "}
                             <strong className="text-base uppercase text-red-600 underline">
                                 and
                             </strong>{" "}
@@ -184,13 +184,13 @@ const ProfilePage = () => {
                         <div className="flex w-full items-center justify-center gap-4">
                             <button
                                 onClick={handleDelete}
-                                className="min-w-[100px] select-none rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 hover:shadow-sm focus:bg-red-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-glacier-50"
+                                className="min-w-[100px] select-none rounded-lg border-2 border-glacier-900 bg-white p-2 font-semibold uppercase text-glacier-900 transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 hover:shadow-sm focus:bg-red-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-glacier-50"
                             >
                                 Delete
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="min-w-[100px] select-none rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 hover:shadow-sm focus:bg-glacier-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-glacier-600 active:bg-glacier-600 active:text-glacier-50"
+                                className="min-w-[100px] select-none rounded-lg border-2 border-glacier-900 bg-white p-2 font-semibold uppercase text-glacier-900 transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 hover:shadow-sm focus:bg-glacier-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-glacier-600 active:bg-glacier-600 active:text-glacier-50"
                             >
                                 No
                             </button>
