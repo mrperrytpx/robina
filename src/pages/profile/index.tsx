@@ -24,7 +24,7 @@ const ProfilePage = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, isDirty },
         setError,
     } = useForm<TUsernameFormValues>({
         resolver: zodResolver(usernameSchema),
@@ -94,7 +94,7 @@ const ProfilePage = () => {
                                 {errors.username.message}
                             </span>
                         )}
-                        {errors.root && (
+                        {errors.root && !isDirty && (
                             <span className="mt-1 text-xs font-semibold text-red-600">
                                 {errors.root.message}
                             </span>

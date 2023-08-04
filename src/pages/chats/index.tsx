@@ -25,7 +25,7 @@ const ChatsPage = () => {
     return (
         <div className="mx-auto max-w-screen-lg flex-1 p-4">
             <article className="mb-4 flex flex-col space-y-2">
-                <h2 className="block text-center font-bold uppercase sm:pl-2 sm:text-left">
+                <h2 className="block text-center font-bold uppercase text-glacier-900 sm:pl-2 sm:text-left">
                     Owned Chatroom
                 </h2>
                 <div className="flex flex-col flex-wrap items-center gap-4 sm:flex-row">
@@ -43,7 +43,7 @@ const ChatsPage = () => {
                 </div>
             </article>
             <article className="my-8 space-y-2">
-                <h2 className="block text-center font-bold uppercase sm:pl-2 sm:text-left">
+                <h2 className="block text-center font-bold uppercase text-glacier-900 sm:pl-2 sm:text-left">
                     Joined Chatrooms
                 </h2>
                 <div className="flex flex-col flex-wrap items-center gap-4 sm:flex-row sm:items-start">
@@ -68,7 +68,7 @@ const ChatsPage = () => {
             </article>
             {pendingInvites.data?.length ? (
                 <article className="my-8 space-y-2">
-                    <h2 className="block text-center font-bold uppercase sm:pl-2 sm:text-left">
+                    <h2 className="block text-center font-bold uppercase text-glacier-900 sm:pl-2 sm:text-left">
                         Invited to
                     </h2>
                     <div className="flex flex-col flex-wrap items-center gap-4 sm:flex-row sm:items-start">
