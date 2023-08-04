@@ -25,7 +25,7 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
             {chatroomMembers.isLoading ? (
                 <div className="h4 flex w-full flex-col gap-2">
                     <div className="flex h-4 w-full items-center rounded-md bg-white p-4 shadow">
-                        <div className="h-3 w-full animate-pulse bg-gray-300" />
+                        <div className="h-3 w-full animate-pulse bg-glacier-200" />
                     </div>
                     <SkeletonLoadingCard />
                     <SkeletonLoadingCard />
@@ -35,7 +35,7 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
                 </div>
             ) : (
                 <>
-                    <h2 className="mb-2 rounded-md bg-white p-2 text-xs font-bold shadow">
+                    <h2 className="mb-2 rounded-md bg-white p-2 text-xs font-bold text-glacier-900 shadow">
                         Members - {chatroomMembers.data?.length}
                     </h2>
                     <div className="scrollbar-track-glacier-900scrollbar-thumb-glacier-200 flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin">
@@ -58,7 +58,7 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
             )}
             {pendingChatroomInvites.data?.length ? (
                 <>
-                    <h2 className="my-2 mt-6 rounded-md bg-white p-2 text-xs font-bold shadow">
+                    <h2 className="my-2 mt-6 rounded-md bg-white p-2 text-xs font-bold text-glacier-900 shadow">
                         Pending invites - {pendingChatroomInvites.data?.length}
                     </h2>
                     <div className="scrollbar-track-glacier-900scrollbar-thumb-glacier-200 flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin">

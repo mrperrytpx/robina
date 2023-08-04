@@ -59,7 +59,7 @@ export const PendingInviteCard = ({ chatroom }: IPendingInviteCardProps) => {
                     className="group/button select-none rounded-full p-1 transition-all duration-75 hover:bg-glacier-600 focus:bg-glacier-600"
                 >
                     {joinChatroom.isLoading ? (
-                        <LoadingSpinner size={20} color="#0ea5e9" />
+                        <LoadingSpinner size={20} color="#337387" />
                     ) : (
                         <VscCheck
                             className="fill-glacier-950 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50"

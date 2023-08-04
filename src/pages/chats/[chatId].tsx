@@ -362,7 +362,7 @@ const ChatPage = () => {
                         aria-label="Back to all chats page"
                     >
                         <VscArrowLeft
-                            className="transition-color fill-glacier-900 duration-75 group-hover:fill-glacier-600 group-focus:fill-glacier-600"
+                            className="transition-color fill-glacier-900 duration-75 group-hover:scale-125 group-hover:fill-glacier-600 group-focus:fill-glacier-600"
                             size={24}
                         />
                     </Link>

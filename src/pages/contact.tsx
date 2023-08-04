@@ -6,7 +6,7 @@ const ContactPage = () => {
             <Head>
                 <title>Contact Us</title>
             </Head>
-            <div className="mx-auto mb-20 mt-10 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4">
+            <div className="mx-auto mb-20 mt-10 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4 text-glacier-900">
                 <h1 className="text-2xl font-semibold">Contact</h1>
                 <article className="flex flex-col items-start gap-2 text-sm">
                     <p>

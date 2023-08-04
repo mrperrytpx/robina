@@ -17,10 +17,10 @@ export const SkeletonLoadingCard = () => {
     return (
         <div
             aria-label="Loading chatroom member card."
-            className="group relative flex items-center gap-2 rounded-md border-2 border-white bg-white p-2 shadow hover:border-black"
+            className="group relative flex items-center gap-2 rounded-md border-2 border-white bg-white p-2 shadow hover:border-glacier-900"
         >
-            <div className="aspect-square w-8 animate-pulse rounded-full bg-gray-300" />
-            <div className="h-5 w-full animate-pulse bg-gray-300" />
+            <div className="aspect-square w-8 animate-pulse rounded-full bg-glacier-200" />
+            <div className="h-5 w-full animate-pulse bg-glacier-200" />
         </div>
     );
 };
@@ -35,7 +35,7 @@ export const MemberCard = ({
     const session = useSession();
 
     return (
-        <div className="group relative flex items-center gap-2 rounded-md border-2 border-white bg-white px-2 py-1 shadow hover:border-black">
+        <div className="group relative flex items-center gap-2 rounded-md border-2 border-white bg-white px-2 py-1 shadow hover:border-glacier-900">
             <div
                 className="aspect-square w-8"
                 style={{ opacity: opaque ? "0.6" : "1" }}
@@ -66,7 +66,7 @@ export const MemberCard = ({
                     aria-label="Ban or unban member depending where the card is rendered."
                 >
                     {loading ? (
-                        <LoadingSpinner size={28} color="rgb(220 38 38)" />
+                        <LoadingSpinner size={28} color="#2f5e6f" />
                     ) : (
                         <VscCircleSlash size={28} fill="rgb(220 38 38)" />
                     )}

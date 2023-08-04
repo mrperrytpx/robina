@@ -7,7 +7,7 @@ const PrivacyPage = () => {
             <Head>
                 <title>Privacy Policy</title>
             </Head>
-            <div className="mx-auto mb-20 mt-10 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4 text-sm text-black">
+            <div className="mx-auto mb-20 mt-10 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4 text-sm text-glacier-900">
                 <h1 className="text-2xl font-semibold">Privacy Policy</h1>
                 <p className="text-xs">Effective Date: 3rd of August, 2023</p>
                 <p>

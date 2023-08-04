@@ -7,7 +7,7 @@ const TosPage = () => {
             <Head>
                 <title>Terms of Service</title>
             </Head>
-            <div className="mx-auto mb-20 mt-10 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4">
+            <div className="mx-auto mb-20 mt-10 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4 text-glacier-900">
                 <h1 className="text-2xl font-semibold">Terms of Service</h1>
                 <span className="text-xl font-medium">
                     Welcome to YetAnotherMessagingApp!
