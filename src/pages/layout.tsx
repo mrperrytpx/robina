@@ -140,12 +140,12 @@ const Layout = ({ children }: ILayoutProps) => {
                     showSpinner: false,
                     trickle: true,
                 }}
-                color="black"
+                color="rgb(219 239 242)"
                 showOnShallow={false}
             />
             <CookieBanner />
             <ErrorBoundary>
-                <main className="mx-auto flex min-h-[calc(100svh-66px)] w-full flex-1">
+                <main className="mx-auto flex min-h-[calc(100svh-64px)] w-full flex-1">
                     {children}
                 </main>
             </ErrorBoundary>

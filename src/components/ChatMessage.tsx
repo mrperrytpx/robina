@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { formatTime } from "../util/formatTime";
-import DefaultImage from "../../public/default.png";
+import DefaultImage from "../../public/default-lightbg.png";
 import { TChatroomMessage } from "../hooks/useGetChatroomQuery";
 import { VscTrash } from "react-icons/vsc";
 import { useDeleteMessageMutation } from "../hooks/useDeleteMessageMutation";

@@ -47,7 +47,7 @@ export default function Home({
         <div className="flex w-full flex-1 flex-col items-center overflow-x-hidden">
             <div className="flex h-full w-full max-w-screen-lg flex-col items-start gap-40 px-2">
                 <article className="flex min-h-[min(calc(100svh-200px),1024px)] w-full flex-col items-center justify-center gap-8 py-4">
-                    {/* <ImageWithFallback
+                    <ImageWithFallback
                         src={LogoTextRectangle}
                         alt="Yet another messaging app"
                         width={500}
@@ -64,7 +64,7 @@ export default function Home({
                         className="md:hidden"
                         fallback={FallbackLogoTextSquare}
                         priority
-                    /> */}
+                    />
                     <Link
                         prefetch={false}
                         href="/chats"

@@ -21,7 +21,7 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
     const pendingChatroomInvites = useGetChatroomPendingInvites(chatId);
 
     return (
-        <aside className="flex-1 overflow-y-auto bg-glacier-600 p-3 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100 sm:h-full sm:w-60 sm:py-0">
+        <aside className="flex-1 overflow-y-auto bg-glacier-600 p-3 scrollbar-thin scrollbar-track-black scrollbar-thumb-glacier-200 sm:h-full sm:w-60 sm:py-0">
             {chatroomMembers.isLoading ? (
                 <div className="h4 flex w-full flex-col gap-2">
                     <div className="flex h-4 w-full items-center rounded-md bg-white p-4 shadow">
@@ -38,7 +38,7 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
                     <h2 className="mb-2 rounded-md bg-white p-2 text-xs font-bold shadow">
                         Members - {chatroomMembers.data?.length}
                     </h2>
-                    <div className="flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">
+                    <div className="flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-glacier-200">
                         {chatroomMembers.data?.map((member) => (
                             <MemberCard
                                 key={member.id}
@@ -61,7 +61,7 @@ export const ChatroomMembers = ({ ownerId }: IChatroomMembersProps) => {
                     <h2 className="my-2 mt-6 rounded-md bg-white p-2 text-xs font-bold shadow">
                         Pending invites - {pendingChatroomInvites.data?.length}
                     </h2>
-                    <div className="flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">
+                    <div className="flex w-full flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-track-black scrollbar-thumb-glacier-200">
                         {pendingChatroomInvites.data?.map((member) => (
                             <MemberCard
                                 key={member.id}

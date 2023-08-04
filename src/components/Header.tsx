@@ -1,12 +1,11 @@
 import Link from "next/link";
-import { RiChat1Line } from "react-icons/ri";
 import { VscBellDot, VscChromeClose, VscMenu } from "react-icons/vsc";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { MobileMenu } from "./MobileMenu";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import { useGetUserPendingInvitesQuery } from "../hooks/useGetUserPendingInvitesQuery";
-import DefaultPic from "../../public/default.png";
+import DefaultPic from "../../public/default-darkbg.png";
 import LogoWhite from "../../public/logo-white.webp";
 import FallbackLogoWhite from "../../public/logo-white.png";
 import { useEffect, useState } from "react";

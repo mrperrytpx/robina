@@ -88,7 +88,7 @@ export const ChatroomSettings = ({
     };
 
     return (
-        <div className="w-full flex-1 overflow-y-auto bg-glacier-600 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100 sm:mx-auto sm:my-20 sm:max-h-[50svh] sm:max-w-lg sm:rounded-xl sm:bg-opacity-100">
+        <div className="w-full flex-1 overflow-y-auto bg-glacier-600 scrollbar-thin scrollbar-track-black scrollbar-thumb-glacier-200 sm:mx-auto sm:my-20 sm:max-h-[50svh] sm:max-w-lg sm:rounded-xl sm:bg-opacity-100">
             {isModalOpen ? (
                 <Portal
                     isInModal={true}

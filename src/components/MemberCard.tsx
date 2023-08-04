@@ -1,5 +1,5 @@
 import Image from "next/image";
-import DefaultPic from "../../public/default.png";
+import DefaultPic from "../../public/default-lightbg.png";
 import { useSession } from "next-auth/react";
 import { User } from "@prisma/client";
 import { VscCircleSlash } from "react-icons/vsc";

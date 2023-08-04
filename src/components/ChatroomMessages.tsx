@@ -259,7 +259,7 @@ export const ChatroomMessages = ({
         return (
             <div
                 aria-label="Error state"
-                className="mx-auto flex max-h-[calc(100svh-66px)] w-full max-w-screen-lg flex-1 flex-col items-center justify-center px-8 py-4"
+                className="mx-auto flex max-h-[calc(100svh-64px)] w-full max-w-screen-lg flex-1 flex-col items-center justify-center px-8 py-4"
             >
                 <div className="flex flex-col items-center gap-4">
                     <span className="text-4xl">😅</span>
@@ -273,7 +273,7 @@ export const ChatroomMessages = ({
 
     return (
         <>
-            <div className="flex flex-1 flex-col overflow-y-auto p-2 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-sky-100">
+            <div className="flex flex-1 flex-col overflow-y-auto p-2 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-glacier-200">
                 {chatroomMessages.isLoading ? (
                     <div className="mt-auto flex w-full items-center justify-center">
                         <LoadingSpinner size={32} color="rgb(14 165 233)" />
