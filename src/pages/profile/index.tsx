@@ -101,7 +101,7 @@ const ProfilePage = () => {
                         )}
                         <div className="mt-1 flex w-full flex-col items-center gap-2">
                             <button
-                                className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium text-glacier-900 shadow-glacier-600 transition-all duration-75 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600 enabled:hover:text-white enabled:hover:shadow enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow disabled:border-0 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
+                                className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium text-glacier-900 shadow-glacier-600 transition-all duration-75 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600 enabled:hover:text-white enabled:hover:shadow enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow disabled:border-glacier-200 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
                                 type="submit"
                                 disabled={
                                     updateUsername.isLoading || isSubmitting

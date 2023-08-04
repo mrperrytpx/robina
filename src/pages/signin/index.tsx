@@ -52,7 +52,7 @@ export default function SignIn({
                 <div className="flex w-full flex-col items-center gap-2">
                     <Link
                         href="/"
-                        className="mb-4 w-full break-all rounded-md bg-white p-2 text-center text-lg font-bold tracking-wider shadow transition-all duration-75 hover:bg-glacier-600 hover:text-glacier-50 hover:shadow-glacier-600 focus:bg-glacier-600 focus:text-glacier-50 focus:shadow-glacier-600"
+                        className="mb-4 w-full break-all rounded-md bg-white p-2 text-center text-lg font-bold tracking-wider text-glacier-900 shadow transition-all duration-75 hover:bg-glacier-600 hover:text-glacier-50 hover:shadow-glacier-600 focus:bg-glacier-600 focus:text-glacier-50 focus:shadow-glacier-600"
                     >
                         YetAnotherMessagingApp
                     </Link>
@@ -142,7 +142,7 @@ export default function SignIn({
                         <span
                             className={
                                 roboto.className +
-                                " pr-2 font-medium text-black group-hover:text-white"
+                                " pr-2 font-medium text-glacier-900 group-hover:text-white"
                             }
                         >
                             Sign in with {provider.name}

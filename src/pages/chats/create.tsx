@@ -49,72 +49,76 @@ const CreateChatPage = () => {
     };
 
     return (
-        <div className="max-w-screen-sm flex-1 bg-white p-4 sm:mx-auto sm:my-20 sm:rounded-xl">
+        <div className="max-w-screen-sm flex-1 bg-glacier-50 p-4 sm:mx-auto sm:my-20 sm:rounded-xl">
             <div className="flex w-full flex-col p-2">
                 <button
                     onClick={() => router.back()}
-                    className="group mb-6 flex select-none items-center gap-1 self-start rounded-md border-2 border-black px-2 py-1 text-sm font-semibold uppercase antialiased shadow  hover:border-white hover:shadow-sky-500 focus:border-white focus:shadow-sky-500"
+                    className="group mb-6 flex select-none items-center gap-1 self-start rounded-md border-2 border-glacier-900 bg-white px-2 py-1 text-sm font-semibold uppercase text-glacier-900 antialiased transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 focus:border-glacier-600 focus:bg-glacier-600 focus:text-glacier-50 "
                 >
                     <VscArrowLeft
-                        className="group-hover:fill-sky-500 group-focus:fill-sky-500"
+                        className="group-hover:fill-glacier-50 group-focus:fill-glacier-50"
                         size={32}
                     />{" "}
                     Go Back
                 </button>
                 <form
-                    className="flex flex-col gap-2"
+                    className="flex flex-col gap-4"
                     onSubmit={handleSubmit(onSubmit)}
                 >
-                    <label className="block text-xs" htmlFor="name">
-                        <strong className="uppercase">Chatroom name</strong>
-                    </label>
-                    <input
-                        style={{
-                            borderColor: errors.name
-                                ? "rgb(220 38 38)"
-                                : "black",
-                        }}
-                        {...register("name")}
-                        name="name"
-                        id="name"
-                        type="text"
-                        className="h-10 w-full rounded-md border-2 p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
-                        placeholder="Chatroom name"
-                        maxLength={50}
-                        minLength={1}
-                    />
-                    {errors.name && (
-                        <span className="text-xs font-semibold text-red-500">
-                            {errors.name.message}
-                        </span>
-                    )}
-                    <label className="block text-xs" htmlFor="description">
-                        <strong className="uppercase">
-                            Chatroom description
-                        </strong>
-                    </label>
-                    <textarea
-                        style={{
-                            borderColor: errors.description
-                                ? "rgb(220 38 38)"
-                                : "black",
-                        }}
-                        {...register("description")}
-                        name="description"
-                        id="description"
-                        className="h-44 w-full rounded-md border-2 p-2 text-sm font-medium hover:border-sky-500 hover:outline-sky-500 focus:border-sky-500 focus:outline-sky-500"
-                        placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-                        maxLength={500}
-                        minLength={1}
-                    />
-                    {errors.description && (
-                        <span className="text-xs font-semibold text-red-500">
-                            {errors.description.message}
-                        </span>
-                    )}
+                    <div className="flex w-full flex-col gap-0.5">
+                        <label
+                            className="block text-xs text-glacier-900"
+                            htmlFor="name"
+                        >
+                            <strong className="uppercase">Chatroom name</strong>
+                        </label>
+                        <input
+                            {...register("name")}
+                            name="name"
+                            id="name"
+                            type="text"
+                            className={`focus:border-glacier-00 h-10 w-full rounded-md border-2 border-glacier-900 p-2 text-sm font-medium transition-all duration-75 hover:border-glacier-400 focus:outline-glacier-400 ${
+                                errors.name && "border-red-600"
+                            }`}
+                            placeholder="Chatroom name"
+                            maxLength={50}
+                            minLength={1}
+                        />
+                        {errors.name && (
+                            <span className="text-xs font-semibold text-red-600">
+                                {errors.name.message}
+                            </span>
+                        )}
+                    </div>
+                    <div className="flex w-full flex-col gap-0.5">
+                        <label
+                            className="block text-xs text-glacier-900"
+                            htmlFor="description"
+                        >
+                            <strong className="uppercase">
+                                Chatroom description
+                            </strong>
+                        </label>
+                        <textarea
+                            {...register("description")}
+                            name="description"
+                            id="description"
+                            className={`h-44 w-full rounded-md border-2 border-glacier-900 p-2 text-sm font-medium transition-all duration-75 hover:border-glacier-400 focus:border-glacier-400 focus:outline-glacier-400 ${
+                                errors.description && "border-red-600"
+                            }`}
+                            placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+                            maxLength={500}
+                            minLength={1}
+                        />
+                        {errors.description && (
+                            <span className="text-xs font-semibold text-red-600">
+                                {errors.description.message}
+                            </span>
+                        )}
+                    </div>
 
                     <button
-                        className="h-10 select-none rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-sky-500 enabled:hover:border-sky-500 enabled:hover:bg-sky-500   enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-sky-500 enabled:focus:bg-sky-500 enabled:focus:text-white enabled:focus:shadow-sm disabled:opacity-50"
+                        className="h-10 select-none rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium shadow-glacier-600 transition-all duration-75 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600 enabled:hover:text-glacier-50 enabled:hover:shadow enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-glacier-50 enabled:focus:shadow-sm disabled:border-glacier-200 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
                         type="submit"
                         disabled={createRoom.isLoading}
                     >
