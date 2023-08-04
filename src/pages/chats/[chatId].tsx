@@ -293,7 +293,7 @@ const ChatPage = () => {
         return (
             <div className="flex w-full flex-1 items-center justify-center">
                 <div className="flex flex-col gap-4">
-                    <LoadingSpinner size={50} color="#0ea5e9" />
+                    <LoadingSpinner size={50} color="#337387" />
                     <span className="text-center font-mono">
                         Loading Chatroom...
                     </span>
@@ -319,7 +319,7 @@ const ChatPage = () => {
     return (
         <div className="flex max-h-[calc(100svh-64px)] w-full flex-row">
             <div className="flex max-h-[calc(100svh-64px)] w-full flex-col">
-                <div className="flex h-14 w-full items-center justify-between px-4 shadow sm:hidden">
+                <div className="flex h-14 w-full items-center justify-between px-4 shadow shadow-glacier-600 sm:hidden">
                     <div className="line-clamp-2 flex items-center gap-2 text-sm font-semibold">
                         <Link
                             href="/chats"
@@ -327,11 +327,13 @@ const ChatPage = () => {
                             aria-label="Back to all chats page"
                         >
                             <VscArrowLeft
-                                className="fill-black group-hover:fill-glacier-600 group-focus:fill-glacier-600"
+                                className="transition-color fill-glacier-900 duration-75 group-hover:scale-125 group-hover:fill-glacier-600 group-focus:fill-glacier-600"
                                 size={24}
                             />
                         </Link>
-                        <span>{chatroom.data.name}</span>
+                        <span className="text-glacier-900">
+                            {chatroom.data.name}
+                        </span>
                     </div>
                     <div className="flex items-center gap-4">
                         <button
@@ -340,31 +342,33 @@ const ChatPage = () => {
                             onClick={handleSettings}
                         >
                             <FiSettings
-                                className=" group-hover:scale-110 group-hover:stroke-glacier-600 group-focus:scale-110 group-focus:stroke-glacier-600 group-active:scale-110"
+                                className="transition-color duration-75 group-hover:scale-125 group-hover:stroke-glacier-600"
                                 size={24}
                             />
                         </button>
                         <button className="group p-2" onClick={handleMembers}>
                             <FiUsers
-                                aria-label="Toggle chatroom members aside"
-                                className="group-hover:scale-110 group-hover:stroke-glacier-600 group-focus:scale-110 group-focus:stroke-glacier-600 group-active:scale-110"
+                                aria-label="Toggle chatroom members aside."
+                                className="transition-color duration-75 group-hover:scale-125 group-hover:stroke-glacier-600"
                                 size={24}
                             />
                         </button>
                     </div>
                 </div>
-                <div className="line-clamp-2 hidden  px-4 py-1 text-sm font-semibold shadow sm:flex sm:items-center sm:gap-4">
+                <div className="line-clamp-2 hidden px-4 py-1 text-sm font-semibold shadow shadow-glacier-600 sm:flex sm:items-center sm:gap-4">
                     <Link
                         href="/chats"
                         className="group px-2 py-1"
                         aria-label="Back to all chats page"
                     >
                         <VscArrowLeft
-                            className="fill-black group-hover:fill-glacier-600 group-focus:fill-glacier-600"
+                            className="transition-color fill-glacier-900 duration-75 group-hover:fill-glacier-600 group-focus:fill-glacier-600"
                             size={24}
                         />
                     </Link>
-                    <span>{chatroom.data.name}</span>
+                    <span className="text-glacier-900">
+                        {chatroom.data.name}
+                    </span>
                 </div>
                 <ChatroomMessages
                     handleSettings={handleSettings}

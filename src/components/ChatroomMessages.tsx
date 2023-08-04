@@ -273,13 +273,13 @@ export const ChatroomMessages = ({
 
     return (
         <>
-            <div className="flex flex-1 flex-col overflow-y-auto p-2 px-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-glacier-200">
+            <div className="flex flex-1 flex-col overflow-y-auto p-2 px-4 scrollbar-thin scrollbar-track-glacier-900 scrollbar-thumb-glacier-200">
                 {chatroomMessages.isLoading ? (
                     <div className="mt-auto flex w-full items-center justify-center">
-                        <LoadingSpinner size={32} color="rgb(14 165 233)" />
+                        <LoadingSpinner size={32} color="#337387" />
                     </div>
                 ) : chatroomMessages.isFetchingPreviousPage ? (
-                    <LoadingSpinner size={32} color="rgb(14 165 233)" />
+                    <LoadingSpinner size={32} color="#337387" />
                 ) : (
                     <div className="mt-auto w-full" ref={startRef} />
                 )}
@@ -309,13 +309,13 @@ export const ChatroomMessages = ({
 
             <div className="flex h-14 items-center gap-3 px-3">
                 <button
-                    className="group hidden rounded-full border-2 border-black p-2 hover:border-glacier-600 focus:border-glacier-600 sm:inline-block"
+                    className="group hidden rounded-full border-2 border-glacier-900 bg-white p-2 hover:border-glacier-600 hover:bg-glacier-600 focus:border-glacier-600 focus:bg-glacier-600 sm:inline-block"
                     aria-label="Toggle chatroom settings modal."
                     onClick={handleSettings}
                 >
                     <FiSettings
                         size={20}
-                        className="group-hover:stroke-glacier-600 group-focus:stroke-glacier-600"
+                        className="stroke-glacier-900 group-hover:stroke-glacier-50 group-focus:stroke-glacier-50"
                     />
                 </button>
                 <form
@@ -338,16 +338,16 @@ export const ChatroomMessages = ({
                         maxLength={150}
                         minLength={1}
                         disabled={!chatroomMessages.data}
-                        className="h-10 w-full rounded-md border-2 border-black p-2 text-sm font-medium hover:border-glacier-600 hover:outline-glacier-600 focus:border-glacier-600 focus:outline-glacier-600 disabled:opacity-50"
+                        className="h-10 w-full rounded-md border-2 border-glacier-900 p-2 text-sm font-medium hover:border-glacier-400 focus:border-glacier-400 focus:outline-glacier-400 disabled:border-glacier-200 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
                     />
                     <button
                         type="submit"
-                        className="group rounded-full border-2 border-black p-2 hover:border-glacier-600 focus:border-glacier-600 disabled:opacity-50"
+                        className="group hidden rounded-full border-2 border-glacier-900 bg-white p-2 hover:border-glacier-600 hover:bg-glacier-600 focus:border-glacier-600 focus:bg-glacier-600 sm:inline-block"
                         aria-label="Send message."
                         disabled={!chatroomMessages.data?.pages}
                     >
                         <VscSend
-                            className="fill-black group-hover:fill-glacier-600 group-focus:fill-glacier-600 group-active:fill-glacier-600"
+                            className="fill-glacier-900 group-hover:fill-glacier-50 group-focus:fill-glacier-50 group-active:fill-glacier-50"
                             size={20}
                         />
                     </button>

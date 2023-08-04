@@ -84,10 +84,10 @@ export default function App({
                         `}</style>
                         <Component {...pageProps} />
                         <ToastContainer {...toastProps} />
-                        <ReactQueryDevtools
+                        {/* <ReactQueryDevtools
                             initialIsOpen={false}
                             position="bottom-right"
-                        />
+                        /> */}
                     </Layout>
                 </QueryClientProvider>
             </SessionProvider>
