@@ -3,9 +3,9 @@ import { Footer } from "../components/Footer";
 import { type ReactNode } from "react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { prisma } from "../../prisma/prisma";
-import LogoTextRectangle from "../../public/logo-text-rectangle.webp";
+import LogoTextRectangle from "../../public/logo-text-rect.webp";
 import LogoTextSquare from "../../public/logo-text-square.webp";
-import FallbackLogoTextRectangle from "../../public/logo-text-rectangle.png";
+import FallbackLogoTextRectangle from "../../public/logo-text-rect.png";
 import FallbackLogoTextSquare from "../../public/logo-text-square.png";
 import { ImageWithFallback } from "../components/ImageWithFallback";
 
@@ -14,11 +14,7 @@ interface ITestimonyCardProps {
     name: string;
     date: string;
 }
-export const TestimonyCard = ({
-    children,
-    name,
-    date,
-}: ITestimonyCardProps) => {
+const TestimonyCard = ({ children, name, date }: ITestimonyCardProps) => {
     return (
         <div className="flex w-full max-w-[min(100%,300px)] flex-col rounded-lg bg-white shadow shadow-glacier-600 xl:aspect-video xl:w-80 xl:max-w-[300px]">
             <div className="grid flex-1 grid-cols-[60px,1fr] items-center justify-center rounded-lg px-4 py-2 shadow">
@@ -50,11 +46,10 @@ export default function Home({
                     <ImageWithFallback
                         src={LogoTextRectangle}
                         alt="Yet another messaging app"
-                        width={500}
-                        height={40}
-                        className="hidden scale-150 select-none md:block"
+                        width={875}
+                        height={70}
+                        className="hidden select-none md:block"
                         fallback={FallbackLogoTextRectangle}
-                        priority
                     />
                     <ImageWithFallback
                         src={LogoTextSquare}
