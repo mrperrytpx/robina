@@ -40,10 +40,10 @@ export const PendingInviteCard = ({ chatroom }: IPendingInviteCardProps) => {
     return (
         <div
             key={chatroom.id}
-            className="my-1 flex w-full max-w-md items-center justify-between rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium hover:border-glacier-400"
+            className="my-1 flex w-full max-w-md items-center justify-between rounded-md border-2 border-glacier-900 bg-white px-2 py-1 text-sm font-medium  transition-all duration-75 focus-within:border-glacier-400 hover:border-glacier-400"
         >
             <span className="truncate">
-                <strong>
+                <strong className="text-glacier-950">
                     {chatroom.owner.username}
                     &apos;s
                 </strong>{" "}
@@ -56,13 +56,13 @@ export const PendingInviteCard = ({ chatroom }: IPendingInviteCardProps) => {
                     }
                     disabled={joinChatroom.isLoading}
                     aria-label={`Accept invite to a chatroom with the name ${chatroom.name}.`}
-                    className="group/button select-none rounded-full"
+                    className="group/button select-none rounded-full p-1 transition-all duration-75 hover:bg-glacier-600 focus:bg-glacier-600"
                 >
                     {joinChatroom.isLoading ? (
                         <LoadingSpinner size={20} color="#0ea5e9" />
                     ) : (
                         <VscCheck
-                            className="fill-black group-hover/button:fill-glacier-600 group-focus/button:fill-glacier-600"
+                            className="fill-glacier-950 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50"
                             size={20}
                         />
                     )}
@@ -70,11 +70,11 @@ export const PendingInviteCard = ({ chatroom }: IPendingInviteCardProps) => {
                 <button
                     onClick={() => handleDeclineInvite(chatroom.id)}
                     disabled={declineInvite.isLoading}
-                    className="group/button select-none rounded-full"
+                    className="group/button select-none rounded-full p-1 transition-all duration-75 hover:bg-glacier-600 focus:bg-glacier-600"
                     aria-label={`Decline invite to a chatroom with the name ${chatroom.name}.`}
                 >
                     <VscChromeClose
-                        className="fill-black group-hover/button:fill-red-600 group-focus/button:fill-red-600"
+                        className="fill-glacier-950 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50"
                         size={20}
                     />
                 </button>

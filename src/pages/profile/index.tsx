@@ -81,7 +81,7 @@ const ProfilePage = () => {
                             name="username"
                             id="username"
                             type="text"
-                            className={`h-10 w-full max-w-md border-b-2 border-glacier-900 p-2 text-center text-sm font-medium hover:border-glacier-400 focus:border-glacier-400 focus:outline-glacier-400 ${
+                            className={`h-10 w-full max-w-md border-b-2 border-glacier-900 p-2 text-center text-sm font-medium transition-all duration-75 hover:border-glacier-400 focus:border-glacier-400 focus:outline-glacier-400 ${
                                 errors.username && "border-red-600"
                             }`}
                             placeholder="lazyfox123_"
@@ -89,35 +89,33 @@ const ProfilePage = () => {
                             maxLength={20}
                             minLength={1}
                         />
-                        <div className="mt-2 flex w-full flex-col items-center gap-2">
+                        {errors.username && (
+                            <span className="mt-1 text-xs font-semibold text-red-600">
+                                {errors.username.message}
+                            </span>
+                        )}
+                        {errors.root && (
+                            <span className="mt-1 text-xs font-semibold text-red-600">
+                                {errors.root.message}
+                            </span>
+                        )}
+                        <div className="mt-1 flex w-full flex-col items-center gap-2">
                             <button
-                                className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium text-glacier-900 shadow-glacier-600 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600 enabled:hover:text-white enabled:hover:shadow enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow disabled:border-0 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
+                                className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium text-glacier-900 shadow-glacier-600 transition-all duration-75 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600 enabled:hover:text-white enabled:hover:shadow enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow disabled:border-0 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
                                 type="submit"
                                 disabled={
                                     updateUsername.isLoading || isSubmitting
                                 }
                             >
                                 {updateUsername.isLoading ? (
-                                    <LoadingSpinner
-                                        color="rgb(2 132 199)"
-                                        size={24}
-                                    />
+                                    <LoadingSpinner color="#2f5e6f" size={24} />
                                 ) : (
                                     "Change username"
                                 )}
                             </button>
                         </div>
                     </form>
-                    {errors.username && (
-                        <span className="text-xs font-semibold text-red-600">
-                            {errors.username.message}
-                        </span>
-                    )}
-                    {errors.root && (
-                        <span className="text-xs font-semibold text-red-600">
-                            {errors.root.message}
-                        </span>
-                    )}
+
                     <p className="w-full text-center text-xs font-medium">
                         *Usernames get converted to lowercase letters.
                     </p>
@@ -125,7 +123,7 @@ const ProfilePage = () => {
             </div>
 
             <article className="my-4 flex w-full flex-col items-center gap-1 sm:mt-8">
-                <h2 className="text-sm font-bold uppercase">
+                <h2 className="text-sm font-bold uppercase text-glacier-900">
                     Pending invites:
                 </h2>
                 {pendingInvites.isLoading ? (
@@ -150,7 +148,7 @@ const ProfilePage = () => {
                 <h2 className="text-sm font-bold uppercase">Account:</h2>
 
                 <button
-                    className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium text-black shadow hover:border-red-600 hover:bg-red-600 hover:text-gray-100 focus:border-red-600 focus:bg-red-600 focus:text-gray-100 active:bg-red-600 active:text-gray-100 disabled:opacity-50"
+                    className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-black bg-white p-2 text-sm font-medium text-black shadow transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 focus:border-red-600 focus:bg-red-600 focus:text-glacier-50 active:bg-red-600 active:text-glacier-50 disabled:opacity-50"
                     onClick={() => setIsModalOpen(!isModalOpen)}
                     disabled={deleteProfile.isLoading}
                 >
@@ -168,8 +166,8 @@ const ProfilePage = () => {
             </article>
             {isModalOpen && (
                 <Portal setState={setIsModalOpen} shouldRoute={false}>
-                    <div className="relative flex max-h-full w-full flex-col items-center gap-8 overflow-y-auto rounded-md border-2 border-white bg-white p-4 text-center text-sm hover:border-glacier-600 sm:max-w-md">
-                        <h1 className="mb-2 mt-4 text-xl font-bold uppercase text-glacier-950 sm:mt-0">
+                    <div className="relative flex max-h-full w-full flex-col items-center gap-8 overflow-y-auto rounded-lg border-2 border-white bg-white p-4 text-center text-sm hover:border-glacier-600 sm:max-w-md">
+                        <h1 className="mb-2 mt-4 text-xl font-bold uppercase text-glacier-900 sm:mt-0">
                             Are you sure?
                         </h1>
                         <p className="mb-2">
@@ -186,13 +184,13 @@ const ProfilePage = () => {
                         <div className="flex w-full items-center justify-center gap-4">
                             <button
                                 onClick={handleDelete}
-                                className="min-w-[100px] select-none rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black hover:border-red-600 hover:bg-red-600 hover:text-gray-100 hover:shadow-sm focus:bg-red-600 focus:text-gray-100 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-gray-100"
+                                className="min-w-[100px] select-none rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 hover:shadow-sm focus:bg-red-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-glacier-50"
                             >
                                 Delete
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="min-w-[100px] select-none rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black hover:border-red-600 hover:bg-red-600 hover:text-gray-100 hover:shadow-sm focus:bg-red-600 focus:text-gray-100 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-gray-100"
+                                className="min-w-[100px] select-none rounded-lg border-2 border-black bg-white p-2 font-semibold uppercase text-black transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 hover:shadow-sm focus:bg-glacier-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-glacier-600 active:bg-glacier-600 active:text-glacier-50"
                             >
                                 No
                             </button>
