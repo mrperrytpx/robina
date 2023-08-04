@@ -25,12 +25,12 @@ export const CookieBanner = () => {
     if (!showCookieHeader) return null;
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-t-lg bg-indigo-600 p-4 py-8 text-center text-white sm:bottom-2 sm:left-2 sm:w-[500px] sm:rounded-lg">
+        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-t-lg bg-glacier-200 p-4 py-8 text-center text-glacier-950 sm:bottom-2 sm:left-2 sm:w-[500px] sm:rounded-lg">
             <p>
                 We use cookies to enhance your experience on our website. By
                 continuing to browse, you consent to our{" "}
                 <Link
-                    className="forcus:text-black underline hover:text-black"
+                    className="underline hover:text-red-600 focus:text-red-600"
                     href="/tos"
                     prefetch={false}
                 >
@@ -40,7 +40,7 @@ export const CookieBanner = () => {
             </p>
             <button
                 onClick={handleAcceptCookies}
-                className="mt-4 select-none rounded-lg border-2 border-white bg-white px-4 py-2 font-semibold text-black hover:border-black hover:text-glacier-600 focus:border-black focus:text-glacier-600"
+                className="transition-color mt-4 select-none rounded-lg border-2 border-white bg-white px-4 py-2 font-semibold text-glacier-950 duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 focus:border-glacier-600 focus:bg-glacier-600 focus:text-glacier-50"
             >
                 I understand
             </button>
