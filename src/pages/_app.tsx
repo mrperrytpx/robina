@@ -70,7 +70,7 @@ export default function App({
                     property="og:description"
                     content="YetAnotherMessagingApp - World's simplest chatroom website."
                 />
-                <meta name="theme-color" content="#0ea5e9" />
+                <meta name="theme-color" content="#3a8ca0" />
             </Head>
             <SessionProvider session={session}>
                 <QueryClientProvider client={queryClient}>
@@ -84,10 +84,10 @@ export default function App({
                         `}</style>
                         <Component {...pageProps} />
                         <ToastContainer {...toastProps} />
-                        {/* <ReactQueryDevtools
+                        <ReactQueryDevtools
                             initialIsOpen={false}
                             position="bottom-right"
-                        /> */}
+                        />
                     </Layout>
                 </QueryClientProvider>
             </SessionProvider>
