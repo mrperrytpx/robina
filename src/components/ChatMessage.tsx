@@ -65,15 +65,15 @@ export const ChatMessage = ({
                         })
                     }
                     aria-label="Delete message."
-                    className="group/delete peer absolute right-3 hidden -translate-y-4 rounded-lg bg-white p-1.5 text-black shadow-lg group-hover/message:block  group-focus/message:block group-active/message:block active:block"
+                    className="group/delete peer absolute right-3 hidden -translate-y-4 rounded-lg bg-white p-1.5 shadow-lg group-hover/message:block group-focus/message:block group-active/message:block active:block"
                 >
                     <VscTrash
-                        className="fill-black group-hover/delete:fill-red-600 group-focus/delete:fill-red-600"
+                        className="fill-glacier-900 group-hover/delete:fill-red-600 group-focus/delete:fill-red-600"
                         size={20}
                     />
                 </button>
             )}
-            <div className="flex flex-col overflow-hidden pl-1 peer-hover:bg-sky-50 hover:bg-sky-50">
+            <div className="flex flex-col overflow-hidden rounded-md pl-1 peer-hover:bg-glacier-100 hover:bg-glacier-100">
                 {!isSameAuthor && (
                     <div className="flex items-end justify-start gap-2">
                         <span className="mb-1 text-sm font-bold">
