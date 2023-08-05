@@ -7,16 +7,16 @@ const ContactPage = () => {
                 <title>Contact Us</title>
                 <meta
                     name="description"
-                    content="f you need to reach us regarding any and all issues,
+                    content="If you need to reach us regarding any and all issues,
                         you can do so by contacting us at the email address
-                        provided below."
+                        provided on the website."
                     key="description"
                 />
                 <meta
                     property="og:description"
-                    content="f you need to reach us regarding any and all issues,
+                    content="If you need to reach us regarding any and all issues,
                         you can do so by contacting us at the email address
-                        provided below."
+                        provided on the website."
                     key="og-description"
                 />
                 <meta
