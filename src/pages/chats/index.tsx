@@ -27,11 +27,25 @@ const ChatsPage = () => {
         <>
             <Head>
                 <title>Chatrooms</title>
-                <meta name="description" content="Chatrooms." />
-                <meta property="og:description" content="Chatrooms." />
+                <meta
+                    name="description"
+                    content="Chatrooms."
+                    key="description"
+                />
+                <meta
+                    property="og:description"
+                    content="Chatrooms."
+                    key="og-description"
+                />
                 <meta
                     property="og:title"
                     content="YetAnotherMessagingApp - Chatrooms"
+                    key="title"
+                />
+                <meta
+                    property="og:url"
+                    content={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/chats`}
+                    key="url"
                 />
             </Head>
             <div className="mx-auto max-w-screen-lg flex-1 p-4">

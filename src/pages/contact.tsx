@@ -10,16 +10,24 @@ const ContactPage = () => {
                     content="f you need to reach us regarding any and all issues,
                         you can do so by contacting us at the email address
                         provided below."
+                    key="description"
                 />
                 <meta
                     property="og:description"
                     content="f you need to reach us regarding any and all issues,
                         you can do so by contacting us at the email address
                         provided below."
+                    key="og-description"
                 />
                 <meta
                     property="og:title"
                     content="YetAnotherMessagingApp - Contact us"
+                    key="title"
+                />
+                <meta
+                    property="og:url"
+                    content={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/contact`}
+                    key="url"
                 />
             </Head>
             <div className="mx-auto mb-20 mt-10 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4 text-glacier-900">

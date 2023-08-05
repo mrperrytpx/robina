@@ -53,14 +53,25 @@ const CreateChatPage = () => {
         <>
             <Head>
                 <title>Create a chatroom</title>
-                <meta name="description" content="Create your own chatroom." />
+                <meta
+                    name="description"
+                    content="Create your own chatroom."
+                    key="description"
+                />
                 <meta
                     property="og:description"
                     content="Create your own chatroom."
+                    key="og-description"
                 />
                 <meta
                     property="og:title"
                     content="YetAnotherMessagingApp - Create a Chatroom"
+                    key="title"
+                />
+                <meta
+                    property="og:url"
+                    content={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/chats/create`}
+                    key="url"
                 />
             </Head>
             <div className="max-w-screen-sm flex-1 bg-glacier-50 p-4 sm:mx-auto sm:my-20 sm:rounded-xl">

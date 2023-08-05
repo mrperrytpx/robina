@@ -6,11 +6,25 @@ const PrivacyPage = () => {
         <>
             <Head>
                 <title>Privacy Policy</title>
-                <meta name="description" content="Privacy Policy." />
-                <meta property="og:description" content="Privacy Policy." />
+                <meta
+                    name="description"
+                    content="Privacy Policy."
+                    key="description"
+                />
+                <meta
+                    property="og:description"
+                    content="Privacy Policy."
+                    key="og-description"
+                />
                 <meta
                     property="og:title"
                     content="YetAnotherMessagingApp - Privacy Policy"
+                    key="title"
+                />
+                <meta
+                    property="og:url"
+                    content={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/privacy`}
+                    key="url"
                 />
             </Head>
             <div className="mx-auto mb-20 mt-10 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4 text-sm text-glacier-900">

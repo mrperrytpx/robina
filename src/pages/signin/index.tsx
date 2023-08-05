@@ -51,11 +51,21 @@ export default function SignIn({
         <>
             <Head>
                 <title>Sign In</title>
-                <meta name="description" content="Sign in." />
-                <meta property="og:description" content="Sign in." />
+                <meta name="description" content="Sign in." key="description" />
+                <meta
+                    property="og:description"
+                    content="Sign in."
+                    key="og-description"
+                />
                 <meta
                     property="og:title"
                     content="YetAnotherMessagingApp - Sign in"
+                    key="title"
+                />
+                <meta
+                    property="og:url"
+                    content={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/signin`}
+                    key="url"
                 />
             </Head>
 

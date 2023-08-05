@@ -25,7 +25,7 @@ const ProfilePage = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting, isDirty },
+        formState: { errors, isSubmitting },
         setError,
     } = useForm<TUsernameFormValues>({
         resolver: zodResolver(usernameSchema),
@@ -66,11 +66,25 @@ const ProfilePage = () => {
         <>
             <Head>
                 <title>My Profile</title>
-                <meta name="description" content="My profile" />
-                <meta property="og:description" content="My profile" />
+                <meta
+                    name="description"
+                    content="My profile"
+                    key="description"
+                />
+                <meta
+                    property="og:description"
+                    content="My profile"
+                    key="og-description"
+                />
                 <meta
                     property="og:title"
                     content="YetAnotherMessagingApp - My profile"
+                    key="title"
+                />
+                <meta
+                    property="og:url"
+                    content={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/profile`}
+                    key="url"
                 />
             </Head>
             <div className="mx-auto flex w-full max-w-screen-md flex-1 flex-col p-2 px-4">

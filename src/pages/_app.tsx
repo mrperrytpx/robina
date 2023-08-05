@@ -61,20 +61,25 @@ export default function App({
                     content="World's simplest chatroom website."
                     key="description"
                 />
-                <meta property="og:title" content="YetAnotherMessagingApp" />
+                <meta
+                    property="og:title"
+                    content="YetAnotherMessagingApp"
+                    key="title"
+                />
                 <meta
                     property="og:image"
                     content={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/meta-thumbnail.png`}
                 />
-                <meta property="og:type" content="website" key="title" />
+                <meta property="og:type" content="website" />
                 <meta
                     property="og:url"
                     content={`${process.env.NEXT_PUBLIC_WEBSITE_URL}`}
+                    key="url"
                 />
                 <meta
                     property="og:description"
-                    key="description"
                     content="World's simplest chatroom website."
+                    key="og-description"
                 />
                 <meta name="theme-color" content="#3a8ca0" />
             </Head>

@@ -51,14 +51,22 @@ const JoinChatroomPage = () => {
                 <meta
                     name="description"
                     content="Join a chatroom by using an invite string."
+                    key="description"
                 />
                 <meta
                     property="og:description"
                     content="Join a chatroom by using an invite string."
+                    key="og-description"
                 />
                 <meta
                     property="og:title"
                     content="YetAnotherMessagingApp - Join a Chatroom"
+                    key="title"
+                />
+                <meta
+                    property="og:url"
+                    content={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/chats/join`}
+                    key="url"
                 />
             </Head>
             <div className="flex w-full max-w-screen-sm flex-1 flex-col items-center bg-glacier-50 p-4 sm:mx-auto sm:my-20 sm:max-w-md sm:rounded-xl">
