@@ -5,6 +5,22 @@ const ContactPage = () => {
         <>
             <Head>
                 <title>Contact Us</title>
+                <meta
+                    name="description"
+                    content="f you need to reach us regarding any and all issues,
+                        you can do so by contacting us at the email address
+                        provided below."
+                />
+                <meta
+                    property="og:description"
+                    content="f you need to reach us regarding any and all issues,
+                        you can do so by contacting us at the email address
+                        provided below."
+                />
+                <meta
+                    property="og:title"
+                    content="YetAnotherMessagingApp - Contact us"
+                />
             </Head>
             <div className="mx-auto mb-20 mt-10 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4 text-glacier-900">
                 <h1 className="text-2xl font-semibold">Contact</h1>

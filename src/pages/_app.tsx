@@ -53,8 +53,12 @@ export default function App({
                     content="width=device-width, initial-scale=1"
                 />
                 <meta
+                    property="og:site_name"
+                    content="YetAnotherMessagingApp"
+                />
+                <meta
                     name="description"
-                    content="YetAnotherMessagingApp - World's simplest chatroom website."
+                    content="World's simplest chatroom website."
                 />
                 <meta property="og:title" content="YetAnotherMessagingApp" />
                 <meta
@@ -68,7 +72,7 @@ export default function App({
                 />
                 <meta
                     property="og:description"
-                    content="YetAnotherMessagingApp - World's simplest chatroom website."
+                    content="World's simplest chatroom website."
                 />
                 <meta name="theme-color" content="#3a8ca0" />
             </Head>

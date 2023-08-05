@@ -21,6 +21,7 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { TChatroomWIthOwner } from "../api/chatroom/get_owned";
 import { Portal } from "../../components/Portal";
+import Head from "next/head";
 
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
@@ -317,10 +318,52 @@ const ChatPage = () => {
     if (!chatroom.data) return null;
 
     return (
-        <div className="flex max-h-[calc(100svh-64px)] w-full flex-row">
-            <div className="flex max-h-[calc(100svh-64px)] w-full flex-col">
-                <div className="flex h-14 w-full items-center justify-between px-4 shadow shadow-glacier-600 sm:hidden">
-                    <div className="line-clamp-2 flex items-center gap-2 text-sm font-semibold">
+        <>
+            <Head>
+                <title>{chatroom.data.name}</title>
+            </Head>
+            <div className="flex max-h-[calc(100svh-64px)] w-full flex-row">
+                <div className="flex max-h-[calc(100svh-64px)] w-full flex-col">
+                    <div className="flex h-14 w-full items-center justify-between px-4 shadow shadow-glacier-600 sm:hidden">
+                        <div className="line-clamp-2 flex items-center gap-2 text-sm font-semibold">
+                            <Link
+                                href="/chats"
+                                className="group px-2 py-1"
+                                aria-label="Back to all chats page"
+                            >
+                                <VscArrowLeft
+                                    className="transition-color fill-glacier-900 duration-75 group-hover:scale-125 group-hover:fill-glacier-600 group-focus:fill-glacier-600"
+                                    size={24}
+                                />
+                            </Link>
+                            <span className="text-glacier-900">
+                                {chatroom.data.name}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <button
+                                className="group p-2"
+                                aria-label="Toggle chatroom settings modal."
+                                onClick={handleSettings}
+                            >
+                                <FiSettings
+                                    className="transition-color duration-75 group-hover:scale-125 group-hover:stroke-glacier-600"
+                                    size={24}
+                                />
+                            </button>
+                            <button
+                                className="group p-2"
+                                onClick={handleMembers}
+                            >
+                                <FiUsers
+                                    aria-label="Toggle chatroom members aside."
+                                    className="transition-color duration-75 group-hover:scale-125 group-hover:stroke-glacier-600"
+                                    size={24}
+                                />
+                            </button>
+                        </div>
+                    </div>
+                    <div className="line-clamp-2 hidden px-4 py-1 text-sm font-semibold shadow shadow-glacier-600 sm:flex sm:items-center sm:gap-4">
                         <Link
                             href="/chats"
                             className="group px-2 py-1"
@@ -335,63 +378,32 @@ const ChatPage = () => {
                             {chatroom.data.name}
                         </span>
                     </div>
-                    <div className="flex items-center gap-4">
-                        <button
-                            className="group p-2"
-                            aria-label="Toggle chatroom settings modal."
-                            onClick={handleSettings}
+                    <ChatroomMessages
+                        handleSettings={handleSettings}
+                        chatroom={chatroom.data}
+                    />
+                    {isSettingsActive && (
+                        <Portal
+                            shouldRoute={false}
+                            setState={setIsSettingsActive}
                         >
-                            <FiSettings
-                                className="transition-color duration-75 group-hover:scale-125 group-hover:stroke-glacier-600"
-                                size={24}
+                            <ChatroomSettings
+                                setIsSettingsActive={setIsSettingsActive}
+                                description={chatroom.data.description}
+                                ownerId={chatroom.data.owner_id}
                             />
-                        </button>
-                        <button className="group p-2" onClick={handleMembers}>
-                            <FiUsers
-                                aria-label="Toggle chatroom members aside."
-                                className="transition-color duration-75 group-hover:scale-125 group-hover:stroke-glacier-600"
-                                size={24}
-                            />
-                        </button>
-                    </div>
-                </div>
-                <div className="line-clamp-2 hidden px-4 py-1 text-sm font-semibold shadow shadow-glacier-600 sm:flex sm:items-center sm:gap-4">
-                    <Link
-                        href="/chats"
-                        className="group px-2 py-1"
-                        aria-label="Back to all chats page"
-                    >
-                        <VscArrowLeft
-                            className="transition-color fill-glacier-900 duration-75 group-hover:scale-125 group-hover:fill-glacier-600 group-focus:fill-glacier-600"
-                            size={24}
-                        />
-                    </Link>
-                    <span className="text-glacier-900">
-                        {chatroom.data.name}
-                    </span>
-                </div>
-                <ChatroomMessages
-                    handleSettings={handleSettings}
-                    chatroom={chatroom.data}
-                />
-                {isSettingsActive && (
-                    <Portal shouldRoute={false} setState={setIsSettingsActive}>
-                        <ChatroomSettings
-                            setIsSettingsActive={setIsSettingsActive}
-                            description={chatroom.data.description}
-                            ownerId={chatroom.data.owner_id}
-                        />
-                    </Portal>
-                )}
+                        </Portal>
+                    )}
 
-                {isMembersActive && (
+                    {isMembersActive && (
+                        <ChatroomMembers ownerId={chatroom.data.owner_id} />
+                    )}
+                </div>
+                <div className="hidden h-full sm:block">
                     <ChatroomMembers ownerId={chatroom.data.owner_id} />
-                )}
+                </div>
             </div>
-            <div className="hidden h-full sm:block">
-                <ChatroomMembers ownerId={chatroom.data.owner_id} />
-            </div>
-        </div>
+        </>
     );
 };
 

@@ -6,6 +6,12 @@ const TosPage = () => {
         <>
             <Head>
                 <title>Terms of Service</title>
+                <meta name="description" content="Terms of Service." />
+                <meta property="og:description" content="Terms of Service." />
+                <meta
+                    property="og:title"
+                    content="YetAnotherMessagingApp - ToS"
+                />
             </Head>
             <div className="mx-auto mb-20 mt-10 flex w-full max-w-screen-md flex-1 flex-col gap-6 p-4 text-glacier-900">
                 <h1 className="text-2xl font-semibold">Terms of Service</h1>
