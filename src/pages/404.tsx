@@ -5,7 +5,7 @@ const Custom404 = () => {
     return (
         <>
             <Head>
-                <title>You're lost 😱</title>
+                <title>You&apos;re lost 😱</title>
             </Head>
             <div className="mx-auto flex max-h-[calc(100svh-64px)] w-full max-w-screen-lg flex-col items-center justify-center px-8 py-4 text-glacier-900">
                 <div className="flex flex-col items-center gap-4">
