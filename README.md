@@ -1,12 +1,12 @@
 # YetAnotherMessagingApp
 
-## Full-stack real-time messaging app
+## Full-stack real-time messaging web app
 
 #### [Website URL](http://yetanothermessagingapp.vercel.app/)
 
 <img src="readme/yama.png">
 
-A full-stack real-time messaging app where users can create their own chatroom, join an existing one with an invite string or get invited to a chatroom by the owner. Owner of the chatroom can delete all posted messages and ban any other user. Real-time chatroom events are handled by Pusher, the WebSocket solution for serverless architecture.
+A full-stack real-time messaging web app where users can create their own chatroom, join an existing one with an invite string or get invited to a chatroom by the owner. Owner of the chatroom can delete all posted messages and ban any other user. Real-time chatroom events are handled by Pusher, the WebSocket solution for serverless architecture.
 
 User authentication is handled with NextAuth and database sessions. Users can either login with Google OAuth or type in an email address and login by clicking the link sent to it.
 
