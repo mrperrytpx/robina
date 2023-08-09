@@ -3,6 +3,7 @@ import { Chatroom, Message, User } from "@prisma/client";
 
 export type TChatroomMessage = Message & {
     author: User;
+    error?: boolean;
 };
 
 async function getChatroom(chatId: string) {

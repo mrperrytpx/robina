@@ -88,8 +88,6 @@ export const ChatroomMessages = ({
         if (!session.data?.user) return;
 
         await queryClient.cancelQueries(["messages", chatId]);
-        const previousData: InfiniteData<TChatroomMessage[]> | undefined =
-            queryClient.getQueryData(["messages", chatId]);
 
         const newMessage: TChatroomMessage = {
             author: {
@@ -104,16 +102,23 @@ export const ChatroomMessages = ({
             id: messageData.fakeId,
         };
 
-        queryClient.setQueryData<typeof previousData>(
+        queryClient.setQueryData(
             ["messages", chatId],
-            (oldData) => {
-                const newData: typeof previousData = JSON.parse(
-                    JSON.stringify(oldData)
-                );
+            (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
+                if (!oldData) return { pageParams: [0], pages: [[]] };
 
-                newData?.pages[newData?.pages.length - 1 ?? 0].push(newMessage);
+                const newData = oldData.pages.map((page, pageIdx) => {
+                    if (pageIdx === oldData.pages.length - 1) {
+                        return [...page, newMessage];
+                    } else {
+                        return page;
+                    }
+                });
 
-                return newData;
+                return {
+                    pages: newData,
+                    pageParams: oldData.pageParams || [0],
+                };
             }
         );
 
@@ -123,21 +128,24 @@ export const ChatroomMessages = ({
 
             const response = await postMessage.mutateAsync(message);
             if (!response.ok) {
-                const error = await response.text();
-                toast.error(error);
                 queryClient.setQueryData(
-                    ["messages", messageData.chatId],
+                    ["messages", chatId],
                     (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
-                        if (!oldData) return;
-                        const newData: typeof oldData = JSON.parse(
-                            JSON.stringify(oldData)
+                        if (!oldData) return { pageParams: [0], pages: [[]] };
+
+                        const newData = oldData.pages.map((page) =>
+                            page.map((msg) => {
+                                if (msg.id === message.fakeId) {
+                                    return { ...msg, error: true };
+                                } else {
+                                    return msg;
+                                }
+                            })
                         );
-                        newData.pages.forEach((page) => {
-                            page.filter(
-                                (message) => message.id !== messageData.fakeId
-                            );
-                        });
-                        return newData;
+                        return {
+                            pages: newData,
+                            pageParams: oldData.pageParams || [0],
+                        };
                     }
                 );
             }
@@ -177,7 +185,7 @@ export const ChatroomMessages = ({
 
                     return {
                         pages: newData,
-                        pageParams: oldData.pageParams || [1],
+                        pageParams: oldData.pageParams || [0],
                     };
                 }
             );
@@ -219,13 +227,20 @@ export const ChatroomMessages = ({
                 queryClient.setQueryData(
                     ["messages", chatId],
                     (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
-                        const newData: typeof oldData = JSON.parse(
-                            JSON.stringify(oldData)
-                        );
-                        newData?.pages[newData.pages.length - 1 || 0].push(
-                            data
-                        );
-                        return newData;
+                        if (!oldData) return { pageParams: [0], pages: [[]] };
+
+                        const newData = oldData.pages.map((page, pageIdx) => {
+                            if (pageIdx === oldData.pages.length - 1) {
+                                return [...page, data];
+                            } else {
+                                return page;
+                            }
+                        });
+
+                        return {
+                            pages: newData,
+                            pageParams: oldData.pageParams || [0],
+                        };
                     }
                 );
             }

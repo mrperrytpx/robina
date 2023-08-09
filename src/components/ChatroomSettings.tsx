@@ -218,9 +218,7 @@ export const ChatroomSettings = ({
                                     <div
                                         className={`grid w-full items-center gap-2 rounded-md ${
                                             (bannedMembers.data?.length || 0) >=
-                                            1
-                                                ? "grid-cols-2"
-                                                : ""
+                                                1 && "grid-cols-2"
                                         }`}
                                     >
                                         {bannedMembers.isLoading ? (
