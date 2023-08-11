@@ -122,7 +122,7 @@ export const ChatroomMessages = ({
             }
         );
 
-        while (queue.length > 0) {
+        while (queue.length > 0 && !postMessage.isLoading) {
             const message = queue.shift();
             if (!message) return;
 
