@@ -343,10 +343,7 @@ const ChatPage = () => {
                                 aria-label="Toggle chatroom settings modal."
                                 onClick={handleSettings}
                             >
-                                <FiSettings
-                                    className="transition-color duration-75 group-hover:scale-125 group-hover:stroke-glacier-600"
-                                    size={24}
-                                />
+                                <FiSettings className="transition-color h-6 w-6 duration-75 group-hover:scale-125 group-hover:stroke-glacier-600" />
                             </button>
                             <button
                                 className="group p-2"
@@ -354,8 +351,7 @@ const ChatPage = () => {
                             >
                                 <FiUsers
                                     aria-label="Toggle chatroom members aside."
-                                    className="transition-color duration-75 group-hover:scale-125 group-hover:stroke-glacier-600"
-                                    size={24}
+                                    className="transition-color h-6 w-6 duration-75 group-hover:scale-125 group-hover:stroke-glacier-600"
                                 />
                             </button>
                         </div>
