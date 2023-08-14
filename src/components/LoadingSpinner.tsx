@@ -9,8 +9,8 @@ export const LoadingSpinner = ({ size = 32, color }: ILoadingSpinnerProps) => {
                 className="inline-block animate-spin rounded-full border-4 border-solid border-current border-r-transparent p-0.5 align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
                 role="status"
                 style={{
-                    width: size + "px",
-                    height: size + "px",
+                    width: size / 16 + "rem",
+                    height: size / 16 + "rem",
                     borderColor: color ? color : "black",
                     borderRightColor: "transparent",
                 }}

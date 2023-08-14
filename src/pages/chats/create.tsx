@@ -80,10 +80,7 @@ const CreateChatPage = () => {
                         onClick={() => router.back()}
                         className="group mb-6 flex select-none items-center gap-1 self-start rounded-md border-2 border-glacier-900 bg-white px-2 py-1 text-sm font-semibold uppercase text-glacier-900 antialiased transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 focus:border-glacier-600 focus:bg-glacier-600 focus:text-glacier-50 "
                     >
-                        <VscArrowLeft
-                            className="group-hover:fill-glacier-50 group-focus:fill-glacier-50"
-                            size={32}
-                        />{" "}
+                        <VscArrowLeft className="h-8 w-8 group-hover:fill-glacier-50 group-focus:fill-glacier-50" />{" "}
                         Go Back
                     </button>
                     <form

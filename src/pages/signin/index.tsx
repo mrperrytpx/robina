@@ -149,12 +149,12 @@ export default function SignIn({
                         <button
                             aria-label={`${provider.name} sign in.`}
                             key={provider.id}
-                            className="group mb-2 flex h-[40px] w-full items-center justify-center gap-2 rounded-lg border-2 border-glacier-900 bg-white text-sm transition-all duration-75 hover:border-[#4285F4] hover:bg-[#4285F4]"
+                            className="group mb-2 flex h-[2.5rem] w-full items-center justify-center gap-2 rounded-lg border-2 border-glacier-900 bg-white text-sm transition-all duration-75 hover:border-[#4285F4] hover:bg-[#4285F4]"
                             onClick={() => signIn(provider.id)}
                         >
                             <div className="rounded-sm bg-white p-2">
                                 <Image
-                                    className="h-[18px] w-[18px]"
+                                    className="h-[1.125rem] w-[1.125rem]"
                                     src="https://authjs.dev/img/providers/google.svg"
                                     alt="Google Logo"
                                     width={18}

@@ -75,10 +75,7 @@ const JoinChatroomPage = () => {
                         onClick={() => router.back()}
                         className="group mb-6 flex select-none items-center gap-1 self-start rounded-md border-2 border-glacier-900 bg-white px-2 py-1 text-sm font-semibold uppercase text-glacier-900 antialiased transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 focus:border-glacier-600 focus:bg-glacier-600 focus:text-glacier-50 "
                     >
-                        <VscArrowLeft
-                            className="group-hover:fill-glacier-50 group-focus:fill-glacier-50"
-                            size={32}
-                        />{" "}
+                        <VscArrowLeft className="h-8 w-8 group-hover:fill-glacier-50 group-focus:fill-glacier-50" />{" "}
                         Go Back
                     </button>
                     <form
@@ -117,7 +114,7 @@ const JoinChatroomPage = () => {
                         </div>
                         <div className="flex w-full flex-col items-center gap-2">
                             <button
-                                className="h-10 w-full max-w-[250px] select-none rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-glacier-600 transition-all duration-75 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow-sm disabled:border-glacier-200 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
+                                className="h-10 w-full max-w-[15.625rem] select-none rounded-md border-2 border-black bg-white p-2 text-sm font-medium shadow-glacier-600 transition-all duration-75 enabled:hover:border-glacier-600 enabled:hover:bg-glacier-600 enabled:hover:text-white enabled:hover:shadow-sm enabled:focus:border-glacier-600 enabled:focus:bg-glacier-600 enabled:focus:text-white enabled:focus:shadow-sm disabled:border-glacier-200 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
                                 type="submit"
                                 disabled={joinChatroom.isLoading}
                             >

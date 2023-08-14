@@ -7,7 +7,7 @@ const Custom404 = () => {
             <Head>
                 <title>You&apos;re lost 😱</title>
             </Head>
-            <div className="mx-auto flex max-h-[calc(100svh-64px)] w-full max-w-screen-lg flex-col items-center justify-center px-8 py-4 text-glacier-900">
+            <div className="mx-auto flex max-h-[calc(100svh-4rem)] w-full max-w-screen-lg flex-col items-center justify-center px-8 py-4 text-glacier-900">
                 <div className="flex flex-col items-center gap-4">
                     <span className="text-5xl">🤨</span>
                     <p className="text-center text-2xl font-semibold">

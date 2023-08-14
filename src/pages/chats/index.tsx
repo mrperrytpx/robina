@@ -50,10 +50,10 @@ const ChatsPage = () => {
             </Head>
             <div className="mx-auto max-w-screen-lg flex-1 p-4">
                 <article className="mb-4 mt-2 flex flex-col space-y-2">
-                    <h2 className="block text-center font-bold uppercase text-glacier-900 sm:pl-2 sm:text-left">
+                    <h2 className="block text-center font-bold uppercase text-glacier-900 md:pl-2 md:text-left">
                         Owned Chatroom
                     </h2>
-                    <div className="flex flex-col flex-wrap items-center gap-4 sm:flex-row">
+                    <div className="flex flex-col flex-wrap items-center gap-4 md:flex-row">
                         {ownedChatroom.isLoading ? (
                             <LoadingChatroomCard />
                         ) : ownedChatroom.data?.id ? (
@@ -68,10 +68,10 @@ const ChatsPage = () => {
                     </div>
                 </article>
                 <article className="my-8 space-y-2">
-                    <h2 className="block text-center font-bold uppercase text-glacier-900 sm:pl-2 sm:text-left">
+                    <h2 className="block text-center font-bold uppercase text-glacier-900 md:pl-2 md:text-left">
                         Joined Chatrooms
                     </h2>
-                    <div className="flex flex-col flex-wrap items-center gap-4 sm:flex-row sm:items-start">
+                    <div className="flex flex-col flex-wrap items-center gap-4 md:flex-row md:items-start">
                         {joinedChatrooms.isLoading ? (
                             <LoadingChatroomCard />
                         ) : (
@@ -93,10 +93,10 @@ const ChatsPage = () => {
                 </article>
                 {pendingInvites.data?.length ? (
                     <article className="my-8 space-y-2">
-                        <h2 className="block text-center font-bold uppercase text-glacier-900 sm:pl-2 sm:text-left">
+                        <h2 className="block text-center font-bold uppercase text-glacier-900 md:pl-2 md:text-left">
                             Invited to
                         </h2>
-                        <div className="flex flex-col flex-wrap items-center gap-4 sm:flex-row sm:items-start">
+                        <div className="flex flex-col flex-wrap items-center gap-4 md:flex-row md:items-start">
                             {pendingInvites.data?.map((chatroom) => (
                                 <InviteChatroomCard
                                     key={chatroom.id}

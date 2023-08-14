@@ -45,7 +45,7 @@ export const MemberCard = ({
                     alt={`${member.username}'s image`}
                     width={100}
                     height={100}
-                    className="w-full min-w-[32px] select-none rounded-full"
+                    className="w-full min-w-[2rem] select-none rounded-full"
                 />
             </div>
             <span
@@ -68,7 +68,7 @@ export const MemberCard = ({
                     {loading ? (
                         <LoadingSpinner size={28} color="#2f5e6f" />
                     ) : (
-                        <VscCircleSlash size={28} fill="rgb(220 38 38)" />
+                        <VscCircleSlash className="h-7 w-7 fill-red-600" />
                     )}
                 </button>
             )}

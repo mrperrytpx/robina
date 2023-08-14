@@ -16,8 +16,8 @@ interface ITestimonyCardProps {
 }
 const TestimonyCard = ({ children, name, date }: ITestimonyCardProps) => {
     return (
-        <div className="flex w-full max-w-[min(100%,300px)] flex-col rounded-lg bg-white shadow shadow-glacier-600 xl:aspect-video xl:w-80 xl:max-w-[300px]">
-            <div className="grid flex-1 grid-cols-[60px,1fr] items-center justify-center rounded-lg px-4 py-2 shadow">
+        <div className="flex w-full max-w-[min(100%,18.75rem)] flex-col rounded-lg bg-white shadow shadow-glacier-600 xl:aspect-video xl:w-80 xl:max-w-[18.75rem]">
+            <div className="grid flex-1 grid-cols-[3.75rem,1fr] items-center justify-center rounded-lg px-4 py-2 shadow">
                 <div className="grid aspect-square w-12 select-none items-center justify-center rounded-full bg-glacier-500">
                     <span className="text-3xl uppercase text-glacier-50">
                         {name[0]}
@@ -29,7 +29,7 @@ const TestimonyCard = ({ children, name, date }: ITestimonyCardProps) => {
                 </div>
             </div>
 
-            <div className="inline-block min-h-[100px] flex-[2] px-4 py-2 text-lg italic">
+            <div className="inline-block min-h-[6.25rem] flex-[2] px-4 py-2 text-lg italic">
                 &quot;{children}&quot;
             </div>
         </div>
@@ -42,28 +42,33 @@ export default function Home({
     return (
         <div className="flex w-full flex-1 flex-col items-center overflow-x-hidden">
             <div className="flex h-full w-full max-w-screen-lg flex-col items-start gap-40 px-2">
-                <article className="flex min-h-[min(calc(100svh-200px),1024px)] w-full flex-col items-center justify-center gap-8 py-4">
-                    <ImageWithFallback
-                        src={LogoTextRectangle}
-                        alt="Yet another messaging app"
-                        width={875}
-                        height={70}
-                        className="hidden select-none md:block"
-                        fallback={FallbackLogoTextRectangle}
-                    />
-                    <ImageWithFallback
-                        src={LogoTextSquare}
-                        alt="Yet another messaging app"
-                        width={300}
-                        height={300}
-                        className="md:hidden"
-                        fallback={FallbackLogoTextSquare}
-                        priority
-                    />
+                <article className="flex min-h-[min(calc(100svh-12.5rem),64rem)] w-full flex-col items-center justify-center gap-8 py-4">
+                    <div className="max-h-[4.375rem] max-w-[54.6875rem]">
+                        <ImageWithFallback
+                            src={LogoTextRectangle}
+                            alt="Yet another messaging app"
+                            width={875}
+                            height={70}
+                            className="hidden h-full w-full select-none md:block"
+                            fallback={FallbackLogoTextRectangle}
+                            priority
+                        />
+                    </div>
+                    <div className="max-h-[18.75rem] max-w-[18.75rem]">
+                        <ImageWithFallback
+                            src={LogoTextSquare}
+                            alt="Yet another messaging app"
+                            width={300}
+                            height={300}
+                            className="h-full w-full md:hidden"
+                            fallback={FallbackLogoTextSquare}
+                            priority
+                        />
+                    </div>
                     <Link
                         prefetch={false}
                         href="/chats"
-                        className="select-none rounded-lg bg-glacier-600 px-4 py-2 font-semibold uppercase text-white shadow shadow-glacier-600 transition-all duration-75 hover:bg-glacier-700 focus:bg-glacier-700 active:bg-glacier-800 xl:text-xl"
+                        className="select-none rounded-lg bg-glacier-600 px-4 py-2 text-center font-semibold uppercase text-white shadow shadow-glacier-600 transition-all duration-75 hover:bg-glacier-700 focus:bg-glacier-700 active:bg-glacier-800 xl:text-xl"
                     >
                         Start Chatting
                     </Link>

@@ -25,7 +25,7 @@ export const CookieBanner = () => {
     if (!showCookieHeader) return null;
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-t-lg bg-glacier-200 p-4 py-8 text-center text-glacier-950 sm:bottom-2 sm:left-2 sm:w-[500px] sm:rounded-lg">
+        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-t-lg bg-glacier-200 p-4 py-8 text-center text-glacier-950 sm:bottom-2 sm:left-2 sm:w-[31.25rem] sm:rounded-lg">
             <p>
                 We use cookies to enhance your experience on our website. By
                 continuing to browse, you consent to our{" "}

@@ -213,13 +213,13 @@ const ProfilePage = () => {
                             <div className="flex w-full items-center justify-center gap-4">
                                 <button
                                     onClick={handleDelete}
-                                    className="min-w-[100px] select-none rounded-lg border-2 border-glacier-900 bg-white p-2 font-semibold uppercase text-glacier-900 transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 hover:shadow-sm focus:bg-red-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-glacier-50"
+                                    className="min-w-[6.25rem] select-none rounded-lg border-2 border-glacier-900 bg-white p-2 font-semibold uppercase text-glacier-900 transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 hover:shadow-sm focus:bg-red-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-glacier-50"
                                 >
                                     Delete
                                 </button>
                                 <button
                                     onClick={() => setIsModalOpen(false)}
-                                    className="min-w-[100px] select-none rounded-lg border-2 border-glacier-900 bg-white p-2 font-semibold uppercase text-glacier-900 transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 hover:shadow-sm focus:bg-glacier-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-glacier-600 active:bg-glacier-600 active:text-glacier-50"
+                                    className="min-w-[6.25rem] select-none rounded-lg border-2 border-glacier-900 bg-white p-2 font-semibold uppercase text-glacier-900 transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 hover:shadow-sm focus:bg-glacier-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-glacier-600 active:bg-glacier-600 active:text-glacier-50"
                                 >
                                     No
                                 </button>

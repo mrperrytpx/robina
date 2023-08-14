@@ -126,7 +126,7 @@ const Layout = ({ children }: ILayoutProps) => {
             />
             <CookieBanner />
             <ErrorBoundary>
-                <main className="mx-auto flex min-h-[calc(100svh-64px)] w-full flex-1">
+                <main className="mx-auto flex min-h-[calc(100svh-4rem)] w-full flex-1">
                     {children}
                 </main>
             </ErrorBoundary>

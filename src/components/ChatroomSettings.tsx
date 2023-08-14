@@ -85,7 +85,7 @@ export const ChatroomSettings = ({
     };
 
     return (
-        <div className="scrollbar-track-glacier-900scrollbar-thumb-glacier-200 w-full flex-1 overflow-y-auto bg-glacier-50 scrollbar-thin sm:mx-auto sm:my-20 sm:max-h-[50svh] sm:max-w-lg sm:rounded-xl sm:bg-opacity-100">
+        <div className="w-full flex-1 overflow-y-auto bg-glacier-50 scrollbar-thin scrollbar-track-glacier-900 scrollbar-thumb-glacier-200 sm:mx-auto sm:my-20 sm:max-h-[50svh] sm:max-w-lg sm:rounded-xl sm:bg-opacity-100">
             {isModalOpen ? (
                 <Portal
                     isInModal={true}
@@ -110,13 +110,13 @@ export const ChatroomSettings = ({
                         <div className="flex w-full items-center justify-center gap-4">
                             <button
                                 onClick={handleDeleteChatroom}
-                                className="min-w-[100px] select-none rounded-lg border-2 border-glacier-900 bg-white p-2 font-semibold uppercase text-glacier-900 transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 hover:shadow-sm focus:bg-red-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-glacier-50"
+                                className="min-w-[6.25rem] select-none rounded-lg border-2 border-glacier-900 bg-white p-2 font-semibold uppercase text-glacier-900 transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 hover:shadow-sm focus:bg-red-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-red-600 active:bg-red-600 active:text-glacier-50"
                             >
                                 Delete
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="min-w-[100px] select-none rounded-lg border-2 border-glacier-900 bg-white p-2 font-semibold uppercase text-glacier-900 transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 hover:shadow-sm focus:bg-glacier-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-glacier-600 active:bg-glacier-600 active:text-glacier-50"
+                                className="min-w-[6.25rem] select-none rounded-lg border-2 border-glacier-900 bg-white p-2 font-semibold uppercase text-glacier-900 transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 hover:shadow-sm focus:bg-glacier-600 focus:text-glacier-50 focus:shadow-sm focus:shadow-glacier-600 active:bg-glacier-600 active:text-glacier-50"
                             >
                                 No
                             </button>
@@ -129,12 +129,9 @@ export const ChatroomSettings = ({
                         <button
                             onClick={() => setIsSettingsActive(false)}
                             aria-label="Close settings"
-                            className="group flex items-center gap-1 self-start rounded-full border-2 border-glacier-900 bg-white p-1 shadow transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 focus:border-glacier-600 focus:bg-glacier-600"
+                            className="group flex  items-center gap-1 self-start rounded-full border-2 border-glacier-900 bg-white p-1 shadow transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 focus:border-glacier-600 focus:bg-glacier-600"
                         >
-                            <VscChromeClose
-                                className="fill-glacier-900 transition-all duration-75 group-hover:fill-glacier-50 group-focus:fill-glacier-50"
-                                size={28}
-                            />
+                            <VscChromeClose className="h-7 w-7 fill-glacier-900 transition-all duration-75 group-hover:fill-glacier-50 group-focus:fill-glacier-50" />
                         </button>
                         <div className="w-full space-y-2">
                             <h3 className="block text-sm font-bold uppercase text-glacier-900">
@@ -163,15 +160,9 @@ export const ChatroomSettings = ({
                                                 aria-label="Copy invite string to clipboard."
                                             >
                                                 {copied ? (
-                                                    <VscCheck
-                                                        className="fill-glacier-400 transition-all duration-75 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50"
-                                                        size={24}
-                                                    />
+                                                    <VscCheck className="h-6 w-6 fill-glacier-400 transition-all duration-75 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50" />
                                                 ) : (
-                                                    <VscCopy
-                                                        className="fill-glacier-600 transition-all duration-75 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50"
-                                                        size={24}
-                                                    />
+                                                    <VscCopy className="h-6 w-6 fill-glacier-600 transition-all duration-75 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50" />
                                                 )}
                                             </button>
                                         )}
@@ -195,10 +186,7 @@ export const ChatroomSettings = ({
                                                         size={24}
                                                     />
                                                 ) : (
-                                                    <VscRefresh
-                                                        className="fill-glacier-600 transition-all duration-75 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50"
-                                                        size={24}
-                                                    />
+                                                    <VscRefresh className="h-6 w-6 fill-glacier-600 transition-all duration-75 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50" />
                                                 )}
                                             </button>
                                         )}

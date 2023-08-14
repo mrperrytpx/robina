@@ -13,10 +13,7 @@ const VerifyRequestPage = () => {
             </Head>
             <div className="mx-auto mt-12 flex w-full max-w-screen-sm flex-col items-center gap-4 rounded-lg p-8">
                 <div className="flex w-full flex-col items-center justify-center">
-                    <VscMail
-                        size="80"
-                        className="hover:fill-glacier-6000 select-none fill-glacier-900"
-                    />
+                    <VscMail className="hover:fill-glacier-6000 h-20 w-20 select-none fill-glacier-900" />
                     <h1 className="text-center text-2xl uppercase text-glacier-900">
                         <strong>Check your email</strong>
                     </h1>
@@ -25,7 +22,7 @@ const VerifyRequestPage = () => {
                     A sign in link has been sent to your email address.
                 </p>
                 <Link
-                    className="mt-2 w-full max-w-[200px] rounded-md border-2 border-black bg-white p-2 text-center font-medium transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 hover:shadow-sm focus:border-glacier-600 focus:bg-glacier-600 focus:text-glacier-50 focus:shadow-sm disabled:opacity-50"
+                    className="mt-2 w-full max-w-[12.5rem] rounded-md border-2 border-black bg-white p-2 text-center font-medium transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 hover:text-glacier-50 hover:shadow-sm focus:border-glacier-600 focus:bg-glacier-600 focus:text-glacier-50 focus:shadow-sm disabled:opacity-50"
                     href="/"
                 >
                     Back to Homepage

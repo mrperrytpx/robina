@@ -304,7 +304,7 @@ const ChatPage = () => {
 
     if (chatroom.isError && chatroom.error instanceof Error) {
         return (
-            <div className="mx-auto flex max-h-[calc(100svh-64px)] w-full max-w-screen-lg flex-col items-center justify-center px-8 py-4">
+            <div className="mx-auto flex max-h-[calc(100svh-4rem)] w-full max-w-screen-lg flex-col items-center justify-center px-8 py-4">
                 <div className="flex flex-col items-center gap-4">
                     <span className="text-4xl">😅</span>
                     <p className="text-center text-xl font-medium">
@@ -322,19 +322,16 @@ const ChatPage = () => {
             <Head>
                 <title>{chatroom.data.name}</title>
             </Head>
-            <div className="flex max-h-[calc(100svh-64px)] w-full flex-row">
-                <div className="flex max-h-[calc(100svh-64px)] w-full flex-col">
-                    <div className="flex h-14 w-full items-center justify-between px-4 shadow shadow-glacier-600 sm:hidden">
+            <div className="flex max-h-[calc(100svh-4rem)] w-full flex-row">
+                <div className="flex max-h-[calc(100svh-4rem)] w-full flex-col">
+                    <div className="flex h-14 w-full items-center justify-between px-4 shadow shadow-glacier-600 md:hidden">
                         <div className="line-clamp-2 flex items-center gap-2 text-sm font-semibold">
                             <Link
                                 href="/chats"
                                 className="group px-2 py-1"
                                 aria-label="Back to all chats page"
                             >
-                                <VscArrowLeft
-                                    className="transition-color fill-glacier-900 duration-75 group-hover:scale-125 group-hover:fill-glacier-600 group-focus:fill-glacier-600"
-                                    size={24}
-                                />
+                                <VscArrowLeft className="transition-color h-6 w-6 fill-glacier-900 duration-75 group-hover:scale-125 group-hover:fill-glacier-600 group-focus:fill-glacier-600" />
                             </Link>
                             <span className="text-glacier-900">
                                 {chatroom.data.name}
@@ -363,16 +360,13 @@ const ChatPage = () => {
                             </button>
                         </div>
                     </div>
-                    <div className="line-clamp-2 hidden px-4 py-1 text-sm font-semibold shadow shadow-glacier-600 sm:flex sm:items-center sm:gap-4">
+                    <div className="line-clamp-2 hidden px-4 py-1 text-sm font-semibold shadow shadow-glacier-600 md:flex md:items-center md:gap-4">
                         <Link
                             href="/chats"
                             className="group px-2 py-1"
                             aria-label="Back to all chats page"
                         >
-                            <VscArrowLeft
-                                className="transition-color fill-glacier-900 duration-75 group-hover:scale-125 group-hover:fill-glacier-600 group-focus:fill-glacier-600"
-                                size={24}
-                            />
+                            <VscArrowLeft className="transition-color h-6 w-6 fill-glacier-900 duration-75 group-hover:scale-125 group-hover:fill-glacier-600 group-focus:fill-glacier-600" />
                         </Link>
                         <span className="text-glacier-900">
                             {chatroom.data.name}
@@ -399,7 +393,7 @@ const ChatPage = () => {
                         <ChatroomMembers ownerId={chatroom.data.owner_id} />
                     )}
                 </div>
-                <div className="hidden h-full sm:block">
+                <div className="hidden h-full md:block">
                     <ChatroomMembers ownerId={chatroom.data.owner_id} />
                 </div>
             </div>

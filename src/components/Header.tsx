@@ -23,12 +23,13 @@ export const Header = () => {
     useEffect(() => setIsExpanded(false), [pathname]);
 
     return (
-        <header className="sticky top-0 z-50 grid min-h-[64px] place-items-center items-center bg-glacier-600 shadow">
+        <header className="sticky top-0 z-50 grid min-h-[4rem] place-items-center items-center bg-glacier-600 shadow">
             <div className="flex w-full items-center justify-between px-4 py-2">
                 <Link
                     prefetch={false}
                     href="/"
                     aria-label="Go to the homepage."
+                    className="h-12 w-12"
                 >
                     <ImageWithFallback
                         width={48}
@@ -37,7 +38,7 @@ export const Header = () => {
                         alt="Website logo"
                         priority
                         fallback={FallbackLogoWhite}
-                        className="select-none"
+                        className="h-full w-full select-none"
                     />
                 </Link>
                 <div className="flex items-center gap-3">
@@ -49,37 +50,34 @@ export const Header = () => {
                             {(pendingInvites.data?.length || 0) >= 1 && (
                                 <Link
                                     prefetch={false}
-                                    className="group select-none rounded-md p-1 text-xl font-bold uppercase text-white transition-all duration-75 hover:bg-glacier-50 focus:bg-glacier-50"
+                                    className="group select-none rounded-md p-1 text-xl font-bold uppercase text-white transition-all duration-75 hover:bg-glacier-50 focus:bg-glacier-50 sm:h-10 sm:w-10"
                                     href="/chats"
                                     aria-label="New pending chat invites."
                                 >
-                                    <VscBellDot
-                                        className="fill-white group-hover:fill-glacier-600 group-focus:fill-glacier-600"
-                                        size={28}
-                                    />
+                                    <VscBellDot className="h-8 w-8 fill-white group-hover:fill-glacier-600 group-focus:fill-glacier-600" />
                                 </Link>
                             )}
                             <Link
                                 prefetch={false}
-                                className="mt-[2px] hidden rounded-md px-2 py-1 text-lg font-semibold uppercase text-white transition-all duration-75 hover:bg-glacier-50 hover:text-glacier-600 focus:bg-glacier-50 focus:text-glacier-600 sm:inline-block"
+                                className="mt-[0.125rem] hidden rounded-md px-2 py-1 text-lg font-semibold uppercase text-white transition-all duration-75 hover:bg-glacier-50 hover:text-glacier-600 focus:bg-glacier-50 focus:text-glacier-600 sm:inline-block"
                                 href="/chats"
                             >
                                 Chats
                             </Link>
                             <button
                                 onClick={() => signOut()}
-                                className="mt-[2px] hidden rounded-md px-2 py-1 text-lg font-semibold uppercase text-white transition-all duration-75 hover:bg-glacier-50 hover:text-glacier-600 focus:bg-glacier-50 focus:text-glacier-600 sm:inline-block"
+                                className="mt-[0.125rem] hidden rounded-md px-2 py-1 text-lg font-semibold uppercase text-white transition-all duration-75 hover:bg-glacier-50 hover:text-glacier-600 focus:bg-glacier-50 focus:text-glacier-600 sm:inline-block"
                             >
                                 Sign out
                             </button>
                             <Link
                                 prefetch={false}
-                                className="rounded-full border-2 border-glacier-50 shadow transition-all duration-75 hover:border-black focus:border-black"
+                                className="h-9 w-9 rounded-full border-2 border-glacier-50 shadow transition-all duration-75 hover:border-black focus:border-black"
                                 href="/profile"
                                 aria-label="Profile"
                             >
                                 <Image
-                                    className="w-9 select-none rounded-full"
+                                    className="h-full w-full select-none rounded-full"
                                     width={100}
                                     height={100}
                                     src={
@@ -94,7 +92,7 @@ export const Header = () => {
                     {!session.data?.user && session.status !== "loading" && (
                         <Link
                             prefetch={false}
-                            className="mt-[2px] hidden rounded-md px-2 py-1 text-lg font-semibold uppercase text-white transition-all duration-75 hover:bg-glacier-50 hover:text-glacier-600 focus:bg-glacier-50 focus:text-glacier-600 sm:inline-block"
+                            className="mt-[0.125rem] hidden rounded-md px-2 py-1 text-lg font-semibold uppercase text-white transition-all duration-75 hover:bg-glacier-50 hover:text-glacier-600 focus:bg-glacier-50 focus:text-glacier-600 sm:inline-block"
                             href="/signin"
                         >
                             Sign in

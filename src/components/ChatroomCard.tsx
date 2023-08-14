@@ -46,7 +46,7 @@ export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
     return (
         <div
             tabIndex={0}
-            className="group relative flex aspect-video w-[min(100%,280px)] flex-col items-center justify-center gap-4 rounded-xl bg-white p-4 shadow-md outline outline-2 outline-glacier-900 hover:shadow-glacier-600 hover:outline-[3px] hover:outline-glacier-600 focus:shadow-glacier-600 focus:outline-[3px] focus:outline-glacier-600"
+            className="group relative flex aspect-video w-[min(100%,17.5rem)] flex-col items-center justify-center gap-4 rounded-xl bg-white p-4 shadow-md outline outline-2 outline-glacier-900 hover:shadow-glacier-600 hover:outline-[3px] hover:outline-glacier-600 focus:shadow-glacier-600 focus:outline-[3px] focus:outline-glacier-600"
         >
             {joinChatroom.isLoading ? (
                 <LoadingSpinner size={50} color="#337387" />
@@ -66,13 +66,10 @@ export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
                         <button
                             onClick={handleAcceptInvite}
                             disabled={joinChatroom.isLoading}
-                            className="group/button mx-auto rounded-full p-1 transition-colors duration-75 "
+                            className="group/button mx-auto rounded-full p-1 transition-colors duration-75"
                             aria-label={`Accept invite to a chatroom with the name ${chatroom.name}`}
                         >
-                            <VscCheck
-                                className="fill-glacier-900 group-hover/button:fill-glacier-600 group-focus/button:fill-glacier-600"
-                                size={72}
-                            />
+                            <VscCheck className="h-20 w-20 fill-glacier-900 group-hover/button:fill-glacier-600 group-focus/button:fill-glacier-600" />
                         </button>
                         <button
                             onClick={handleDeclineInvite}
@@ -80,10 +77,7 @@ export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
                             className="group/button mx-auto rounded-full p-1 transition-colors duration-75"
                             aria-label={`Decline invite to a chatroom with the name ${chatroom.name}`}
                         >
-                            <VscChromeClose
-                                className="fill-glacier-900 group-hover/button:fill-red-600 group-focus/button:fill-red-600"
-                                size={72}
-                            />
+                            <VscChromeClose className="h-20 w-20 fill-glacier-900 group-hover/button:fill-red-600 group-focus/button:fill-red-600" />
                         </button>
                     </div>
                 </>
@@ -94,7 +88,7 @@ export const InviteChatroomCard = ({ chatroom }: IInviteChatroomCardProps) => {
 
 export const LoadingChatroomCard = () => {
     return (
-        <div className="group relative grid aspect-video w-[min(100%,280px)] items-center rounded-xl bg-white p-6 shadow-lg outline outline-2 outline-glacier-900">
+        <div className="group relative grid aspect-video w-[min(100%,17.5rem)] items-center rounded-xl bg-white p-6 shadow-lg outline outline-2 outline-glacier-900">
             <div className="mb-4 h-6 w-full animate-pulse rounded-lg bg-glacier-200" />
             <div className="flex flex-col gap-0.5">
                 <div className="h-4 w-full animate-pulse rounded-lg bg-glacier-200" />
@@ -119,11 +113,11 @@ export const NewChatroomCard = ({
         <Link
             href={href}
             as={hrefAs}
-            className="group relative grid aspect-video w-[min(100%,280px)]  items-center rounded-xl bg-white text-center shadow-md outline outline-2 outline-glacier-900 hover:shadow-glacier-600 hover:outline-[3px] hover:outline-glacier-600 focus:shadow-glacier-600 focus:outline-[3px] focus:outline-glacier-600"
+            className="group relative grid aspect-video w-[min(100%,17.5rem)]  items-center rounded-xl bg-white text-center shadow-md outline outline-2 outline-glacier-900 hover:shadow-glacier-600 hover:outline-[3px] hover:outline-glacier-600 focus:shadow-glacier-600 focus:outline-[3px] focus:outline-glacier-600"
         >
             <span className="group-hover:hidden">{title}</span>
             <div className="absolute inset-0 hidden h-full w-full items-center group-hover:grid">
-                <VscAdd className="mx-auto fill-glacier-900" size={72} />
+                <VscAdd className="mx-auto h-20 w-20 fill-glacier-900" />
             </div>
         </Link>
     );
@@ -179,7 +173,7 @@ export const EnterChatroomCard = ({ chatroom }: IEnterChatroomCard) => {
         <Link
             href={`/chats/${chatroom.id}`}
             aria-label={`Visit a chatroom named ${chatroom.name}`}
-            className="group relative flex aspect-video w-[min(100%,280px)] flex-col items-center justify-center gap-4 rounded-xl bg-white p-4 shadow-md outline outline-2 outline-glacier-900 hover:shadow-glacier-600 hover:outline-[3px] hover:outline-glacier-600 focus:shadow-glacier-600 focus:outline-[3px] focus:outline-glacier-600"
+            className="group relative flex aspect-video w-[min(100%,17.5rem)] flex-col items-center justify-center gap-4 rounded-xl bg-white p-4 shadow-md outline outline-2 outline-glacier-900 hover:shadow-glacier-600 hover:outline-[3px] hover:outline-glacier-600 focus:shadow-glacier-600 focus:outline-[3px] focus:outline-glacier-600"
         >
             <span className="line-clamp-2 w-full break-words text-center text-xl group-hover:line-clamp-none group-focus:line-clamp-none">
                 <strong className="text-glacier-900">

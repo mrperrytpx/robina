@@ -49,22 +49,19 @@ export const PendingInviteCard = ({ chatroom }: IPendingInviteCardProps) => {
                 </strong>{" "}
                 {chatroom.name}
             </span>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
                 <button
                     onClick={() =>
                         handleAcceptInvite(chatroom.invite_link.value)
                     }
                     disabled={joinChatroom.isLoading}
                     aria-label={`Accept invite to a chatroom with the name ${chatroom.name}.`}
-                    className="group/button select-none rounded-full p-1 transition-all duration-75 hover:bg-glacier-600 focus:bg-glacier-600"
+                    className="group/button  select-none rounded-full p-1 transition-all duration-75 hover:bg-glacier-600 focus:bg-glacier-600"
                 >
                     {joinChatroom.isLoading ? (
                         <LoadingSpinner size={20} color="#337387" />
                     ) : (
-                        <VscCheck
-                            className="fill-glacier-950 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50"
-                            size={20}
-                        />
+                        <VscCheck className="h-5 w-5 fill-glacier-950 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50" />
                     )}
                 </button>
                 <button
@@ -73,10 +70,7 @@ export const PendingInviteCard = ({ chatroom }: IPendingInviteCardProps) => {
                     className="group/button select-none rounded-full p-1 transition-all duration-75 hover:bg-glacier-600 focus:bg-glacier-600"
                     aria-label={`Decline invite to a chatroom with the name ${chatroom.name}.`}
                 >
-                    <VscChromeClose
-                        className="fill-glacier-950 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50"
-                        size={20}
-                    />
+                    <VscChromeClose className="h-5 w-5 fill-glacier-950 group-hover/button:fill-glacier-50 group-focus/button:fill-glacier-50" />
                 </button>
             </div>
         </div>

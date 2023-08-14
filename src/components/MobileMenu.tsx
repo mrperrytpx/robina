@@ -36,7 +36,7 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
         <div
             id="menu"
             ref={mobileRef}
-            className="b-[64px] absolute inset-0 top-16 z-20 flex h-[100svh] w-full flex-col items-center bg-glacier-50 px-4 py-8 text-glacier-900"
+            className="absolute inset-0 top-16 z-20 flex h-[100svh] w-full flex-col items-center bg-glacier-50 px-4 py-8 text-glacier-900"
         >
             {session.data?.user && (
                 <span className="text-center font-mono text-xl">
@@ -98,10 +98,7 @@ export const MobileMenu = ({ isExpanded, setIsExpanded }: IMobileMenuProps) => {
                 aria-label="Github"
                 className="group mt-auto select-none rounded-full"
             >
-                <VscGithub
-                    className="fill-glacier-900 group-hover:scale-105 group-hover:fill-glacier-600 group-focus:scale-105 group-focus:fill-glacier-600"
-                    size={40}
-                />
+                <VscGithub className="h-10 w-10 fill-glacier-900 group-hover:scale-105 group-hover:fill-glacier-600 group-focus:scale-105 group-focus:fill-glacier-600" />
             </a>
             <div className="h-16" />
         </div>

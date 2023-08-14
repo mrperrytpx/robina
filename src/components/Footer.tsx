@@ -36,10 +36,7 @@ export const Footer = () => {
                         aria-label="Github"
                         className="group mt-auto select-none rounded-full transition-all duration-75 hover:bg-glacier-50 focus:bg-glacier-50"
                     >
-                        <VscGithub
-                            className="fill-glacier-50 group-hover:scale-105 group-hover:fill-glacier-900 group-focus:scale-105 group-focus:fill-glacier-900"
-                            size={40}
-                        />
+                        <VscGithub className="h-10 w-10 fill-glacier-50 group-hover:scale-105 group-hover:fill-glacier-900 group-focus:scale-105 group-focus:fill-glacier-900" />
                     </a>
                 </div>
                 <div className="w-full pl-2 text-center text-sm text-white md:text-left">

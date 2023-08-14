@@ -322,20 +322,17 @@ export const ChatroomMessages = ({
                 <div ref={endRef} />
             </div>
 
-            <div className="flex h-14 items-center gap-3 px-3">
+            <div className="flex h-14 items-center gap-2 px-3">
                 <button
                     className="group hidden rounded-full border-2 border-glacier-900 bg-white p-2 hover:border-glacier-600 hover:bg-glacier-600 focus:border-glacier-600 focus:bg-glacier-600 sm:inline-block"
                     aria-label="Toggle chatroom settings modal."
                     onClick={handleSettings}
                 >
-                    <FiSettings
-                        size={20}
-                        className="stroke-glacier-900 group-hover:stroke-glacier-50 group-focus:stroke-glacier-50"
-                    />
+                    <FiSettings className="h-5 w-5 stroke-glacier-900 group-hover:stroke-glacier-50 group-focus:stroke-glacier-50 group-active:stroke-glacier-50" />
                 </button>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
-                    className="flex w-full items-center justify-between gap-3"
+                    className="flex w-full items-center justify-between gap-2"
                 >
                     <label
                         aria-hidden="true"
@@ -361,10 +358,7 @@ export const ChatroomMessages = ({
                         aria-label="Send message."
                         disabled={!chatroomMessages.data?.pages}
                     >
-                        <VscSend
-                            className="fill-glacier-900 group-hover:fill-glacier-50 group-focus:fill-glacier-50 group-active:fill-glacier-50"
-                            size={20}
-                        />
+                        <VscSend className="h-5 w-5 fill-glacier-900 group-hover:fill-glacier-50 group-focus:fill-glacier-50 group-active:fill-glacier-50" />
                     </button>
                 </form>
             </div>
