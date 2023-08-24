@@ -5,22 +5,18 @@ export const CookieBanner = () => {
     const [showCookieHeader, setShowCookieHeader] = useState(false);
 
     const handleAcceptCookies = () => {
-        if (typeof window !== "undefined") {
-            localStorage.setItem("yama-cki-accepted", "true");
-            setShowCookieHeader(false);
-        }
+        localStorage.setItem("yama-cki-accepted", "true");
+        setShowCookieHeader(false);
     };
 
     useEffect(() => {
-        if (typeof window !== "undefined") {
-            if (
-                showCookieHeader ||
-                localStorage.getItem("yama-cki-accepted") !== "true"
-            ) {
-                setShowCookieHeader(true);
-            }
+        if (
+            typeof window !== "undefined" &&
+            localStorage.getItem("yama-cki-accepted") !== "true"
+        ) {
+            setShowCookieHeader(true);
         }
-    }, [showCookieHeader]);
+    }, []);
 
     if (!showCookieHeader) return null;
 
