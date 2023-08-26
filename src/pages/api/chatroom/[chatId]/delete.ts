@@ -9,48 +9,53 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    if (req.method === "DELETE") {
-        const chatId = z.string().parse(req.query.chatId);
+    try {
+        if (req.method === "DELETE") {
+            const chatId = z.string().parse(req.query.chatId);
 
-        if (!chatId) return res.status(400).end("Please provide an ID"!);
+            if (!chatId) return res.status(400).end("Please provide an ID"!);
 
-        const session = await getServerSession(req, res, authOptions);
+            const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session!");
+            if (!session) return res.status(401).end("No session!");
 
-        const user = await prisma.user.findFirst({
-            where: {
-                id: session.user.id,
-            },
-            include: {
-                owned_chatroom: true,
-            },
-        });
-        if (!user) return res.status(401).end("User doesn't exist!!");
+            const user = await prisma.user.findFirst({
+                where: {
+                    id: session.user.id,
+                },
+                include: {
+                    owned_chatroom: true,
+                },
+            });
+            if (!user) return res.status(401).end("User doesn't exist!!");
 
-        if (!user.owned_chatroom) {
-            return res.status(400).end("You do not own a chatroom!");
+            if (!user.owned_chatroom) {
+                return res.status(400).end("You do not own a chatroom!");
+            }
+
+            if (user.owned_chatroom?.id !== chatId) {
+                return res.status(403).end("You do not own this chatroom!");
+            }
+
+            await prisma.chatroom.delete({
+                where: {
+                    id: user.owned_chatroom.id,
+                },
+            });
+
+            await pusherServer.trigger(
+                `chat__${chatId}__delete-room`,
+                "delete-room",
+                { chatId, userId: user.id }
+            );
+
+            res.status(204).end("Success");
+        } else {
+            res.setHeader("Allow", "DELETE");
+            res.status(405).end("Method Not Allowed");
         }
-
-        if (user.owned_chatroom?.id !== chatId) {
-            return res.status(403).end("You do not own this chatroom!");
-        }
-
-        await prisma.chatroom.delete({
-            where: {
-                id: user.owned_chatroom.id,
-            },
-        });
-
-        await pusherServer.trigger(
-            `chat__${chatId}__delete-room`,
-            "delete-room",
-            { chatId, userId: user.id }
-        );
-
-        res.status(204).end("Success");
-    } else {
-        res.setHeader("Allow", "DELETE");
-        res.status(405).end("Method Not Allowed");
+    } catch (error) {
+        console.log("/api/chatroom/[chatId]/delete", error);
+        res.status(500).end("Internal Server Error");
     }
 }

@@ -9,46 +9,51 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    if (req.method === "PATCH") {
-        const chatId = z.string().parse(req.query.chatId);
+    try {
+        if (req.method === "PATCH") {
+            const chatId = z.string().parse(req.query.chatId);
 
-        if (!chatId) return res.status(400).end("Provide a valid chat ID!");
+            if (!chatId) return res.status(400).end("Provide a valid chat ID!");
 
-        const session = await getServerSession(req, res, authOptions);
+            const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session!");
+            if (!session) return res.status(401).end("No session!");
 
-        const user = await prisma.user.findFirst({
-            where: {
-                id: session.user.id,
-            },
-            include: {
-                owned_chatroom: true,
-            },
-        });
+            const user = await prisma.user.findFirst({
+                where: {
+                    id: session.user.id,
+                },
+                include: {
+                    owned_chatroom: true,
+                },
+            });
 
-        if (!user) return res.status(400).end("User doesn't exist!");
+            if (!user) return res.status(400).end("User doesn't exist!");
 
-        if (!user.owned_chatroom)
-            return res.status(400).end("You don't own a chatroom!");
+            if (!user.owned_chatroom)
+                return res.status(400).end("You don't own a chatroom!");
 
-        if (user.owned_chatroom.id !== chatId)
-            return res.status(403).end("You don't own this chatroom!");
+            if (user.owned_chatroom.id !== chatId)
+                return res.status(403).end("You don't own this chatroom!");
 
-        const inviteString = randomString(10);
+            const inviteString = randomString(10);
 
-        const inviteLink = await prisma.inviteLink.update({
-            where: {
-                chatroom_id: user.owned_chatroom.id,
-            },
-            data: {
-                value: inviteString,
-            },
-        });
+            const inviteLink = await prisma.inviteLink.update({
+                where: {
+                    chatroom_id: user.owned_chatroom.id,
+                },
+                data: {
+                    value: inviteString,
+                },
+            });
 
-        res.status(201).json({ value: inviteLink.value });
-    } else {
-        res.setHeader("Allow", "PATCH");
-        res.status(405).end("Method not allowed");
+            res.status(201).json({ value: inviteLink.value });
+        } else {
+            res.setHeader("Allow", "PATCH");
+            res.status(405).end("Method not allowed");
+        }
+    } catch (error) {
+        console.log("/api/chatroom/[chatId]/invite/update", error);
+        res.status(500).end("Internal Server Error");
     }
 }

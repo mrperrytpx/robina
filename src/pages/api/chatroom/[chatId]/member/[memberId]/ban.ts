@@ -9,98 +9,107 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    if (req.method === "DELETE") {
-        const chatId = z.string().parse(req.query.chatId);
-        const memberId = z.string().parse(req.query.memberId);
+    try {
+        if (req.method === "DELETE") {
+            const chatId = z.string().parse(req.query.chatId);
+            const memberId = z.string().parse(req.query.memberId);
 
-        if (!chatId) return res.status(400).end("Provide a valid chat ID!");
+            if (!chatId) return res.status(400).end("Provide a valid chat ID!");
 
-        const session = await getServerSession(req, res, authOptions);
+            const session = await getServerSession(req, res, authOptions);
 
-        if (!session) return res.status(401).end("No session!");
+            if (!session) return res.status(401).end("No session!");
 
-        const user = await prisma.user.findFirst({
-            where: {
-                id: session.user.id,
-            },
-            include: {
-                owned_chatroom: true,
-            },
-        });
-        if (!user) return res.status(401).end("User doesn't exist!");
-
-        if (!user.owned_chatroom) {
-            return res.status(400).end("You do not own a chatroom!");
-        }
-
-        if (user.owned_chatroom?.id !== chatId) {
-            return res.status(403).end("You do not own this chatroom!");
-        }
-
-        const member = await prisma.user.findFirst({
-            where: {
-                id: memberId,
-            },
-            include: {
-                chatrooms: true,
-                messages: true,
-            },
-        });
-
-        if (!member)
-            return res.status(400).end("User isn't a part of this chatroom!");
-
-        await prisma.user.update({
-            where: {
-                id: member.id,
-            },
-            data: {
-                chatrooms: {
-                    set: member.chatrooms.filter((chat) => chat.id !== chatId),
+            const user = await prisma.user.findFirst({
+                where: {
+                    id: session.user.id,
                 },
-            },
-        });
-
-        await prisma.message.deleteMany({
-            where: {
-                id: {
-                    in: member.messages
-                        .filter((msg) => msg.chatroom_id === chatId)
-                        .map((msg) => msg.id),
+                include: {
+                    owned_chatroom: true,
                 },
-            },
-        });
+            });
+            if (!user) return res.status(401).end("User doesn't exist!");
 
-        const chatroom = await prisma.chatroom.update({
-            where: {
-                id: chatId,
-            },
-            data: {
-                banned_members: {
-                    connect: {
-                        id: member.id,
+            if (!user.owned_chatroom) {
+                return res.status(400).end("You do not own a chatroom!");
+            }
+
+            if (user.owned_chatroom?.id !== chatId) {
+                return res.status(403).end("You do not own this chatroom!");
+            }
+
+            const member = await prisma.user.findFirst({
+                where: {
+                    id: memberId,
+                },
+                include: {
+                    chatrooms: true,
+                    messages: true,
+                },
+            });
+
+            if (!member)
+                return res
+                    .status(400)
+                    .end("User isn't a part of this chatroom!");
+
+            await prisma.user.update({
+                where: {
+                    id: member.id,
+                },
+                data: {
+                    chatrooms: {
+                        set: member.chatrooms.filter(
+                            (chat) => chat.id !== chatId
+                        ),
                     },
                 },
-            },
-        });
+            });
 
-        await pusherServer.trigger(
-            `chat__${user.owned_chatroom?.id}__remove-member`,
-            "remove-member",
-            {
-                id: memberId,
-            }
-        );
+            await prisma.message.deleteMany({
+                where: {
+                    id: {
+                        in: member.messages
+                            .filter((msg) => msg.chatroom_id === chatId)
+                            .map((msg) => msg.id),
+                    },
+                },
+            });
 
-        await pusherServer.trigger(`chat__${member.id}__ban`, "ban", {
-            id: member.id,
-            chatId: chatroom.id,
-            chatroomName: chatroom.name,
-        });
+            const chatroom = await prisma.chatroom.update({
+                where: {
+                    id: chatId,
+                },
+                data: {
+                    banned_members: {
+                        connect: {
+                            id: member.id,
+                        },
+                    },
+                },
+            });
 
-        res.status(204).end("Success");
-    } else {
-        res.setHeader("Allow", "DELETE");
-        res.status(405).end("Method Not Allowed");
+            await pusherServer.trigger(
+                `chat__${user.owned_chatroom?.id}__remove-member`,
+                "remove-member",
+                {
+                    id: memberId,
+                }
+            );
+
+            await pusherServer.trigger(`chat__${member.id}__ban`, "ban", {
+                id: member.id,
+                chatId: chatroom.id,
+                chatroomName: chatroom.name,
+            });
+
+            res.status(204).end("Success");
+        } else {
+            res.setHeader("Allow", "DELETE");
+            res.status(405).end("Method Not Allowed");
+        }
+    } catch (error) {
+        console.log("/api/chatroom/[chatId]/member/[memberId]/ban", error);
+        res.status(500).end("Internal Server Error");
     }
 }
