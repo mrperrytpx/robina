@@ -101,7 +101,7 @@ const CreateChatPage = () => {
                                 name="name"
                                 id="name"
                                 type="text"
-                                className={`focus:border-glacier-00 h-10 w-full rounded-md border-2 border-glacier-900 p-2 text-sm font-medium transition-all duration-75 hover:border-glacier-400 focus:outline-glacier-400 ${
+                                className={`focus:border-glacier-400 h-10 w-full rounded-md border-2 border-glacier-900 p-2 text-sm font-medium transition-all duration-75 hover:border-glacier-400 focus:outline-glacier-400 ${
                                     errors.name && "border-red-600"
                                 }`}
                                 placeholder="Chatroom name"
