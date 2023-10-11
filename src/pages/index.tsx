@@ -122,7 +122,7 @@ export default function Home({
                 </article>
             </div>
 
-            <div className="mt-40 flex w-full max-w-3xl items-center justify-center">
+            <div className="mt-40 flex w-full max-w-3xl items-center justify-center px-4">
                 <Image
                     src={DemonstrationGif}
                     className="w-full"
