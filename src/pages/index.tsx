@@ -8,6 +8,8 @@ import LogoTextSquare from "../../public/logo-text-square.webp";
 import FallbackLogoTextRectangle from "../../public/logo-text-rect.png";
 import FallbackLogoTextSquare from "../../public/logo-text-square.png";
 import { ImageWithFallback } from "../components/ImageWithFallback";
+import DemonstrationGif from "../assets/work.gif";
+import Image from "next/image";
 
 interface ITestimonyCardProps {
     children: ReactNode | ReactNode[];
@@ -75,7 +77,7 @@ export default function Home({
                 </article>
 
                 <article className="flex w-full flex-col gap-8 rounded-lg px-2 py-4 text-center font-medium">
-                    <h2 className="text-4xl font-bold text-glacier-600">
+                    <h2 className="text-4xl font-extrabold text-glacier-600">
                         Have you ever asked yourself...
                     </h2>
                     <p className="xl:text-left">
@@ -97,7 +99,7 @@ export default function Home({
                 </article>
 
                 <article className="flex w-full flex-col gap-12 rounded-lg px-2 py-4 text-center font-medium">
-                    <h2 className="space text-4xl font-bold tracking-wider text-glacier-600">
+                    <h2 className="space text-4xl font-extrabold tracking-wider text-glacier-600">
                         Welcome home!
                     </h2>
                     <p className="text-xl">
@@ -118,6 +120,14 @@ export default function Home({
                         </p>
                     </div>
                 </article>
+            </div>
+
+            <div className="mt-40 flex w-full max-w-3xl items-center justify-center">
+                <Image
+                    src={DemonstrationGif}
+                    className="w-full"
+                    alt="A gif which showcases a potential experience flow when using this website. There are 2 mobile views next to each other. A user on the right side invites the user on the left side to their chatroom. The right user sends a single message, then the left user starts spamming the chatroom. Then the right user removes the left user from the chatroom and both of them get a toast notification about it."
+                />
             </div>
 
             <article className="mt-40 flex w-full flex-col px-2 py-4 text-center">
