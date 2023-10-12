@@ -129,7 +129,7 @@ export const ChatroomSettings = ({
                         <button
                             onClick={() => setIsSettingsActive(false)}
                             aria-label="Close settings"
-                            className="group flex  items-center gap-1 self-start rounded-full border-2 border-glacier-900 bg-white p-1 shadow transition-all duration-75 hover:border-glacier-600 hover:bg-glacier-600 focus:border-glacier-600 focus:bg-glacier-600"
+                            className="group flex  items-center gap-1 self-start rounded-full  bg-white p-1 shadow transition-all duration-75 hover:bg-glacier-600 focus:bg-glacier-600"
                         >
                             <VscChromeClose className="h-7 w-7 fill-glacier-900 transition-all duration-75 group-hover:fill-glacier-50 group-focus:fill-glacier-50" />
                         </button>
@@ -243,7 +243,7 @@ export const ChatroomSettings = ({
 
                                 <button
                                     onClick={() => setIsModalOpen(!isModalOpen)}
-                                    className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-glacier-900 bg-white p-2 text-sm font-medium text-glacier-900 shadow transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 focus:border-red-600 focus:bg-red-600 focus:text-glacier-50 active:bg-red-600 active:text-glacier-50 disabled:border-glacier-200 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
+                                    className="flex h-10 w-full max-w-md select-none items-center justify-center rounded-md border-2 border-white bg-white p-2 text-sm font-medium text-glacier-900 shadow transition-all duration-75 hover:border-red-600 hover:bg-red-600 hover:text-glacier-50 focus:border-red-600 focus:bg-red-600 focus:text-glacier-50 active:bg-red-600 active:text-glacier-50 disabled:border-glacier-200 disabled:bg-glacier-200 disabled:text-glacier-700 disabled:opacity-50"
                                     disabled={deleteChatroom.isLoading}
                                     aria-label="Delete the chatroom."
                                 >

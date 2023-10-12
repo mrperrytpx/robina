@@ -44,7 +44,7 @@ export const ChatroomMessages = ({
 
     const chatroomMessages = useGetChatroomMessagesInfQuery(chatId);
 
-    const isStartIntersecting = useIntersectionObserver(startRef, {});
+    const isStartIntersecting = useIntersectionObserver(startRef);
 
     const postMessage = usePostChatMessageMutation();
     const inviteUser = useInviteUserMutation();
@@ -70,7 +70,6 @@ export const ChatroomMessages = ({
                 const error = await response?.text();
                 toast.error(error);
             }
-
             return;
         }
 
@@ -126,29 +125,7 @@ export const ChatroomMessages = ({
             const message = queue.shift();
             if (!message) return;
 
-            const response = await postMessage.mutateAsync(message);
-            if (!response.ok) {
-                queryClient.setQueryData(
-                    ["messages", chatId],
-                    (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
-                        if (!oldData) return { pageParams: [0], pages: [[]] };
-
-                        const newData = oldData.pages.map((page) =>
-                            page.map((msg) => {
-                                if (msg.id === message.fakeId) {
-                                    return { ...msg, error: true };
-                                } else {
-                                    return msg;
-                                }
-                            })
-                        );
-                        return {
-                            pages: newData,
-                            pageParams: oldData.pageParams || [0],
-                        };
-                    }
-                );
-            }
+            await postMessage.mutateAsync(message);
         }
         return;
     };

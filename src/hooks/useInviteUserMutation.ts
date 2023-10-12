@@ -23,12 +23,9 @@ export const useInviteUserMutation = () => {
     };
 
     return useMutation(inviteUser, {
-        onMutate: (data) => {
-            return { ...data };
-        },
-        onSuccess: (data, _vars, context) => {
+        onSuccess: (data, vars) => {
             if (!data.ok) return;
-            toast.success(`${context?.username} invited!`);
+            toast.success(`${vars?.username} invited!`);
         },
     });
 };

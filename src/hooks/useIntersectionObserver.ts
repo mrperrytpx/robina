@@ -8,7 +8,7 @@ type TIntersectionObserverOptions = {
 
 export const useIntersectionObserver = (
     ref: RefObject<HTMLDivElement>,
-    options: TIntersectionObserverOptions
+    options?: TIntersectionObserverOptions
 ) => {
     const [isIntersecting, setIsIntersecting] = useState(false);
 
