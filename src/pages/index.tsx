@@ -64,7 +64,7 @@ export default function Home({
                         like...&quot;
                     </p>
                     <p className="xl:text-left">
-                        &quot;Is there a way for me to experience what is was
+                        &quot;Is there a way for me to experience what it was
                         like using online chatrooms back in the 90&apos;s?&quot;
                     </p>
                     <p>
@@ -74,7 +74,7 @@ export default function Home({
                 </article>
 
                 <article className="flex w-full flex-col gap-12 rounded-lg px-2 py-4 text-center font-medium">
-                    <h2 className="space text-4xl font-extrabold tracking-wider text-glacier-600">
+                    <h2 className="text-4xl font-extrabold text-glacier-600">
                         Welcome home!
                     </h2>
                     <p className="text-xl">
@@ -97,7 +97,7 @@ export default function Home({
                 </article>
             </div>
 
-            <div className="relative flex w-full max-w-3xl items-center justify-center px-4">
+            <div className="relative hidden w-full max-w-3xl items-center justify-center px-4 md:flex">
                 <Image
                     src={DemonstrationGif}
                     className="z-10 w-full"
@@ -148,7 +148,7 @@ export default function Home({
                 <Link
                     prefetch={false}
                     href="/signin"
-                    className="text-3xl font-bold uppercase text-glacier-900 transition-all duration-75 hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
+                    className="text-3xl font-bold text-glacier-900 transition-all duration-75 hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
                 >
                     Join
                 </Link>
