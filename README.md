@@ -20,13 +20,13 @@ Next.js, Typescript, TailwindCSS, Prisma, NextAuth, PusherJS, Tanstack Query, Zo
 
 ## How to install
 
-Download and install Node and NPM from https://nodejs.org/en/download.
+Download and install the latest versions of Node and NPM from https://nodejs.org/en/download.
 
-Once downloaded, run thees commands in the terminal:
+Once that's done, run these commands in the terminal:
 
 ```ts
 $ git clone https://github.com/mrperrytpx/robina
-$ cd .\robina\
+$ cd ./robina/
 $ npm install
 ```
 

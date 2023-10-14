@@ -11,6 +11,7 @@ import DemonstrationGif from "../assets/work.gif";
 import Image from "next/image";
 import { TestimonyCard } from "../components/TestimonyCard";
 import { testimonies } from "../consts/fakeTestimonials";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 export default function Home({
     userCount,
@@ -96,12 +97,22 @@ export default function Home({
                 </article>
             </div>
 
-            <div className=" flex w-full max-w-3xl items-center justify-center px-4">
+            <div className="relative flex w-full max-w-3xl items-center justify-center px-4">
                 <Image
                     src={DemonstrationGif}
-                    className="w-full"
+                    className="z-10 w-full"
+                    width={996}
+                    height={869}
                     alt="A gif which showcases a potential experience flow when using this website. There are 2 mobile views next to each other. A user on the right side invites the user on the left side to their chatroom. The right user sends a single message, then the left user starts spamming the chatroom. Then the right user removes the left user from the chatroom and both of them get a toast notification about it."
                 />
+                <div className="absolute left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2 space-y-4 p-4 text-center text-xs">
+                    <LoadingSpinner size={40} color={"rgb(51 115 135)"} />
+                    <p>
+                        There&apos;s supposed to be a GIF demonstration of a
+                        simple experience flow example here... 🤔
+                    </p>
+                    <p>Should be loading in anytime soon. (2.7 Megabytes)</p>
+                </div>
             </div>
 
             <article className="space-y-20">
