@@ -4,9 +4,9 @@
 
 #### [Website URL](http://yetanothermessagingapp.vercel.app/)
 
-<img src="readme/yama.png">
+![App Screenshot](readme/yama.png)
 
-A full-stack real-time messaging web app where users can create their own chatroom, join an existing one with an invite string or get invited to a chatroom by the owner. Owner of the chatroom can delete all posted messages and ban any other user. Real-time chatroom events are handled by Pusher, the WebSocket solution for serverless architecture.
+A full-stack real-time messaging web app where users can create their own chatroom, join an existing one with an invite string or get invited to a chatroom by the owner. The owner of the chatroom can delete all posted messages and ban any other user. Real-time chatroom events are handled by Pusher, the WebSocket solution for serverless architecture.
 
 User authentication is handled with NextAuth and database sessions. Users can either login with Google OAuth or type in an email address and login by clicking the link sent to it.
 
@@ -20,11 +20,11 @@ Next.js, Typescript, TailwindCSS, Prisma, NextAuth, PusherJS, Tanstack Query, Zo
 
 ## How to install
 
-Download and install the latest versions of Node and NPM from https://nodejs.org/en/download.
+Download and install the latest versions of Node and NPM from [https://nodejs.org/en/download](https://nodejs.org/en/download).
 
 Once that's done, run these commands in the terminal:
 
-```ts
+```shell
 $ git clone https://github.com/mrperrytpx/robina
 $ cd ./robina/
 $ npm install
@@ -51,4 +51,4 @@ I learned how to use Pusher's service and SDK to set up multiple channels that l
 
 I learned how to dynamically import big javascript bundles to improve the website's performance.
 
-I learned how to replicate Discord's messaging by using a queue which only sends one message request at a time.
+I learned how to replicate Discord's messaging by using an asynchronous queue.
