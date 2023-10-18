@@ -36,15 +36,13 @@ export const ChatroomMessages = ({
     handleSettings,
 }: IChatroomMessagesProps) => {
     const endRef = useRef<HTMLDivElement>(null);
-    const startRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
     const chatId = z.string().parse(router.query.chatId);
     const queryClient = useQueryClient();
     const session = useSession();
 
+    const isEndIntersecting = useIntersectionObserver(endRef);
     const chatroomMessages = useGetChatroomMessagesInfQuery(chatId);
-
-    const isStartIntersecting = useIntersectionObserver(startRef);
 
     const postMessage = usePostChatMessageMutation();
     const inviteUser = useInviteUserMutation();
@@ -131,16 +129,14 @@ export const ChatroomMessages = ({
     };
 
     useEffect(() => {
-        endRef.current?.scrollIntoView({ behavior: "instant" });
-    }, [chatroomMessages.data]);
+        if (isEndIntersecting) {
+            endRef.current?.scrollIntoView({ behavior: "instant" });
+        }
+    }, [isEndIntersecting, chatroomMessages]);
 
     useEffect(() => {
-        if (chatroomMessages.hasPreviousPage) {
-            if (isStartIntersecting) {
-                chatroomMessages.fetchPreviousPage();
-            }
-        }
-    }, [isStartIntersecting, chatroomMessages]);
+        endRef.current?.scrollIntoView({ behavior: "instant" });
+    }, []);
 
     useEffect(() => {
         const deleteMessageHandler = async (data: {
@@ -273,7 +269,15 @@ export const ChatroomMessages = ({
                 ) : chatroomMessages.isFetchingPreviousPage ? (
                     <LoadingSpinner size={32} color="#337387" />
                 ) : (
-                    <div className="mt-auto w-full" ref={startRef} />
+                    chatroomMessages.hasPreviousPage && (
+                        <button
+                            className="disabled:opacity:50 w-full bg-glacier-200 p-1 font-semibold"
+                            onClick={() => chatroomMessages.fetchPreviousPage()}
+                            disabled={!chatroomMessages.hasPreviousPage}
+                        >
+                            Load more messages
+                        </button>
+                    )
                 )}
 
                 {chatroomMessages.data?.pages.map((page, i) => (
