@@ -73,6 +73,8 @@ export const ChatroomMessages = ({
 
         if (queue.length >= 5) return;
 
+        endRef.current?.scrollIntoView({ behavior: "instant" });
+
         const messageData: IPostMessage = {
             ...data,
             chatId,

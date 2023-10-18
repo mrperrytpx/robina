@@ -1,6 +1,8 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { TChatroomMessage } from "./useGetChatroomQuery";
 
+const MESSAGES_OFFSET = 50;
+
 async function getChatroomMessages(chatId: string, pageParam: number) {
     const controller = new AbortController();
 
@@ -35,7 +37,13 @@ export const useGetChatroomMessagesInfQuery = (chatId: string) => {
         queryFn: ({ pageParam = 0 }) => getChatroomMessages(chatId, pageParam),
         enabled: !!chatId,
         getPreviousPageParam: (firstPage, pages) => {
-            return firstPage.length >= 50 ? pages.flat().length : undefined;
+            if (pages.length > 1) {
+                return firstPage.length === MESSAGES_OFFSET
+                    ? pages.flat().length
+                    : undefined;
+            } else {
+                return firstPage.length > 0 ? pages.flat().length : undefined;
+            }
         },
         retry: 1,
     });
