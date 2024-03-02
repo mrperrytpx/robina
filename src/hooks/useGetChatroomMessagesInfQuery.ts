@@ -36,14 +36,13 @@ export const useGetChatroomMessagesInfQuery = (chatId: string) => {
         queryKey: ["messages", chatId],
         queryFn: ({ pageParam = 0 }) => getChatroomMessages(chatId, pageParam),
         enabled: !!chatId,
-        getPreviousPageParam: (firstPage, pages) => {
-            if (pages.length > 1) {
-                return firstPage.length === MESSAGES_OFFSET
-                    ? pages.flat().length
-                    : undefined;
-            } else {
-                return firstPage.length > 0 ? pages.flat().length : undefined;
-            }
+        getPreviousPageParam: (_firstPage, pages) => {
+            if (pages.flat().length === 0) return undefined;
+
+            if (pages.flat().length >= 50 && pages[0].length !== 0)
+                return pages.flat().length;
+
+            return undefined;
         },
         retry: 1,
     });

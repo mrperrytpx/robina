@@ -31,7 +31,7 @@ const PrivacyPage = () => {
                 <h1 className="text-2xl font-semibold">Privacy Policy</h1>
                 <p className="text-xs">Effective Date: 3rd of August, 2023</p>
                 <p>
-                    At GarbGarb, we take your privacy seriously. This policy
+                    At YetAnotherMessagingApp, we take your privacy seriously. This policy
                     explains how we collect, process, and share your personal
                     information when you use our services or visit our Website.
                 </p>
