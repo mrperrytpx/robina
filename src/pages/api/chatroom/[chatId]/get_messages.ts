@@ -57,7 +57,10 @@ export default async function handler(
             if (!chatroom)
                 return res.status(400).end("Chatroom doesn't exist!?");
 
-            res.status(201).json(chatroom.messages);
+            res.status(201).json({
+                hasMore: chatroom.messages.length >= 50,
+                messages: chatroom.messages.reverse(),
+            });
         } else {
             res.setHeader("Allow", "GET");
             res.status(405).end("Method Not Allowed");

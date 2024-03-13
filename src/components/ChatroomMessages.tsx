@@ -6,7 +6,10 @@ import { z } from "zod";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { pusherClient } from "../lib/pusher";
 import { useSession } from "next-auth/react";
-import { useGetChatroomMessagesInfQuery } from "../hooks/useGetChatroomMessagesInfQuery";
+import {
+    TPageOfMessages,
+    useGetChatroomMessagesInfQuery,
+} from "../hooks/useGetChatroomMessagesInfQuery";
 import { shouldBeNewAuthor } from "../util/shouldBeNewAuthor";
 import { Chatroom } from "@prisma/client";
 import { LoadingSpinner } from "./LoadingSpinner";
@@ -103,12 +106,19 @@ export const ChatroomMessages = ({
 
         queryClient.setQueryData(
             ["messages", chatId],
-            (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
-                if (!oldData) return { pageParams: [0], pages: [[]] };
+            (oldData: InfiniteData<TPageOfMessages> | undefined) => {
+                if (!oldData)
+                    return {
+                        pageParams: [0],
+                        pages: [{ hasMore: false, messages: [] }],
+                    };
 
                 const newData = oldData.pages.map((page, pageIdx) => {
                     if (pageIdx === oldData.pages.length - 1) {
-                        return [...page, newMessage];
+                        return {
+                            ...page,
+                            messages: [...page.messages, newMessage],
+                        };
                     } else {
                         return page;
                     }
@@ -151,12 +161,15 @@ export const ChatroomMessages = ({
 
             queryClient.setQueryData(
                 ["messages", chatId],
-                (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
+                (oldData: InfiniteData<TPageOfMessages> | undefined) => {
                     if (!oldData) return;
 
-                    const newData = oldData.pages.map((page) =>
-                        page.filter((msg) => msg.id !== data.id)
-                    );
+                    const newData = oldData.pages.map((page) => ({
+                        ...page,
+                        messages: page.messages.filter(
+                            (msg) => msg.id !== data.id
+                        ),
+                    }));
 
                     return {
                         pages: newData,
@@ -184,15 +197,15 @@ export const ChatroomMessages = ({
             if (data.author_id === session.data?.user.id) {
                 queryClient.setQueryData(
                     ["messages", chatId],
-                    (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
-                        oldData?.pages[oldData?.pages.length - 1 ?? 0].map(
-                            (msg) => {
-                                if (msg.id === data.fakeId) {
-                                    msg.id = data.id;
-                                }
-                                return msg;
+                    (oldData: InfiniteData<TPageOfMessages> | undefined) => {
+                        oldData?.pages[
+                            oldData?.pages.length - 1 ?? 0
+                        ].messages.map((msg) => {
+                            if (msg.id === data.fakeId) {
+                                msg.id = data.id;
                             }
-                        );
+                            return msg;
+                        });
 
                         return oldData;
                     }
@@ -201,12 +214,19 @@ export const ChatroomMessages = ({
             } else {
                 queryClient.setQueryData(
                     ["messages", chatId],
-                    (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
-                        if (!oldData) return { pageParams: [0], pages: [[]] };
+                    (oldData: InfiniteData<TPageOfMessages> | undefined) => {
+                        if (!oldData)
+                            return {
+                                pageParams: [0],
+                                pages: [{ hasMore: false, messages: [] }],
+                            };
 
                         const newData = oldData.pages.map((page, pageIdx) => {
                             if (pageIdx === oldData.pages.length - 1) {
-                                return [...page, data];
+                                return {
+                                    ...page,
+                                    messages: [...page.messages, data],
+                                };
                             } else {
                                 return page;
                             }
@@ -222,14 +242,14 @@ export const ChatroomMessages = ({
 
             queryClient.setQueryData(
                 ["messages", chatId],
-                (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
-                    oldData?.pages[oldData?.pages.length - 1 ?? 0].sort(
-                        (a, b) => {
-                            if (a.id.length === b.id.length) return 0;
-                            if (a.id.length > b.id.length) return -1;
-                            return 1;
-                        }
-                    );
+                (oldData: InfiniteData<TPageOfMessages> | undefined) => {
+                    oldData?.pages[
+                        oldData?.pages.length - 1 ?? 0
+                    ].messages.sort((a, b) => {
+                        if (a.id.length === b.id.length) return 0;
+                        if (a.id.length > b.id.length) return -1;
+                        return 1;
+                    });
 
                     return oldData;
                 }
@@ -284,9 +304,9 @@ export const ChatroomMessages = ({
 
                 {chatroomMessages.data?.pages.map((page, i) => (
                     <Fragment key={i}>
-                        {page.map((message, msgIdx) => {
+                        {page.messages.map((message, msgIdx) => {
                             const isSameAuthor = shouldBeNewAuthor(
-                                page,
+                                page.messages,
                                 msgIdx,
                                 message
                             );

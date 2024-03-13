@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { TChatroomInvite } from "./useGetUserPendingInvitesQuery";
-import { TChatroomWIthOwner } from "../pages/api/chatroom/get_owned";
+import { TChatroomWithOwner } from "../pages/api/chatroom/get_owned";
 
 export const useJoinChatroomMutation = () => {
     const queryClient = useQueryClient();
@@ -36,7 +36,7 @@ export const useJoinChatroomMutation = () => {
 
             queryClient.setQueryData(
                 ["chatrooms", session.data?.user.id],
-                (oldData: TChatroomWIthOwner[] | undefined) => {
+                (oldData: TChatroomWithOwner[] | undefined) => {
                     if (!oldData) return [strippedInvite];
                     return [strippedInvite, ...oldData];
                 }

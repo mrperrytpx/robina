@@ -1,7 +1,10 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { TChatroomMessage } from "./useGetChatroomQuery";
 
-const MESSAGES_OFFSET = 50;
+export type TPageOfMessages = {
+    hasMore: boolean;
+    messages: TChatroomMessage[];
+};
 
 async function getChatroomMessages(chatId: string, pageParam: number) {
     const controller = new AbortController();
@@ -26,9 +29,9 @@ async function getChatroomMessages(chatId: string, pageParam: number) {
         throw new Error(error);
     }
 
-    const data: TChatroomMessage[] = await response.json();
+    const data: TPageOfMessages = await response.json();
 
-    return data.reverse();
+    return data;
 }
 
 export const useGetChatroomMessagesInfQuery = (chatId: string) => {
@@ -36,13 +39,12 @@ export const useGetChatroomMessagesInfQuery = (chatId: string) => {
         queryKey: ["messages", chatId],
         queryFn: ({ pageParam = 0 }) => getChatroomMessages(chatId, pageParam),
         enabled: !!chatId,
-        getPreviousPageParam: (_firstPage, pages) => {
-            if (pages.flat().length === 0) return undefined;
+        getPreviousPageParam: (firstPage, pages) => {
+            const totalMessages = pages.reduce((accumulator, currentPage) => {
+                return accumulator + currentPage.messages.length;
+            }, 0);
 
-            if (pages.flat().length >= 50 && pages[0].length !== 0)
-                return pages.flat().length;
-
-            return undefined;
+            return firstPage.hasMore ? totalMessages : undefined;
         },
         retry: 1,
     });

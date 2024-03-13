@@ -133,7 +133,7 @@ const TosPage = () => {
                         Intellectual Property
                     </h2>
                     <p>
-                        YOur website and services, including all content and
+                        Our website and services, including all content and
                         features, are protected by intellectual property laws
                         and belong to us or our licensors. You may not use,
                         copy, modify, distribute, or reproduce any part of our

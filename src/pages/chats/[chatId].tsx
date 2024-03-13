@@ -9,19 +9,17 @@ import { useCallback, useEffect, useState } from "react";
 import { pusherClient } from "../../lib/pusher";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
-import {
-    TChatroomMessage,
-    useGetChatroomQuery,
-} from "../../hooks/useGetChatroomQuery";
+import { useGetChatroomQuery } from "../../hooks/useGetChatroomQuery";
 import { User } from "@prisma/client";
 import { ChatroomMembers } from "../../components/ChatroomMembers";
 import { ChatroomSettings } from "../../components/ChatroomSettings";
 import { ChatroomMessages } from "../../components/ChatroomMessages";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import { TChatroomWIthOwner } from "../api/chatroom/get_owned";
+import { TChatroomWithOwner } from "../api/chatroom/get_owned";
 import { Portal } from "../../components/Portal";
 import Head from "next/head";
+import { TPageOfMessages } from "../../hooks/useGetChatroomMessagesInfQuery";
 
 const ChatPage = () => {
     const [isMembersActive, setIsMembersActive] = useState(false);
@@ -78,40 +76,46 @@ const ChatPage = () => {
 
             if (data.id === session.data?.user.id) {
                 await router.push("/chats");
-            } else {
-                if (session.data?.user.id !== chatroom.data?.owner_id) {
-                    const member = (
-                        queryClient.getQueryData(["members", chatId]) as User[]
-                    ).find((user) => user.id === data.id);
-                    toast.error(`${member?.username} has been banned!`);
-                }
-
-                queryClient.setQueryData(
-                    ["members", chatId],
-                    (oldData: User[] | undefined) => {
-                        if (!oldData) return;
-
-                        return oldData.filter(
-                            (member) => member.id !== data.id
-                        );
-                    }
-                );
-                queryClient.setQueryData(
-                    ["messages", chatId],
-                    (oldData: InfiniteData<TChatroomMessage[]> | undefined) => {
-                        if (!oldData) return;
-                        return {
-                            pageParams: oldData.pageParams,
-                            pages: oldData?.pages.map((page) =>
-                                page.filter(
-                                    (message) => message.author_id !== data.id
-                                )
-                            ),
-                        };
-                    }
-                );
-                queryClient.invalidateQueries(["members", chatId]);
+                return;
             }
+
+            if (session.data?.user.id !== chatroom.data?.owner_id) {
+                const member = (
+                    queryClient.getQueryData(["members", chatId]) as User[]
+                ).find((user) => user.id === data.id);
+
+                toast.error(`${member?.username} has been banned!`);
+            }
+
+            queryClient.setQueryData(
+                ["members", chatId],
+                (oldData: User[] | undefined) => {
+                    if (!oldData) return;
+
+                    return oldData.filter((member) => member.id !== data.id);
+                }
+            );
+            queryClient.setQueryData(
+                ["messages", chatId],
+                (oldData: InfiniteData<TPageOfMessages> | undefined) => {
+                    if (!oldData) return;
+
+                    const newData = [...oldData?.pages].map((page) => {
+                        return {
+                            ...page,
+                            messages: page.messages.filter(
+                                (message) => message.author_id !== data.id
+                            ),
+                        } satisfies TPageOfMessages;
+                    });
+
+                    return {
+                        pageParams: oldData.pageParams,
+                        pages: newData,
+                    };
+                }
+            );
+            queryClient.invalidateQueries(["members", chatId]);
         };
         if (chatroom.data) {
             pusherClient.subscribe(`chat__${chatId}__remove-member`);
@@ -135,7 +139,7 @@ const ChatPage = () => {
                 await router.push("/chats");
                 queryClient.setQueryData(
                     ["chatrooms", session.data.user.id],
-                    (oldData: TChatroomWIthOwner[] | undefined) => {
+                    (oldData: TChatroomWithOwner[] | undefined) => {
                         if (!oldData) return;
                         return oldData.filter(
                             (chatroom) => chatroom.id !== data.chatId
@@ -243,7 +247,7 @@ const ChatPage = () => {
                 toast.error("Owner has deleted the chatroom!");
                 queryClient.setQueryData(
                     ["chatrooms", session.data?.user.id],
-                    (oldData: TChatroomWIthOwner[] | undefined) => {
+                    (oldData: TChatroomWithOwner[] | undefined) => {
                         if (!oldData) return;
                         return oldData.filter(
                             (chatroom) => chatroom.id !== data.chatId

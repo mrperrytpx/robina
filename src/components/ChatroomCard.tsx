@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { pusherClient } from "../lib/pusher";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { TChatroomWIthOwner } from "../pages/api/chatroom/get_owned";
+import { TChatroomWithOwner } from "../pages/api/chatroom/get_owned";
 
 interface IInviteChatroomCardProps {
     chatroom: TChatroomInvite;
@@ -124,7 +124,7 @@ export const NewChatroomCard = ({
 };
 
 interface IEnterChatroomCard {
-    chatroom: TChatroomWIthOwner;
+    chatroom: TChatroomWithOwner;
 }
 
 export const EnterChatroomCard = ({ chatroom }: IEnterChatroomCard) => {
@@ -139,7 +139,7 @@ export const EnterChatroomCard = ({ chatroom }: IEnterChatroomCard) => {
             if (data.userId !== session.data?.user.id) {
                 queryClient.setQueryData(
                     ["chatrooms", session.data?.user.id],
-                    (oldData: TChatroomWIthOwner[] | undefined) => {
+                    (oldData: TChatroomWithOwner[] | undefined) => {
                         if (!oldData) return;
                         return oldData.filter(
                             (room) => room.id !== data.chatId

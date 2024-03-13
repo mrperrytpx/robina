@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { Footer } from "../components/Footer";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { prisma } from "../../prisma/prisma";
 import LogoTextRectangle from "../../public/logo-text-rect.webp";
 import LogoTextSquare from "../../public/logo-text-square.webp";
 import FallbackLogoTextRectangle from "../../public/logo-text-rect.png";
@@ -13,9 +11,7 @@ import { TestimonyCard } from "../components/TestimonyCard";
 import { testimonies } from "../consts/fakeTestimonials";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 
-export default function Home({
-    userCount,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Home() {
     return (
         <div className="flex w-full flex-1 flex-col items-center space-y-52 overflow-x-hidden">
             <div className="flex h-full w-full max-w-screen-lg flex-col items-start gap-40 px-2">
@@ -51,73 +47,63 @@ export default function Home({
                     </Link>
                 </article>
 
-                <article className="flex w-full flex-col gap-8 rounded-lg px-2 py-4 text-center font-medium">
-                    <h2 className="text-4xl font-extrabold text-glacier-600">
-                        Have you ever asked yourself...
+                <article className="text-center space-y-8 rounded-lg px-2 py-4 font-medium">
+                    <span className="bg-glacier-100 px-2 py-1 rounded-md">
+                        Introducing
+                    </span>
+                    <h2 className="text-5xl font-extrabold text-glacier-600">
+                        Yet Another Messaging App
                     </h2>
-                    <p className="xl:text-left">
-                        &quot;Is there an app like Discord I can use that&apos;s
-                        kind of... basic?&quot;
-                    </p>
-                    <p className="xl:text-right">
-                        &quot;I wonder what Discord&apos;s MVP looked
-                        like...&quot;
-                    </p>
-                    <p className="xl:text-left">
-                        &quot;Is there a way for me to experience what it was
-                        like using online chatrooms back in the 90&apos;s?&quot;
-                    </p>
-                    <p>
-                        &quot;Man I wish all these apps didn&apos;t have so many
-                        good features...&quot;
+                    <p className="text-lg xl:text-left">
+                        Create a space for your community. Chat with friends.
+                        Meet new people. Express yourself. All in one place.
                     </p>
                 </article>
 
-                <article className="flex w-full flex-col gap-12 rounded-lg px-2 py-4 text-center font-medium">
-                    <h2 className="text-4xl font-extrabold text-glacier-600">
-                        Welcome home!
-                    </h2>
-                    <p className="text-xl">
-                        Presenting YetAnotherMessagingApp!
-                    </p>
-                    <div>
+                <div className="relative mx-auto hidden w-full max-w-3xl items-center justify-center px-4 md:flex">
+                    <Image
+                        src={DemonstrationGif}
+                        className="z-10 w-full"
+                        width={996}
+                        height={869}
+                        alt="A gif which showcases a potential experience flow when using this website. There are 2 mobile views next to each other. A user on the right side invites the user on the left side to their chatroom. The right user sends a single message, then the left user starts spamming the chatroom. Then the right user removes the left user from the chatroom and both of them get a toast notification about it."
+                    />
+                    <div className="absolute left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2 space-y-4 p-4 text-center text-xs">
+                        <LoadingSpinner size={40} color={"rgb(51 115 135)"} />
                         <p>
-                            The most basic messaging app you&apos;ll ever use!
+                            There&apos;s supposed to be a GIF demonstration of a
+                            simple experience flow example here... 🤔
                         </p>
-                        <p className="text-xs font-bold">
-                            (until I try to make profit from it)
+                        <p>
+                            Should be loading in anytime soon. (2.7 Megabytes)
                         </p>
                     </div>
-                    <div>
-                        <p>
-                            From its minimal design to its minimal features,
-                            there simply (haha) is no rival!
-                        </p>
-                    </div>
-                </article>
-            </div>
-
-            <div className="relative hidden w-full max-w-3xl items-center justify-center px-4 md:flex">
-                <Image
-                    src={DemonstrationGif}
-                    className="z-10 w-full"
-                    width={996}
-                    height={869}
-                    alt="A gif which showcases a potential experience flow when using this website. There are 2 mobile views next to each other. A user on the right side invites the user on the left side to their chatroom. The right user sends a single message, then the left user starts spamming the chatroom. Then the right user removes the left user from the chatroom and both of them get a toast notification about it."
-                />
-                <div className="absolute left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2 space-y-4 p-4 text-center text-xs">
-                    <LoadingSpinner size={40} color={"rgb(51 115 135)"} />
-                    <p>
-                        There&apos;s supposed to be a GIF demonstration of a
-                        simple experience flow example here... 🤔
-                    </p>
-                    <p>Should be loading in anytime soon. (2.7 Megabytes)</p>
                 </div>
+
+                <article className="space-y-8 rounded-lg px-2 py-4 font-medium">
+                    <h2 className="text-5xl font-extrabold text-glacier-600">
+                        Create Your Own Chatrooms
+                    </h2>
+                    <p className="text-lg xl:text-left">
+                        It&apos;s easy to make your own space. Invite your
+                        friends and start talking.
+                    </p>
+                </article>
+                <article className="space-y-8 rounded-lg px-2 py-4 font-medium">
+                    <h2 className="text-5xl font-extrabold text-glacier-600">
+                        Real-Time Conversations
+                    </h2>
+                    <p className="text-lg xl:text-left">
+                        Chat on the go with our web app. Share stories, make new
+                        friends and stay connected anywhere in the world. The
+                        perfect place for your community to hang out.
+                    </p>
+                </article>
             </div>
 
-            <article className="space-y-20">
-                <div className="flex w-full flex-col px-2 py-4 text-center">
-                    <h2 className="text-2xl font-bold text-glacier-900">
+            <article className="space-y-10">
+                <div className="w-full max-w-screen-lg text-center mx-auto">
+                    <h2 className="text-2xl font-bold">
                         Check out these testimonials 😏
                     </h2>
                 </div>
@@ -144,34 +130,7 @@ export default function Home({
                 </div>
             </article>
 
-            <div className="flex w-full max-w-screen-lg flex-col items-center justify-between gap-40 px-2 text-center">
-                <Link
-                    prefetch={false}
-                    href="/signin"
-                    className="text-3xl font-bold text-glacier-900 transition-all duration-75 hover:text-glacier-600 hover:underline focus:text-glacier-600 focus:underline"
-                >
-                    Join
-                </Link>
-                <span className="scale-150 text-5xl font-bold text-glacier-600">
-                    {userCount ? userCount : 0}
-                </span>
-                <span className="text-3xl font-bold text-glacier-900">
-                    other happy {userCount === 1 ? "user" : "users"}!
-                </span>
-            </div>
             <Footer />
         </div>
     );
 }
-
-export const getServerSideProps: GetServerSideProps<{
-    userCount: number;
-}> = async () => {
-    const userCount = await prisma.user.count();
-
-    return {
-        props: {
-            userCount,
-        },
-    };
-};

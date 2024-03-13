@@ -4,7 +4,7 @@ import { prisma } from "../../../../prisma/prisma";
 import { randomString } from "../../../util/randomString";
 import { createChatroomSchema } from "../../chats/create";
 import { authOptions } from "../auth/[...nextauth]";
-import { TChatroomWIthOwner } from "./get_owned";
+import { TChatroomWithOwner } from "./get_owned";
 
 export default async function handler(
     req: NextApiRequest,
@@ -63,7 +63,7 @@ export default async function handler(
                 },
             });
 
-            const returnChatroom: TChatroomWIthOwner = {
+            const returnChatroom: TChatroomWithOwner = {
                 created_at: chatroom.created_at,
                 description: chatroom.description,
                 id: chatroom.id,

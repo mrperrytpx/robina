@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { TChatroomWIthOwner } from "../pages/api/chatroom/get_owned";
+import { TChatroomWithOwner } from "../pages/api/chatroom/get_owned";
 
-async function getOwnedChatroom(): Promise<TChatroomWIthOwner> {
+async function getOwnedChatroom(): Promise<TChatroomWithOwner> {
     const controller = new AbortController();
 
     const response = await fetch("/api/chatroom/get_owned", {
@@ -20,7 +20,7 @@ async function getOwnedChatroom(): Promise<TChatroomWIthOwner> {
         throw new Error(error);
     }
 
-    const data: TChatroomWIthOwner = await response.json();
+    const data: TChatroomWithOwner = await response.json();
 
     return data;
 }

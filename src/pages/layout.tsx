@@ -6,7 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import NextNProgress from "nextjs-progressbar";
 import { Header } from "../components/Header";
 import { TChatroomInvite } from "../hooks/useGetUserPendingInvitesQuery";
-import { TChatroomWIthOwner } from "./api/chatroom/get_owned";
+import { TChatroomWithOwner } from "./api/chatroom/get_owned";
 import type Pusher from "pusher-js/types/src/core/pusher";
 import { CookieBanner } from "../components/CookieBanner";
 
@@ -42,7 +42,7 @@ const Layout = ({ children }: ILayoutProps) => {
                 toast.error(`You have been removed from ${data.chatroomName}!`);
                 queryClient.setQueryData(
                     ["chatrooms", session.data?.user.id],
-                    (oldData: TChatroomWIthOwner[] | undefined) => {
+                    (oldData: TChatroomWithOwner[] | undefined) => {
                         if (!oldData) return;
                         return oldData.filter(
                             (chatroom) => chatroom.id !== data.chatId
